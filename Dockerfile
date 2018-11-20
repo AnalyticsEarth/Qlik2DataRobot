@@ -6,7 +6,7 @@ WORKDIR /root/src/app/qlik2datarobot
 COPY Qlik2DataRobot/Qlik2DataRobot.csproj Qlik2DataRobot/Qlik2DataRobot.csproj
 RUN dotnet restore Qlik2DataRobot/Qlik2DataRobot.csproj 
 
-COPY . .
+COPY Qlik2DataRobot Qlik2DataRobot
 RUN dotnet publish -c release -o published 
 
 FROM microsoft/dotnet:2.1-runtime
