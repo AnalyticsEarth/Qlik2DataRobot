@@ -1,0 +1,8 @@
+version: '3'
+services:
+  qlik2datarobot:
+    image: analyticsearth/qlik2datarobot
+    deploy:
+      mode: global
+    ports:
+      - "50052:50052/tcp" 
