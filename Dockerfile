@@ -12,7 +12,7 @@ RUN dotnet publish -c release -o published
 FROM microsoft/dotnet:2.1-runtime
 
 WORKDIR /root/  
-COPY --from=builder /root/src/app/qlik2datarobot/Qlik2DataRobot/published .
+COPY --from=builder /root/src/app/qlik2datarobot/published .
 
 EXPOSE 50052/tcp
 EXPOSE 19345/tcp
