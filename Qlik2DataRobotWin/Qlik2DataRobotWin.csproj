@@ -13,6 +13,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -23,10 +24,13 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <ProductName>Qlik2DataRobot</ProductName>
+    <PublisherName>Steven Pressland</PublisherName>
+    <SuiteName>Qlik2DataRobot</SuiteName>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -53,6 +57,24 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Qlik2DataRobot.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>388FF8E3D89FAF8931208BC0BBB2E10DD7187D7E</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Qlik2DataRobotWin_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CsvHelper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
@@ -126,6 +148,7 @@
       <HintPath>..\packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Drawing" />
@@ -133,6 +156,7 @@
       <HintPath>..\packages\System.Interactive.Async.3.2.0\lib\net46\System.Interactive.Async.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.Compression, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.1\lib\netstandard2.0\System.Memory.dll</HintPath>
     </Reference>
@@ -185,19 +209,27 @@
     <Compile Include="..\Qlik2DataRobot\Qlik2DataRobotConnector.cs">
       <Link>Qlik2DataRobotConnector.cs</Link>
     </Compile>
+    <Compile Include="InstallerSetup.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="InstallerSetup.Designer.cs">
+      <DependentUpon>InstallerSetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Qlik2DataRobot\NLog.config">
+    <Content Include="..\Qlik2DataRobot\NLog.config">
       <Link>NLog.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="..\Qlik2DataRobot\NLog.xsd">
       <Link>NLog.xsd</Link>
       <SubType>Designer</SubType>
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
+    <None Include="Qlik2DataRobotWin_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon_connector_grey_eJp_icon.ico" />

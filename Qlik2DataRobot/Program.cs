@@ -8,6 +8,7 @@ using System.Threading;
 using Prometheus;
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Qlik2DataRobot
 {
@@ -48,6 +49,8 @@ namespace Qlik2DataRobot
 
 
             var appSettings = ConfigurationManager.AppSettings;
+            var metricsRunningPort = -1;
+
 
             try
             {
@@ -58,7 +61,8 @@ namespace Qlik2DataRobot
                 {
                     Qlik2DataRobotMetrics.MetricServer = new MetricServer(metricEndpointPort);
                     Qlik2DataRobotMetrics.MetricServer.Start();
-                    //Logger.Info($"Metric Service listening on port:{metricEndpointPort}");
+                    metricsRunningPort = metricEndpointPort;
+                    Logger.Trace($"Metric Service listening on port:{metricEndpointPort}");
                     Qlik2DataRobotMetrics.UpGauge.Set(1);
                 }      
             }
@@ -67,10 +71,12 @@ namespace Qlik2DataRobot
                 Logger.Error($"ERROR: {e.Message}");
             }
 
-            printMessage(Convert.ToInt32(appSettings["grpcPort"]), Convert.ToInt32(appSettings["metricEndpointPort"]));
+            printMessage(Convert.ToInt32(appSettings["grpcPort"]), metricsRunningPort, Assembly.GetExecutingAssembly().GetName().Version);
+
+            Logger.Debug(Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
             Logger.Info(
-                $"{Path.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().Location)} uses NLog. Set log level by adding or changing logger rules in NLog.config, setting minLevel=\"Info\" or \"Debug\" or \"Trace\".");
+                $"{Path.GetFileName(Assembly.GetExecutingAssembly().Location)} uses NLog. Set log level by adding or changing logger rules in NLog.config, setting minLevel=\"Info\" or \"Debug\" or \"Trace\".");
 
             Logger.Info(
                 $"Changes to NLog config are immediately reflected in running application, unless you change the setting autoReload=\"true\".");
@@ -149,10 +155,13 @@ namespace Qlik2DataRobot
 
         }
 
-        static void printMessage(int qlikPort, int metricPort)
+        static void printMessage(int qlikPort, int metricPort, Version version)
         {
             string qPort = qlikPort.ToString().PadLeft(8);
             string mPort = metricPort.ToString().PadLeft(8);
+            if (metricPort == -1) mPort = "Disabled";
+
+            string ver = version.ToString().PadRight(16);
 
             Console.BackgroundColor = ConsoleColor.DarkGreen;
             Console.ForegroundColor = ConsoleColor.White;
@@ -165,6 +174,7 @@ namespace Qlik2DataRobot
  # | |_| | | |   <   / __/  | |_| | (_| | || (_| |  _ < (_) | |_) | (_) | |_  # 
  #  \__\_\_|_|_|\_\ |_____| |____/ \__,_|\__\__,_|_| \_\___/|_.__/ \___/ \__| # 
  #                                                                            # 
+ #                             Version: {2}                      #
  ############################################################################## 
  #                                     #                                      # 
  #      Qlik Analytic Connector        #      Prometheus Metric Service       # 
@@ -174,7 +184,9 @@ namespace Qlik2DataRobot
  ############################################################################## 
                                                                                 
 
-", qPort, mPort);
+", qPort, mPort, ver);
+
+            //Console.WriteLine(Assembly.GetExecutingAssembly().GetName().Version);
 
             //Console.ResetColor();
         }

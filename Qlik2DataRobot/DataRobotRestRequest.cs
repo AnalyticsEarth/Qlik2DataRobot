@@ -16,25 +16,31 @@ namespace Qlik2DataRobot
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        private int reqHash;
+
+        public DataRobotRestRequest(int _reqHash)
+        {
+            reqHash = _reqHash;
+        }
 
         //HttpClient client;  
 
-       /* public async Task<string> ListProjectsAsync()
-        {
-            HttpResponseMessage response = await client.GetAsync("projects");
-            response.EnsureSuccessStatusCode();
+        /* public async Task<string> ListProjectsAsync()
+         {
+             HttpResponseMessage response = await client.GetAsync("projects");
+             response.EnsureSuccessStatusCode();
 
-            // return URI of the created resource.
-            return await response.Content.ReadAsStringAsync();
-        }*/
+             // return URI of the created resource.
+             return await response.Content.ReadAsStringAsync();
+         }*/
 
         public async Task<MemoryStream> CreateProjectsAsync(string baseAddress, string token, MemoryStream data, string projectName, string filename)
         {
 
-            Logger.Trace("Create Client");
+            Logger.Trace($"{reqHash} - Create Client");
             var client = Qlik2DataRobotHttpClientFactory.clientFactory.CreateClient();
             ConfigureAsync(client, baseAddress, token);
-            Logger.Trace("Configured Client");
+            Logger.Trace($"{reqHash} - Configured Client");
             var requestContent = new MultipartFormDataContent("----");
             
             var projectContent = new StringContent(projectName);
@@ -48,21 +54,20 @@ namespace Qlik2DataRobot
             requestContent.Add(projectContent);
             requestContent.Add(fileContent);
 
-            Logger.Trace("Finished Building Request");
+            Logger.Trace($"{reqHash} - Finished Building Request");
 
             MemoryStream outStream = new MemoryStream();
             var streamWriter = new StreamWriter(outStream);
 
-            Logger.Trace("Finished Setting Up Stream");
+            Logger.Trace($"{reqHash} - Finished Setting Up Stream");
 
             try
             {
                 
                 HttpResponseMessage response = await checkRedirectAuth(client, await client.PostAsync("projects/", requestContent), null);
-                Logger.Trace(response.StatusCode);
-                Logger.Trace(response.Headers.Location);
-                var result = await response.Content.ReadAsStringAsync();
-                Logger.Trace(result);
+                Logger.Trace($"{reqHash} - Status Code: {response.StatusCode}");
+                Logger.Trace($"{reqHash} - Location: {response.Headers.Location}");
+                //var result = await response.Content.ReadAsStringAsync();
                 var status = "";
 
                 //TODO: Break this loop and exit on finished project or error
@@ -70,7 +75,7 @@ namespace Qlik2DataRobot
                 {
                     //ConfigureAsync(client, baseAddress, token);
                     status = await CheckStatusAsync(client, response.Headers.Location);
-                    Logger.Trace(status);
+                    Logger.Trace($"{reqHash} - Status: {status}");
                     Dictionary<string, dynamic> responseobj = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(status);
                     if (responseobj.ContainsKey("id"))
                     {
@@ -87,8 +92,8 @@ namespace Qlik2DataRobot
             }
             catch (Exception e)
             {
-                Logger.Warn(e, "Create Project Error");
-                Logger.Warn(e.Message);
+                Logger.Warn($"{reqHash} - Create Project Error");
+                Logger.Warn($"{reqHash} - Error: {e.Message}");
                 streamWriter.WriteLine("{\"status\":\"error\"}");
             }
 
@@ -101,27 +106,18 @@ namespace Qlik2DataRobot
 
         public async Task<String> CheckStatusAsync(HttpClient client, Uri location)
         {
-            
-            //var client = Qlik2DataRobotHttpClientFactory.clientFactory.CreateClient(); ;
-            HttpResponseMessage response = await checkRedirectAuth(client, await client.GetAsync(location), location);
 
-            //Logger.Trace(location);
-            //Logger.Trace(await response.Content.ReadAsStringAsync());
-            //Logger.Trace(response.StatusCode);
+            HttpResponseMessage response = await checkRedirectAuth(client, await client.GetAsync(location), location);
             response.EnsureSuccessStatusCode();
 
-            // return URI of the created resource.
-            
             return await response.Content.ReadAsStringAsync();
         }
 
         public async Task<MemoryStream> PredictApiAsync(MemoryStream data, string api_token, string datarobot_key, string username, string host, string project_id, string model_id)
         {
-            //client = new HttpClient();
+
             var client = Qlik2DataRobotHttpClientFactory.clientFactory.CreateClient();
-            client.Timeout = new System.TimeSpan(0, 5, 0);
-            //client.BaseAddress = new Uri(host);
-            
+            client.Timeout = new System.TimeSpan(0, 5, 0);          
 
             var uri = new Uri($"{host}/predApi/v1.0/{project_id}/{model_id}/predict");
 
@@ -136,13 +132,11 @@ namespace Qlik2DataRobot
             message.Content.Headers.Add("Content-Type", "text/csv");
 
 
-            HttpResponseMessage response = client.SendAsync(message).Result; //await 
+            HttpResponseMessage response = client.SendAsync(message).Result;
 
+            Logger.Trace($"{reqHash} - Status Code: {response.StatusCode}");
 
-
-            Logger.Trace(response.StatusCode);
-
-            Logger.Trace(await response.Content.ReadAsStringAsync());
+            //Logger.Trace(await response.Content.ReadAsStringAsync());
             Stream rdata = await response.Content.ReadAsStreamAsync();
 
             var mdata = new MemoryStream();
@@ -155,29 +149,24 @@ namespace Qlik2DataRobot
 
         public bool ConfigureAsync(HttpClient client, string baseAddress, string token)
         {
-            
 
             try
             {
-                Logger.Trace(baseAddress);
+                Logger.Trace($"{reqHash} - Base Address: {baseAddress}");
                 if (token is string)
                 {
                     Logger.Trace(token);
                 }
 
-                //client = new HttpClient(); //handler
                 client.Timeout = new System.TimeSpan(0, 5, 0);
-                Logger.Debug("Timeout: {0}", client.Timeout);
-
+                Logger.Debug($"{reqHash} - Timeout: {client.Timeout}");
 
                 client.BaseAddress = new Uri(baseAddress);
-                string tokenh = "Token " + token;
-                //client.DefaultRequestHeaders.Add("Authorization", tokenh);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", token);
             }
             catch (Exception e)
             {
-                Logger.Warn(e, "Request Configuration Error");
+                Logger.Warn($"{reqHash} - Request Configuration Error: {e.Message}");
             }
 
             return true;

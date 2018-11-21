@@ -12,6 +12,7 @@ using NLog;
 using Qlik.Sse;
 using Newtonsoft.Json;
 using CsvHelper;
+using System.Reflection;
 
 namespace Qlik2DataRobot
 {
@@ -49,7 +50,7 @@ namespace Qlik2DataRobot
         private static readonly Capabilities ConnectorCapabilities = new Capabilities
         {
             PluginIdentifier = "Qlik2DataRobot",
-            PluginVersion = "1.0.0",
+            PluginVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(),
             AllowScript = true,
             Functions =
             {
@@ -100,8 +101,8 @@ namespace Qlik2DataRobot
                 var commonRequestHeader = GetHeader(context.RequestHeaders, "qlik-commonrequestheader-bin");
                 commonHeader = CommonRequestHeader.Parser.ParseFrom(commonRequestHeader);
 
-                Logger.Info($"EvaluateScript called from client ({context.Peer}), hashid ({reqHash})");
-                Logger.Debug($"EvaluateScript header info: AppId ({commonHeader.AppId}), UserId ({commonHeader.UserId}), Cardinality ({commonHeader.Cardinality} rows)");
+                Logger.Info($"{reqHash} - EvaluateScript called from client ({context.Peer}), hashid ({reqHash})");
+                Logger.Debug($"{reqHash} - EvaluateScript header info: AppId ({commonHeader.AppId}), UserId ({commonHeader.UserId}), Cardinality ({commonHeader.Cardinality} rows)");
             }
             catch (Exception e)
             {
@@ -114,7 +115,7 @@ namespace Qlik2DataRobot
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                var paramnames = $"EvaluateScript call with hashid({reqHash}) got Param names: ";
+                var paramnames = $"{reqHash} - EvaluateScript call with hashid({reqHash}) got Param names: ";
 
                 foreach (var param in scriptHeader.Params)
                 {
@@ -139,15 +140,15 @@ namespace Qlik2DataRobot
 
                 ResultDataColumn keyField = new ResultDataColumn();
                 var rowdatastream = await ConvertBundledRowsToObject(Params, requestStream, context, keyField, keyname);
-                Logger.Debug($"Input Data Size: {rowdatastream.Length}");
+                Logger.Debug($"{reqHash} - Input Data Size: {rowdatastream.Length}");
                 
 
-                var outData = await SelectFunction(config, rowdatastream);
+                var outData = await SelectFunction(config, rowdatastream, reqHash);
                 rowdatastream = null;
-                await GenerateResult(outData, responseStream, context, cacheResultInQlik: false, keyField:keyField, keyname:keyname);
+                await GenerateResult(outData, responseStream, context, reqHash, cacheResultInQlik: false, keyField:keyField, keyname:keyname);
                 outData = null;
                 stopwatch.Stop();
-                Logger.Debug($"Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
+                Logger.Debug($"{reqHash} - Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
                 Qlik2DataRobotMetrics.DurHist.Observe(stopwatch.ElapsedMilliseconds/1000);
             }
             catch (Exception e)
@@ -162,10 +163,11 @@ namespace Qlik2DataRobot
             GC.Collect();
         }
 
-        private async Task<MemoryStream> SelectFunction(Dictionary<string, dynamic> config, MemoryStream rowdatastream)
+        private async Task<MemoryStream> SelectFunction(Dictionary<string, dynamic> config, MemoryStream rowdatastream, int reqHash)
         {
-            Logger.Info("Start DataRobot");
-            DataRobotRestRequest dr = new DataRobotRestRequest();
+           
+            Logger.Info($"{reqHash} - Start DataRobot");
+            DataRobotRestRequest dr = new DataRobotRestRequest(reqHash);
            
             string api_token = Convert.ToString(config["auth_config"]["api_token"]);
 
@@ -173,12 +175,12 @@ namespace Qlik2DataRobot
             switch (config["request_type"])
             {
                 case "createproject":
-                    Logger.Info("Create Project");
+                    Logger.Info($"{reqHash} - Create Project");
                     string project_name = Convert.ToString(config["project_name"]);
 
-                    var zippedstream = await CompressStream(rowdatastream, project_name);
+                    var zippedstream = await CompressStream(rowdatastream, project_name, reqHash);
                     
-                    Logger.Info($"Zipped Data Size: {zippedstream.Length}");
+                    Logger.Info($"{reqHash} - Zipped Data Size: {zippedstream.Length}");
 
                     string endpoint = Convert.ToString(config["auth_config"]["endpoint"]);
                     if (endpoint.Substring(endpoint.Length - 2) != "/") endpoint = endpoint + "/";
@@ -187,7 +189,7 @@ namespace Qlik2DataRobot
                     break;
 
                 case "predictapi":
-                    Logger.Info("Predict API");
+                    Logger.Info($"{reqHash} - Predict API");
                     string datarobot_key = Convert.ToString(config["auth_config"]["datarobot_key"]);
                     string username = Convert.ToString(config["auth_config"]["username"]);
                     string host = Convert.ToString(config["api_host"]);
@@ -201,15 +203,15 @@ namespace Qlik2DataRobot
                     break;
             }
 
-            Logger.Info("DataRobot Finish");
+            Logger.Info($"{reqHash} - DataRobot Finish");
             return result;
         }
 
         
 
-        private async Task<MemoryStream> CompressStream(MemoryStream inData, string filename)
+        private async Task<MemoryStream> CompressStream(MemoryStream inData, string filename, int reqHash)
         {
-            Logger.Debug("Start Compress");
+            Logger.Debug($"{reqHash} - Start Compress");
             var outStream = new MemoryStream();
             
                 using (var archive = new ZipArchive(outStream, ZipArchiveMode.Create, true))
@@ -227,7 +229,8 @@ namespace Qlik2DataRobot
 
         private async Task<MemoryStream> ConvertBundledRowsToObject(ParameterData[] Parameters, IAsyncStreamReader<global::Qlik.Sse.BundledRows> requestStream, ServerCallContext context, ResultDataColumn keyField, string keyname)
         {
-            Logger.Debug("Start Create CSV");
+            int reqHash = requestStream.GetHashCode();
+            Logger.Debug($"{reqHash} - Start Create CSV");
 
             var memStream = new MemoryStream();
             var streamWriter = new StreamWriter(memStream);
@@ -263,7 +266,7 @@ namespace Qlik2DataRobot
                 csv.WriteField(param.ParamName);
             }
             csv.NextRecord();
-            Logger.Debug("Finished Header");
+            Logger.Debug($"{reqHash} - Finished Header");
             int a = 0;
 
             while (await requestStream.MoveNext())
@@ -303,7 +306,7 @@ namespace Qlik2DataRobot
             memStream.Flush();
 
             memStream.Position = 0;
-            Logger.Debug("Rows" + a);
+            Logger.Debug($"{reqHash} - Rows" + a);
             return await Task.FromResult(memStream);
         }
 
@@ -315,20 +318,21 @@ namespace Qlik2DataRobot
             public List<string> Strings;
         }
 
-        private async Task GenerateResult(MemoryStream returnedData, IServerStreamWriter<global::Qlik.Sse.BundledRows> responseStream, ServerCallContext context,
+        private async Task GenerateResult(MemoryStream returnedData, IServerStreamWriter<global::Qlik.Sse.BundledRows> responseStream, ServerCallContext context, int reqHash,
             bool failIfWrongDataTypeInFirstCol = false, DataType expectedFirstDataType = DataType.Numeric, bool cacheResultInQlik = true, ResultDataColumn keyField = null, string keyname = null)
         {
+            
             int nrOfCols = 0;
             int nrOfRows = 0;
             List<ResultDataColumn> resultDataColumns = new List<ResultDataColumn>();
 
-            Logger.Info("Generate Results");
+            Logger.Info($"{reqHash} - Generate Results");
 
             if (true)
             {
-                Logger.Debug("Extract JSON");
+                Logger.Debug($"{reqHash} - Extract JSON");
                 //Convert the stream (json) to dictionary
-                Logger.Info($"Returned Datasize: {returnedData.Length}");
+                Logger.Info($"{reqHash} - Returned Datasize: {returnedData.Length}");
                 StreamReader sr = new StreamReader(returnedData);
                 returnedData.Position = 0;
                 var data = sr.ReadToEnd();
@@ -376,7 +380,7 @@ namespace Qlik2DataRobot
 
                 nrOfRows = resultDataColumns[0].DataType == DataType.String ? resultDataColumns[0].Strings.Count : resultDataColumns[0].Numerics.Count;
                 nrOfCols = resultDataColumns.Count;
-                Logger.Debug($"Result Number of Columns: {nrOfCols}");
+                Logger.Debug($"{reqHash} - Result Number of Columns: {nrOfCols}");
 
             }
 
@@ -386,7 +390,7 @@ namespace Qlik2DataRobot
                 if (failIfWrongDataTypeInFirstCol && expectedFirstDataType != resultDataColumns[0].DataType)
                 {
                     string msg = $"Rserve result datatype mismatch in first column, expected {expectedFirstDataType}, got {resultDataColumns[0].DataType}";
-                    Logger.Warn($"{msg}");
+                    Logger.Warn($"{reqHash} - {msg}");
                     throw new RpcException(new Status(StatusCode.InvalidArgument, $"{msg}"));
                 }
 
