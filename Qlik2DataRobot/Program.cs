@@ -87,7 +87,8 @@ namespace Qlik2DataRobot
 
             var grpcHost = appSettings["grpcHost"];
             var grpcPort = Convert.ToInt32(appSettings["grpcPort"]);
-            var certificateFolder = appSettings["certificateFolder"];
+            //var certificateFolder = appSettings["certificateFolder"];
+            var certificateFolder = ParameterValue("certificateFolder", "");
 
             ServerCredentials sslCredentials = null;
 
@@ -189,6 +190,33 @@ namespace Qlik2DataRobot
             //Console.WriteLine(Assembly.GetExecutingAssembly().GetName().Version);
 
             //Console.ResetColor();
+        }
+
+        public static string ParameterValue(string parameterName, string defaultValue)
+        {
+            var appSettings = ConfigurationManager.AppSettings;
+            var val = defaultValue;
+
+            if (appSettings[parameterName] != "")
+            {
+                val = appSettings[parameterName];
+            }
+
+            try
+            {
+
+                if (Environment.GetEnvironmentVariable("qlik2datarobot_" + parameterName) != null)
+                {
+                    val = Convert.ToString(Environment.GetEnvironmentVariable("qlik2datarobot_" + parameterName));
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Error With Environment Variable: {e}");
+                Console.WriteLine(e);
+            }
+
+            return val;
         }
     }
 }

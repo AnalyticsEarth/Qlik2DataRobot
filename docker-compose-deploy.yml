@@ -5,4 +5,9 @@ services:
     deploy:
       mode: global
     ports:
-      - "50052:50052/tcp" 
+      - "50052:50052/tcp"
+      - "19345:19345/tcp"       
+    volumes:
+      - /labdata/DataRobot:/dr
+    environment:
+      - qlik2datarobot_certificateFolder=/dr/sse_DataRobot_server_certs
