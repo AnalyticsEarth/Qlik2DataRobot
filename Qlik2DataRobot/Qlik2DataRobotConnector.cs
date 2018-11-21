@@ -182,8 +182,8 @@ namespace Qlik2DataRobot
 
                     string endpoint = Convert.ToString(config["auth_config"]["endpoint"]);
                     if (endpoint.Substring(endpoint.Length - 2) != "/") endpoint = endpoint + "/";
-                    dr.ConfigureAsync(endpoint, api_token);
-                    result = await dr.CreateProjectsAsync(zippedstream, project_name, project_name + ".zip");
+                    
+                    result = await dr.CreateProjectsAsync(endpoint, api_token, zippedstream, project_name, project_name + ".zip");
                     break;
 
                 case "predictapi":

@@ -6,6 +6,8 @@ using NLog;
 using System.Configuration;
 using System.Threading;
 using Prometheus;
+using System.Net.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Qlik2DataRobot
 {
@@ -21,13 +23,30 @@ namespace Qlik2DataRobot
         );
     }
 
+    static class Qlik2DataRobotHttpClientFactory
+    {
+        private static readonly IServiceProvider serviceProvider = new ServiceCollection().AddHttpClient().BuildServiceProvider();
+
+        public static readonly IHttpClientFactory clientFactory = serviceProvider.GetService<IHttpClientFactory>();
+
+        //var client = httpClientFactory.CreateClient();
+
+
+        //public static readonly IHttpClientFactory clientFactory;
+    }
+
     class Program
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        
+
         static void Main(string[] args)
         {
+
             
+
+
             var appSettings = ConfigurationManager.AppSettings;
 
             try
