@@ -126,7 +126,9 @@ namespace Qlik2DataRobot
                 Logger.Trace(scriptHeader.Script);
                 Dictionary< string,dynamic> config = JsonConvert.DeserializeObject<Dictionary<string,dynamic>>(scriptHeader.Script);
 
-                string project_name = config.ContainsKey("project_name") ? Convert.ToString(config["project_name"]) : Convert.ToString(config["project_id"]);
+                //string project_name = "";
+                    
+                //config.ContainsKey("project_name") ? Convert.ToString(config["project_name"]) : config.ContainsKey("project_id") ? Convert.ToString(config["project_id"]) : ;
 
                 var Params = GetParams(scriptHeader.Params.ToArray());
 
@@ -145,7 +147,15 @@ namespace Qlik2DataRobot
 
                 var outData = await SelectFunction(config, rowdatastream, reqHash);
                 rowdatastream = null;
-                await GenerateResult(outData, responseStream, context, reqHash, cacheResultInQlik: false, keyField:keyField, keyname:keyname);
+
+                bool shouldCache = false;
+
+                if (config.ContainsKey("should_cache"))
+                {
+                    shouldCache = config["should_cache"];
+                }
+
+                await GenerateResult(outData, responseStream, context, reqHash, cacheResultInQlik: shouldCache, keyField:keyField, keyname:keyname);
                 outData = null;
                 stopwatch.Stop();
                 Logger.Debug($"{reqHash} - Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
@@ -192,11 +202,23 @@ namespace Qlik2DataRobot
                     Logger.Info($"{reqHash} - Predict API");
                     string datarobot_key = Convert.ToString(config["auth_config"]["datarobot_key"]);
                     string username = Convert.ToString(config["auth_config"]["username"]);
-                    string host = Convert.ToString(config["api_host"]);
-                    string project_id = Convert.ToString(config["project_id"]);
-                    string model_id = Convert.ToString(config["model_id"]);
+                    string host = Convert.ToString(config["auth_config"]["endpoint"]);
+                    string project_id = null;
+                    string model_id = null;
+                    string deployment_id = null;
 
-                    result = await dr.PredictApiAsync(rowdatastream, api_token, datarobot_key, username, host, project_id, model_id);
+                    if (config.ContainsKey("deployment_id"))
+                    {
+                        deployment_id = Convert.ToString(config["deployment_id"]);
+                    }
+
+                    if (config.ContainsKey("project_id") && config.ContainsKey("model_id"))
+                    {
+                        project_id = Convert.ToString(config["project_id"]);
+                        model_id = Convert.ToString(config["model_id"]);
+                    }
+                    
+                    result = await dr.PredictApiAsync(rowdatastream, api_token, datarobot_key, username, host, deployment_id:deployment_id, project_id:project_id, model_id:model_id);
                     break;
 
                 default:

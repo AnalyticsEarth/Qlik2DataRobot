@@ -69,7 +69,7 @@ namespace Qlik2DataRobot
                 Logger.Trace($"{reqHash} - Location: {response.Headers.Location}");
                 //var result = await response.Content.ReadAsStringAsync();
                 var status = "";
-
+                Logger.Debug($"{reqHash} - Upload Finished - DataRobot Analysis Starting");
                 //TODO: Break this loop and exit on finished project or error
                 for (int i = 0; i < 500; i++)
                 {
@@ -113,19 +113,30 @@ namespace Qlik2DataRobot
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<MemoryStream> PredictApiAsync(MemoryStream data, string api_token, string datarobot_key, string username, string host, string project_id, string model_id)
+        public async Task<MemoryStream> PredictApiAsync(MemoryStream data, string api_token, string datarobot_key, string username, string host, string deployment_id = null, string project_id = null, string model_id = null)
         {
 
             var client = Qlik2DataRobotHttpClientFactory.clientFactory.CreateClient();
-            client.Timeout = new System.TimeSpan(0, 5, 0);          
+            client.Timeout = new System.TimeSpan(0, 5, 0);
 
-            var uri = new Uri($"{host}/predApi/v1.0/{project_id}/{model_id}/predict");
+            Uri uri;
+
+            if(deployment_id != null)
+            {
+                Logger.Trace($"{reqHash} - Deployment Score:{deployment_id}");
+                uri = new Uri($"{host}/predApi/v1.0/deployments/{deployment_id}/predictions");
+            }
+            else
+            {
+                Logger.Trace($"{reqHash} - Project/Model Score:{project_id} {model_id}");
+                uri = new Uri($"{host}/predApi/v1.0/{project_id}/{model_id}/predict");
+            }
 
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, uri);
             message.Headers.Authorization = new AuthenticationHeaderValue("Basic",
-        Convert.ToBase64String(
-            System.Text.ASCIIEncoding.ASCII.GetBytes(
-                string.Format("{0}:{1}", username, api_token))));
+                Convert.ToBase64String(
+                    System.Text.ASCIIEncoding.ASCII.GetBytes(
+                        string.Format("{0}:{1}", username, api_token))));
             message.Headers.Add("datarobot-key", datarobot_key);
 
             message.Content = new StreamContent(data);
@@ -136,13 +147,11 @@ namespace Qlik2DataRobot
 
             Logger.Trace($"{reqHash} - Status Code: {response.StatusCode}");
 
-            //Logger.Trace(await response.Content.ReadAsStringAsync());
             Stream rdata = await response.Content.ReadAsStreamAsync();
 
             var mdata = new MemoryStream();
             rdata.Position = 0;
             rdata.CopyTo(mdata);
-
 
             return mdata;
         }
