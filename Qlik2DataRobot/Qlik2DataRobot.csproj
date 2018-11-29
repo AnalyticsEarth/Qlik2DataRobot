@@ -7,12 +7,12 @@
     <ApplicationIcon>icon_connector_grey_eJp_icon.ico</ApplicationIcon>
     <Configurations>Debug;Release;Windows</Configurations>
     <StartupObject>Qlik2DataRobot.Program</StartupObject>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <Authors>Steven Pressland</Authors>
     <Company>Qlik</Company>
     <PackageId>Qlik2DataRobot-Core</PackageId>
-    <AssemblyVersion>0.1.1.0</AssemblyVersion>
-    <FileVersion>0.1.1.0</FileVersion>
+    <AssemblyVersion>0.1.2.0</AssemblyVersion>
+    <FileVersion>0.1.2.0</FileVersion>
     <Copyright>Steven Pressland 2018</Copyright>
   </PropertyGroup>
 
