@@ -3,7 +3,7 @@ services:
   qlik2datarobot:
     image: analyticsearth/qlik2datarobot
     deploy:
-      mode: global
+      replicas: 1
     ports:
       - "50052:50052/tcp"
       - "19345:19345/tcp"       
