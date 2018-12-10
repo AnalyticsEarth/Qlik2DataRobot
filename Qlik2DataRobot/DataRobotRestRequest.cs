@@ -133,14 +133,12 @@ namespace Qlik2DataRobot
             }
 
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, uri);
-            message.Headers.Authorization = new AuthenticationHeaderValue("Basic",
-                Convert.ToBase64String(
-                    System.Text.ASCIIEncoding.ASCII.GetBytes(
-                        string.Format("{0}:{1}", username, api_token))));
             message.Headers.Add("datarobot-key", datarobot_key);
+            
+            message.Headers.Authorization = new AuthenticationHeaderValue("Token", api_token);
 
             message.Content = new StreamContent(data);
-            message.Content.Headers.Add("Content-Type", "text/csv");
+            message.Content.Headers.Add("Content-Type", "text/csv; charset=UTF-8");
 
 
             HttpResponseMessage response = client.SendAsync(message).Result;
