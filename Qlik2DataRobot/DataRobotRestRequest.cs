@@ -23,17 +23,9 @@ namespace Qlik2DataRobot
             reqHash = _reqHash;
         }
 
-        //HttpClient client;  
-
-        /* public async Task<string> ListProjectsAsync()
-         {
-             HttpResponseMessage response = await client.GetAsync("projects");
-             response.EnsureSuccessStatusCode();
-
-             // return URI of the created resource.
-             return await response.Content.ReadAsStringAsync();
-         }*/
-
+        /// <summary>
+        /// Create a datarobot project
+        /// </summary>
         public async Task<MemoryStream> CreateProjectsAsync(string baseAddress, string token, MemoryStream data, string projectName, string filename)
         {
 
@@ -63,17 +55,13 @@ namespace Qlik2DataRobot
 
             try
             {
-                
                 HttpResponseMessage response = await checkRedirectAuth(client, await client.PostAsync("projects/", requestContent), null);
                 Logger.Trace($"{reqHash} - Status Code: {response.StatusCode}");
                 Logger.Trace($"{reqHash} - Location: {response.Headers.Location}");
-                //var result = await response.Content.ReadAsStringAsync();
                 var status = "";
                 Logger.Debug($"{reqHash} - Upload Finished - DataRobot Analysis Starting");
-                //TODO: Break this loop and exit on finished project or error
                 for (int i = 0; i < 500; i++)
                 {
-                    //ConfigureAsync(client, baseAddress, token);
                     status = await CheckStatusAsync(client, response.Headers.Location);
                     Logger.Trace($"{reqHash} - Status: {status}");
                     Dictionary<string, dynamic> responseobj = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(status);
@@ -82,13 +70,8 @@ namespace Qlik2DataRobot
                         break;
                     }
                     Thread.Sleep(1000);
-
                 }
-
                 streamWriter.WriteLine("{\"status\":\"success\",\"response\":" + status +"}");
-                
-
-                
             }
             catch (Exception e)
             {
@@ -101,9 +84,11 @@ namespace Qlik2DataRobot
             outStream.Position = 0;
 
             return outStream;
-
         }
 
+        /// <summary>
+        /// Check status of the DataRobot project validation checks
+        /// </summary>
         public async Task<String> CheckStatusAsync(HttpClient client, Uri location)
         {
 
@@ -113,6 +98,9 @@ namespace Qlik2DataRobot
             return await response.Content.ReadAsStringAsync();
         }
 
+        /// <summary>
+        /// Process request against the prediction API
+        /// </summary>
         public async Task<MemoryStream> PredictApiAsync(MemoryStream data, string api_token, string datarobot_key, string username, string host, string deployment_id = null, string project_id = null, string model_id = null)
         {
 
@@ -140,7 +128,6 @@ namespace Qlik2DataRobot
             message.Content = new StreamContent(data);
             message.Content.Headers.Add("Content-Type", "text/csv; charset=UTF-8");
 
-
             HttpResponseMessage response = client.SendAsync(message).Result;
 
             Logger.Trace($"{reqHash} - Status Code: {response.StatusCode}");
@@ -154,6 +141,9 @@ namespace Qlik2DataRobot
             return mdata;
         }
 
+        /// <summary>
+        /// Configure the HTTPClient
+        /// </summary>
         public bool ConfigureAsync(HttpClient client, string baseAddress, string token)
         {
 
@@ -180,6 +170,9 @@ namespace Qlik2DataRobot
 
         }
 
+        /// <summary>
+        /// Checks for redirection and reconfigure authorization headers
+        /// </summary>
         public async Task<HttpResponseMessage> checkRedirectAuth(HttpClient client, HttpResponseMessage response, Uri location)
         {
             var finalresponse = response;

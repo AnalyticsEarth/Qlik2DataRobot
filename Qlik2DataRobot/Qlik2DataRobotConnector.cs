@@ -23,8 +23,6 @@ namespace Qlik2DataRobot
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private static string logType;
-
         public class ParameterData
         {
             public DataType DataType;
@@ -35,17 +33,7 @@ namespace Qlik2DataRobot
         {
             var appSettings = ConfigurationManager.AppSettings;
 
-            logType = appSettings["logType"];
-
         }
-
-        private enum FunctionConstant
-        {
-            LogAsSeenStrCheck,
-            LogAsSeenStrEcho,
-            LogAsSeenCheck,
-            LogAsSeenEcho
-        };
 
         private static readonly Capabilities ConnectorCapabilities = new Capabilities
         {
@@ -74,27 +62,21 @@ namespace Qlik2DataRobot
             return Task.FromResult(ConnectorCapabilities);
         }
 
-        
 
+        /// <summary>
+        /// All requests are processed through evaluate script, however in the context of this connector, the script is a JSON notation string which contains the metadata required to correctly process the attached data.
+        /// </summary>
         public override async Task EvaluateScript(IAsyncStreamReader<global::Qlik.Sse.BundledRows> requestStream, IServerStreamWriter<global::Qlik.Sse.BundledRows> responseStream, ServerCallContext context)
         {
             ScriptRequestHeader scriptHeader;
             CommonRequestHeader commonHeader;
 
-
             Qlik2DataRobotMetrics.RequestCounter.Inc();
 
             int reqHash = requestStream.GetHashCode();
 
-            if (!(ConnectorCapabilities.AllowScript))
-            {
-                throw new RpcException(new Status(StatusCode.PermissionDenied, $"Script evaluations disabled"));
-            }
-
             try
             {
-                
-
                 var header = GetHeader(context.RequestHeaders, "qlik-scriptrequestheader-bin");
                 scriptHeader = ScriptRequestHeader.Parser.ParseFrom(header);
 
@@ -126,10 +108,6 @@ namespace Qlik2DataRobot
                 Logger.Trace(scriptHeader.Script);
                 Dictionary< string,dynamic> config = JsonConvert.DeserializeObject<Dictionary<string,dynamic>>(scriptHeader.Script);
 
-                //string project_name = "";
-                    
-                //config.ContainsKey("project_name") ? Convert.ToString(config["project_name"]) : config.ContainsKey("project_id") ? Convert.ToString(config["project_id"]) : ;
-
                 var Params = GetParams(scriptHeader.Params.ToArray());
 
                 string keyname = null;
@@ -141,10 +119,9 @@ namespace Qlik2DataRobot
                 
 
                 ResultDataColumn keyField = new ResultDataColumn();
-                var rowdatastream = await ConvertBundledRowsToObject(Params, requestStream, context, keyField, keyname);
+                var rowdatastream = await ConvertBundledRowsToCSV(Params, requestStream, context, keyField, keyname);
                 Logger.Debug($"{reqHash} - Input Data Size: {rowdatastream.Length}");
                 
-
                 var outData = await SelectFunction(config, rowdatastream, reqHash);
                 rowdatastream = null;
 
@@ -173,6 +150,10 @@ namespace Qlik2DataRobot
             GC.Collect();
         }
 
+
+        /// <summary>
+        /// Select the functiona based upon the request specification
+        /// </summary>
         private async Task<MemoryStream> SelectFunction(Dictionary<string, dynamic> config, MemoryStream rowdatastream, int reqHash)
         {
            
@@ -181,7 +162,7 @@ namespace Qlik2DataRobot
            
             string api_token = Convert.ToString(config["auth_config"]["api_token"]);
 
-            MemoryStream result = new MemoryStream(); //ideally would not declare this here, error on return
+            MemoryStream result = new MemoryStream();
             switch (config["request_type"])
             {
                 case "createproject":
@@ -229,8 +210,10 @@ namespace Qlik2DataRobot
             return result;
         }
 
-        
 
+        /// <summary>
+        /// Compress data sent using ZIP encoding
+        /// </summary>
         private async Task<MemoryStream> CompressStream(MemoryStream inData, string filename, int reqHash)
         {
             Logger.Debug($"{reqHash} - Start Compress");
@@ -249,7 +232,11 @@ namespace Qlik2DataRobot
             return await Task.FromResult(outStream);
         }
 
-        private async Task<MemoryStream> ConvertBundledRowsToObject(ParameterData[] Parameters, IAsyncStreamReader<global::Qlik.Sse.BundledRows> requestStream, ServerCallContext context, ResultDataColumn keyField, string keyname)
+
+        /// <summary>
+        /// Convert the input data into a CSV file within memory stream
+        /// </summary>
+        private async Task<MemoryStream> ConvertBundledRowsToCSV(ParameterData[] Parameters, IAsyncStreamReader<global::Qlik.Sse.BundledRows> requestStream, ServerCallContext context, ResultDataColumn keyField, string keyname)
         {
             int reqHash = requestStream.GetHashCode();
             Logger.Debug($"{reqHash} - Start Create CSV");
@@ -332,6 +319,9 @@ namespace Qlik2DataRobot
             return await Task.FromResult(memStream);
         }
 
+        /// <summary>
+        /// Data structure for the result data column
+        /// </summary>
         public class ResultDataColumn
         {
             public string Name;
@@ -340,6 +330,9 @@ namespace Qlik2DataRobot
             public List<string> Strings;
         }
 
+        /// <summary>
+        /// Return the results from connector to Qlik Engine
+        /// </summary>
         private async Task GenerateResult(MemoryStream returnedData, IServerStreamWriter<global::Qlik.Sse.BundledRows> responseStream, ServerCallContext context, int reqHash,
             bool failIfWrongDataTypeInFirstCol = false, DataType expectedFirstDataType = DataType.Numeric, bool cacheResultInQlik = true, ResultDataColumn keyField = null, string keyname = null)
         {
@@ -371,20 +364,6 @@ namespace Qlik2DataRobot
                         a.Strings.Add(Convert.ToString(p["prediction"]));
                     }
 
-                    if(keyname != null)
-                    {
-                      /*  if (keyField.DataType == DataType.String)
-                        {
-                            Console.WriteLine("String");
-                            Console.WriteLine(keyField.Strings.Count);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Numeric");
-                            Console.WriteLine(keyField.Numerics.Count);
-                        }*/
-                    }
-
                     if (keyname != null) resultDataColumns.Add(keyField);
                     resultDataColumns.Add(a);
 
@@ -411,7 +390,7 @@ namespace Qlik2DataRobot
             {
                 if (failIfWrongDataTypeInFirstCol && expectedFirstDataType != resultDataColumns[0].DataType)
                 {
-                    string msg = $"Rserve result datatype mismatch in first column, expected {expectedFirstDataType}, got {resultDataColumns[0].DataType}";
+                    string msg = $"Result datatype mismatch in first column, expected {expectedFirstDataType}, got {resultDataColumns[0].DataType}";
                     Logger.Warn($"{reqHash} - {msg}");
                     throw new RpcException(new Status(StatusCode.InvalidArgument, $"{msg}"));
                 }

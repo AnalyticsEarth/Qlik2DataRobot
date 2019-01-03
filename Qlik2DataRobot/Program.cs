@@ -30,27 +30,16 @@ namespace Qlik2DataRobot
 
         public static readonly IHttpClientFactory clientFactory = serviceProvider.GetService<IHttpClientFactory>();
 
-        //var client = httpClientFactory.CreateClient();
-
-
-        //public static readonly IHttpClientFactory clientFactory;
     }
 
     class Program
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        
-
         static void Main(string[] args)
         {
-
-            
-
-
             var appSettings = ConfigurationManager.AppSettings;
             var metricsRunningPort = -1;
-
 
             try
             {
@@ -72,22 +61,15 @@ namespace Qlik2DataRobot
             }
 
             printMessage(Convert.ToInt32(appSettings["grpcPort"]), metricsRunningPort, Assembly.GetExecutingAssembly().GetName().Version);
-
             Logger.Debug(Assembly.GetExecutingAssembly().GetName().Version.ToString());
-
             Logger.Info(
                 $"{Path.GetFileName(Assembly.GetExecutingAssembly().Location)} uses NLog. Set log level by adding or changing logger rules in NLog.config, setting minLevel=\"Info\" or \"Debug\" or \"Trace\".");
-
             Logger.Info(
                 $"Changes to NLog config are immediately reflected in running application, unless you change the setting autoReload=\"true\".");
             Logger.Info($"Logging Enabled - Fatal:{Logger.IsFatalEnabled} Error:{Logger.IsErrorEnabled} Warn:{Logger.IsWarnEnabled} Info:{Logger.IsInfoEnabled} Debug:{Logger.IsDebugEnabled} Trace:{Logger.IsTraceEnabled}");
 
-
-
-
             var grpcHost = appSettings["grpcHost"];
             var grpcPort = Convert.ToInt32(appSettings["grpcPort"]);
-            //var certificateFolder = appSettings["certificateFolder"];
             var certificateFolder = ParameterValue("certificateFolder", "");
 
             ServerCredentials sslCredentials = null;
@@ -130,12 +112,8 @@ namespace Qlik2DataRobot
                     Services = { Qlik.Sse.Connector.BindService(new Qlik2DataRobotConnector()) },
                     Ports = { new ServerPort(grpcHost, grpcPort, sslCredentials) }
                 };
-
                 server.Start();
                 Logger.Info($"gRPC listening on port {grpcPort}");
-
-                //Logger.Info("Press any key to stop gRPC server and exit...");
-
                 try {
                       while(true) {
                         Thread.Sleep(10000);
@@ -143,15 +121,7 @@ namespace Qlik2DataRobot
                     } finally {
                       Logger.Info("Shutting down Connector");
                       server.ShutdownAsync().Wait();
-
                     }
-                
-            }
-            else
-            {
-                //Logger.Info("Press any key to exit...");
-
-                //Console.ReadKey();
             }
 
         }

@@ -2492,6 +2492,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
         "Release"
@@ -2516,6 +2524,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
     }
@@ -8312,15 +8328,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Qlik2DataRobot"
-        "ProductCode" = "8:{D4A7FDF3-6407-4E01-ADCA-C1F271CE4F03}"
-        "PackageCode" = "8:{ECB11C42-B0FB-4310-8345-1C2BE62935CB}"
+        "ProductCode" = "8:{3D983925-7E34-4AF6-8E8F-D2375E3C1BC5}"
+        "PackageCode" = "8:{F6BB15E5-661D-434D-9B9B-8ED095BFC271}"
         "UpgradeCode" = "8:{2F7905AB-B777-4BF1-87F0-4202263DA239}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.1"
         "Manufacturer" = "8:Qlik"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
