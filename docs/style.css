@@ -1,0 +1,264 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600');
+
+html body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Source Sans Pro', Helvetica, Roboto, Arial, sans-serif !important;
+  box-sizing: border-box;
+  background-color: #c4cfda;
+  color: rgb(75,75,75);
+}
+
+h1 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+h2 {
+
+
+}
+
+h3 {
+
+
+}
+
+.header .content {
+  padding-top:10px;
+  text-align: center;
+  margin:0 auto;
+  width:100%;
+  max-width: 99em;
+}
+
+.content {
+  padding:10px;
+  text-align: center;
+  margin:0 auto;
+  width:100%;
+  max-width: 90em;
+}
+
+.header {
+  width:100%;
+  background-color: #fff;
+  height:100px;
+}
+
+.banner {
+  width:100%;
+  background-color: #1C355E;
+  height:500px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.banner .background {
+  background-image: url('img/Art_BarChart_white.png');
+  background-position: right;
+  background-size:contain;
+  background-repeat: no-repeat;
+  height:100%;
+  width:100%;
+  box-sizing: border-box;
+}
+
+.banner .content {
+  padding:10px;
+  text-align: left;
+  margin-left: 10%;
+  width: 30%;
+  color:#fff;
+  font-weight: 300 !important;
+  font-size:56px;
+}
+
+.banner .content h1 {
+  font-weight: 300 !important;
+  font-size:56px;
+}
+
+.banner .content p {
+  font-weight: 300 !important;
+  font-size:24px;
+  line-height: 40px;
+}
+
+.banner .content .button {
+  margin-right:16px;
+  float:left;
+}
+
+.button {
+  font-weight: 400 !important;
+  font-size:18px;
+  line-height: 18px;
+  padding-bottom: 22px;
+  padding-top:20px;
+  padding-left:28px;
+  padding-right:28px;
+  border: 1px solid #fff;
+  cursor: pointer;
+}
+
+.darkbutton {
+  border: 1px solid rgb(75,75,75);
+}
+
+.darkbutton:hover {
+  color:#fff;
+}
+
+.button:hover {
+  background-color: rgb(0,123,60);
+  border: 1px solid rgb(0,123,60);
+}
+
+.qlikgreen {
+  background-color: #009845;
+  border: 1px solid #009845 !important;
+}
+
+.qlikturquoise {
+  background-color: #006580;
+  color:#fff;
+}
+
+.body3 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: stretch;
+}
+
+.body2 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: stretch;
+  max-width:70em;
+}
+
+.body1 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: stretch;
+  max-width:40em;
+}
+
+.rowitem {
+  margin:20px;
+  margin-top:0;
+  flex-grow: 1;
+  flex-shrink:0;
+  flex-basis:0;
+}
+
+.rowitem img {
+  max-width:100%;
+  height: auto;
+  vertical-align: middle;
+  margin-bottom: 20px;
+}
+
+.rowitem h1 {
+  font-weight: 400;
+  font-size: 48px;
+}
+
+.rowitem h2 {
+  font-weight: 600;
+  font-size: 24px;
+}
+
+.rowitem h3 {
+  font-weight: 400;
+  font-size: 18px;
+}
+
+.rowitem .heightfixed {
+  height:100px;
+  padding-bottom: 20px;
+}
+
+.rowitem a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.rowitem a:hover {
+  font-weight: bold;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer {
+  padding:20px;
+  background-color: #000;
+  color:#fff;
+  text-align: center;
+}
+
+.footer .contentwidth {
+  max-width: 60em;
+  margin: 0 auto;
+}
+
+.logo {
+  float: left;
+  background-image: url('img/Qlik-Logo_RGB.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width:200px;
+  height: 80px;
+  margin-top:10px;
+}
+
+.headeritem {
+  float: right;
+  padding-top:25px;
+  font-size: 18px;
+}
+
+.videoshow {
+  display:flex !important;
+}
+
+.videooverlay {
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background-color: rgba(0,0,0,0.7);
+  display:none;
+  align-items: center;
+  justify-content: center;
+  padding: 200px;
+}
+
+.videoplayer {
+  position: relative;
+	padding-bottom: 56.25%; /* 16:9 */
+	padding-top: 25px;
+	height: 0;
+  flex-grow: 1;
+  flex-shrink:0;
+  flex-basis:0;
+}
+
+.videoplayer iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}

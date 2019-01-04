@@ -1,0 +1,114 @@
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <title>Qlik2DataRobot</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="video.js"></script>
+</head>
+
+<body>
+  <div class="header">
+    <div class="content">
+      <div class="logo"></div>
+      <div class="headeritem">Documentation</div>
+    </div>
+  </div>
+  <div class="banner">
+    <div class="background">
+      <div class="content">
+        <h1>Qlik2DataRobot</h1>
+        <p>Qlik2DataRobot is an Analytic Connector for Qlik Sense, QlikView and Qlik Core.</p><p>Integrate Qlik with DataRobot.</p>
+        <div class="button qlikgreen" onclick="showVideoOverlay();">Watch Video</div>
+        <a href="#download"><div class="button">Download</div></a>
+      </div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="content body3">
+      <div class="rowitem">
+        <h1>No more manual export to CSV</h1>
+      </div>
+    </div>
+    <div class="content body3">
+      <div class="rowitem">
+        <img src="img/Icon_Qlik_Engine_grey.png"/>
+        <h2>Send associated data securely from Qlik to DataRobot</h2>
+        <h3>Identify data for analysis directly from your Qlik Sense application using the associative difference, before sending it securely to DataRobot directly from the Qlik engine</h3>
+      </div>
+      <div class="rowitem">
+        <img src="img/Icon_Sheet_grey.png"/>
+        <h2>Automated model scoring within a Qlik application reload</h2>
+        <h3>Seamlessly score new production data against your chosen model deployments in DataRobot, all seamlessly from the Qlik reload process without the need for external triggers or data exports</h3>
+      </div>
+      <div class="rowitem">
+        <img src="img/Icon_Advanced_Analytics_grey.png"/>
+        <h2>Real time scoring direct from a Qlik dashboard</h2>
+        <h3>Simulate your model predictions directly from a Qlik dashboard using the live analytic connector expressions within your charts</h3>
+      </div>
+    </div>
+  </div>
+  <div id="download" class="body qlikturquoise">
+    <div class="content body2">
+      <div class="rowitem">
+        <h1>Download</h1>
+      </div>
+    </div>
+    <div class="content body2">
+      <div class="rowitem">
+        <h2>Server Side Extension</h2>
+        <h3 class="heightfixed">Communication between Qlik and DataRobot is performed by a Server Side Analytic Connector, for windows servers its recommended to use the supplied installer to get started</h3>
+        <a href="https://github.com/AnalyticsEarth/Qlik2DataRobot/releases/download/v1.0.0.0/Qlik2DataRobot.Windows.Installer.msi"><div class="button">Download</div></a>
+      </div>
+      <div class="rowitem">
+        <h2>Client Extension</h2>
+        <h3 class="heightfixed">To interactively send data from a Qlik Sense application, the client extension can be used in conjunction with the server side extension. This is the easiest way to get started and integrate between Qlik Sense and DataRobot</h3>
+        <a href="https://github.com/AnalyticsEarth/Qlik2DataRobot-Ext/releases/download/v1.1.3/qlik2datarobotext.zip"><div class="button">Download</div></a>
+      </div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="content body1">
+      <div class="rowitem">
+        <h1>Ready for Multi-cloud?</h1>
+      </div>
+    </div>
+    <div class="content body1">
+      <div class="rowitem">
+        <h2>Docker Image</h2>
+        <h3 class="heightfixed">The Qlik2DataRobot connector is also available as a docker image, allowing for seamless deployment in a container environment. Its compatible with all variants of the Associative Engine across Qlik Sense, QlikView and Qlik Core. It really comes into its own when running as part of the Qlik Sense Enterprise for Elastic, scaling with demand on your Kubernetes cluster</h3>
+        <a href="https://hub.docker.com/r/analyticsearth/qlik2datarobot"><div class="button darkbutton">Docker Hub</div></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <div>
+    <p>Qlik2DataRobot is an open source project built by Steven Pressland, Principal Solution Architect, Qlik PreSales.</p>
+    <p>The project is managed and maintained on GitHub</p>
+    </div>
+    <div class="content body2">
+      <div class="rowitem">
+        <a href="https://github.com/AnalyticsEarth/Qlik2DataRobot">
+          <img src="img/GitHub-Mark-Light-64px.png"/>
+          <div>Server Side Extension Project</div>
+        </a>
+      </div>
+      <div class="rowitem">
+        <a href="https://github.com/AnalyticsEarth/Qlik2DataRobot-Ext">
+          <img src="img/GitHub-Mark-Light-64px.png"/>
+          <div>Client Side Extension Project</div>
+        </a>
+      </div>
+    </div>
+    <div class="contentwidth">
+      <p>About Qlik®</p>
+<p>Qlik is on a mission to create a data-literate world, where everyone can use data to solve their most challenging problems. Only Qlik’s end-to-end data management and analytics platform brings together all of an organization’s data from any source, enabling people at any skill level to use their curiosity to uncover new insights. Companies use Qlik products to see more deeply into customer behavior, reinvent business processes, discover new revenue streams, and balance risk and reward. Qlik does business in more than 100 countries and serves over 48,000 customers around the world. </p>
+      <p>© 2018 QlikTech International AB. All rights reserved. Qlik®, Qlik Sense®, QlikView®, QlikTech®, Qlik Cloud®, Qlik DataMarket®, Qlik Analytics Platform®, Qlik NPrinting®, Qlik Connectors®, Qlik GeoAnalytics®, Qlik Core®, Associative Difference®, Lead with Data™, Qlik Data Catalyst™, Qlik Associative Big Data Index™ and the QlikTech logos are trademarks of QlikTech International AB that have been registered in one or more countries. Other marks and logos mentioned herein are trademarks or registered trademarks of their respective owners.</p>
+    </div>
+  </div>
+  <div id="videooverlay" class="videooverlay" onclick="hideVideoOverlay()">
+    <div class="exitoverlay"></div>
+    <div class="videoplayer"><div id="ytplayer"></div></div>
+  </div>
+</body>
+
+</html>
