@@ -2,6 +2,10 @@
 
 Qlik2DataRobot is an Analytic Connector for Qlik Sense, QlikView and Qlik Core.
 
+For more information on this project and integrating Qlik with DataRobot visit [Qlik Community](http://bit.ly/QlikDataRobot).
+
+A companion client extension is available [here](https://github.com/AnalyticsEarth/Qlik2DataRobot-Ext).
+
 ## Configuration
 
 - grpcHost: The allowed remote connection IP block (default: 0.0.0.0)
