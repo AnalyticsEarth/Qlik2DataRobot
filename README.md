@@ -6,6 +6,19 @@ For more information on this project and integrating Qlik with DataRobot visit [
 
 A companion client extension is available [here](https://github.com/AnalyticsEarth/Qlik2DataRobot-Ext).
 
+## Download
+The source code is not suitable for installing directly into Qlik Sense, please download the latest release from the releases page on this GitHub repository.
+
+## Installation
+For installation instructions, visit the Installation Guide which is part of the Qlik2DataRobot repository:
+https://github.com/AnalyticsEarth/Qlik2DataRobot/tree/master/docs
+
+## Issues
+Any issues with the extension should be recorded as such in this GitHub repository.
+
+## Support
+This extension is provided as Open Source and not covered as part of your Qlik maintenance. Support is provided by the community.
+
 ## Configuration
 
 - grpcHost: The allowed remote connection IP block (default: 0.0.0.0)
