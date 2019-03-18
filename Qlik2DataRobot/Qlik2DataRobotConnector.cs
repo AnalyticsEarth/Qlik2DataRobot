@@ -140,6 +140,7 @@ namespace Qlik2DataRobot
             }
             catch (Exception e)
             {
+                Logger.Error($"{reqHash} - ERROR: {e.Message}");
                 throw new RpcException(new Status(StatusCode.InvalidArgument, $"{e.Message}"));
             }
             finally
@@ -274,6 +275,13 @@ namespace Qlik2DataRobot
 
                 csv.WriteField(param.ParamName);
             }
+
+            if (keyField.Name == null && keyname != null) 
+            {
+                throw new Exception("The keyfield was not found in the source data, please ensure you are including this field in the dataset sent from Qlik.");
+            }
+
+
             csv.NextRecord();
             Logger.Debug($"{reqHash} - Finished Header");
             int a = 0;
@@ -282,29 +290,40 @@ namespace Qlik2DataRobot
             {
                 foreach (var Row in requestStream.Current.Rows)
                 {
-                    
+
                     for (int i = 0; i < Parameters.Length; i++)
                     {
                         
                         var param = Parameters[i];
                         var dual = Row.Duals[i];
-
                         switch (param.DataType)
                         {
                             case DataType.Numeric:
-                                if (keyindex == i && keyname != null) keyField.Numerics.Add(dual.NumData);
+
+                                if (keyindex == i && keyname != null)
+                                {
+                                    keyField.Numerics.Add(dual.NumData);
+                                }
                                 csv.WriteField(dual.NumData.ToString());
                                 break;
                             case DataType.String:
-                                if (keyindex == i && keyname != null) keyField.Strings.Add(dual.StrData);
+                                if (keyindex == i && keyname != null)
+                                {
+                                    keyField.Strings.Add(dual.StrData);
+                                }
                                 csv.WriteField(dual.StrData);
                                 break;
                             case DataType.Dual:
-                                if (keyindex == i && keyname != null) keyField.Numerics.Add(dual.NumData);
+                                if (keyindex == i && keyname != null)
+                                {
+                                    keyField.Numerics.Add(dual.NumData);
+                                }
                                 csv.WriteField(dual.NumData.ToString());
                                 break;
                         }
+                        
                     }
+
                     a++;
                     csv.NextRecord();
                 } 
@@ -316,6 +335,12 @@ namespace Qlik2DataRobot
 
             memStream.Position = 0;
             Logger.Debug($"{reqHash} - Rows" + a);
+
+            if (a == 0)
+            {
+                throw new Exception("There were no rows in the table sent from Qlik. Check that the table has at least 1 row of data.");
+            }
+
             return await Task.FromResult(memStream);
         }
 
@@ -348,10 +373,12 @@ namespace Qlik2DataRobot
                 Logger.Debug($"{reqHash} - Extract JSON");
                 //Convert the stream (json) to dictionary
                 Logger.Info($"{reqHash} - Returned Datasize: {returnedData.Length}");
+                
                 StreamReader sr = new StreamReader(returnedData);
                 returnedData.Position = 0;
                 var data = sr.ReadToEnd();
                 Dictionary<string, dynamic> response = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(data);
+                //Logger.Trace($"{reqHash} - Returned Data: {data}");
 
                 if (response.ContainsKey("data"))
                 {
@@ -368,7 +395,7 @@ namespace Qlik2DataRobot
                     resultDataColumns.Add(a);
 
                 }
-                else
+                else if(response.ContainsKey("response"))
                 {
                     var a = new ResultDataColumn();
                     a.Name = "Result";
@@ -377,6 +404,17 @@ namespace Qlik2DataRobot
                     a.Strings.Add(Convert.ToString(response["response"]["id"]));
 
                     resultDataColumns.Add(a);
+                } else
+                {
+                    if (response.ContainsKey("message"))
+                    {
+                        throw new Exception($"The following error message was returned from DataRobot: {response["message"]}");
+                    }
+                    else
+                    {
+                        throw new Exception($"An Unknown Error Occured: {data}");
+                    }
+                    
                 }
 
                 nrOfRows = resultDataColumns[0].DataType == DataType.String ? resultDataColumns[0].Strings.Count : resultDataColumns[0].Numerics.Count;
