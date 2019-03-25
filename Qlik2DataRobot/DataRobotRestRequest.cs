@@ -121,7 +121,11 @@ namespace Qlik2DataRobot
             }
 
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, uri);
-            message.Headers.Add("datarobot-key", datarobot_key);
+            if(datarobot_key != null)
+            {
+                message.Headers.Add("datarobot-key", datarobot_key);
+            }
+            
             
             message.Headers.Authorization = new AuthenticationHeaderValue("Token", api_token);
 

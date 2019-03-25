@@ -182,7 +182,11 @@ namespace Qlik2DataRobot
 
                 case "predictapi":
                     Logger.Info($"{reqHash} - Predict API");
-                    string datarobot_key = Convert.ToString(config["auth_config"]["datarobot_key"]);
+                    string datarobot_key = null;
+                    if (config["auth_config"].ContainsKey("datarobot_key")){
+                        datarobot_key = Convert.ToString(config["auth_config"]["datarobot_key"]);
+                    }
+                    
                     string username = Convert.ToString(config["auth_config"]["username"]);
                     string host = Convert.ToString(config["auth_config"]["endpoint"]);
                     string project_id = null;
