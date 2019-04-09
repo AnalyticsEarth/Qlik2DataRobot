@@ -101,7 +101,7 @@ namespace Qlik2DataRobot
         /// <summary>
         /// Process request against the prediction API
         /// </summary>
-        public async Task<MemoryStream> PredictApiAsync(MemoryStream data, string api_token, string datarobot_key, string username, string host, string deployment_id = null, string project_id = null, string model_id = null)
+        public async Task<MemoryStream> PredictApiAsync(MemoryStream data, string api_token, string datarobot_key, string username, string host, string deployment_id = null, string project_id = null, string model_id = null, bool explain = false, int maxCodes = 0, double thresholdHigh = 0, double thresholdLow = 0)
         {
 
             var client = Qlik2DataRobotHttpClientFactory.clientFactory.CreateClient();
@@ -112,7 +112,23 @@ namespace Qlik2DataRobot
             if(deployment_id != null)
             {
                 Logger.Trace($"{reqHash} - Deployment Score:{deployment_id}");
-                uri = new Uri($"{host}/predApi/v1.0/deployments/{deployment_id}/predictions");
+                if(explain == true)
+                {
+                    string param = "";
+                    if (maxCodes != 0) param += $"maxCodes={maxCodes}&";
+                    if (thresholdHigh != 0) param += $"thresholdHigh={thresholdHigh}&";
+                    if (thresholdLow != 0) param += $"thresholdLow={thresholdLow}";
+                    if (param != "") param = "?" + param;
+                    uri = new Uri($"{host}/predApi/v1.0/deployments/{deployment_id}/predictionExplanations{param}");
+                    
+                    Logger.Trace($"{reqHash} - URL:{uri}");
+
+                }
+                else
+                {
+                    uri = new Uri($"{host}/predApi/v1.0/deployments/{deployment_id}/predictions");
+                }
+                
             }
             else
             {
