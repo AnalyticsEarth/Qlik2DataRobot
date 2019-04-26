@@ -106,7 +106,17 @@ namespace Qlik2DataRobot
                 Logger.Trace("{0}", paramnames);
 
                 Logger.Trace(scriptHeader.Script);
-                Dictionary< string,dynamic> config = JsonConvert.DeserializeObject<Dictionary<string,dynamic>>(scriptHeader.Script);
+                Dictionary<string, dynamic> config;
+                try
+                {
+                    config = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(scriptHeader.Script);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error($"{reqHash} - ERROR LOADING JSON REQUEST: {e.Message}");
+                    throw new RpcException(new Status(StatusCode.DataLoss, $"ERROR LOADING JSON REQUEST: {e.Message}"));
+                }
+               
 
                 var Params = GetParams(scriptHeader.Params.ToArray());
 
@@ -114,7 +124,6 @@ namespace Qlik2DataRobot
                 if(config.ContainsKey("keyfield"))
                 {
                     keyname = Convert.ToString(config["keyfield"]);
-
                 }
                 
 
@@ -125,12 +134,8 @@ namespace Qlik2DataRobot
                 var outData = await SelectFunction(config, rowdatastream, reqHash);
                 rowdatastream = null;
 
-                bool shouldCache = false;
-
-                if (config.ContainsKey("should_cache"))
-                {
-                    shouldCache = config["should_cache"];
-                }
+                bool shouldCache = ValidateAndExtractKeyBool(reqHash, config, "should_cache", true, false);
+                
 
                 await GenerateResult(outData, responseStream, context, reqHash, cacheResultInQlik: shouldCache, keyField:keyField, keyname:keyname);
                 outData = null;
@@ -151,6 +156,63 @@ namespace Qlik2DataRobot
             GC.Collect();
         }
 
+        private string ValidateAndExtractKeyString(int reqHash, dynamic configobject, string key, bool allowBlank)
+        {
+            string val = "";
+            string errorMessage = "";
+            if(configobject.ContainsKey(key))
+            {
+                val = Convert.ToString(configobject[key]);
+                if (val == "" && allowBlank == false)
+                {
+                    errorMessage = $"Key is blank from request: {key}";
+                }
+            }
+            else
+            {
+                errorMessage = $"Key is missing from request: {key}";
+            }
+            
+            if(errorMessage != "")
+            {
+                throw new Exception(errorMessage);
+            }
+            
+            return val;
+        }
+
+        private bool ValidateAndExtractKeyBool(int reqHash, dynamic configobject, string key, bool allowBlank, bool defaultVal)
+        {
+            bool val = defaultVal;
+            string errorMessage = "";
+            if (configobject.ContainsKey(key))
+            {
+                if (configobject[key] is bool)
+                {
+                    val = configobject[key];
+                }
+                else
+                {
+                    errorMessage = $"Key is not a boolean from request: {key}";
+                }
+            }
+            else
+            {
+                if (allowBlank == false)
+                {
+                    errorMessage = $"Key is missing from request: {key}";
+                }
+                
+            }
+
+            if (errorMessage != "")
+            {
+                throw new Exception(errorMessage);
+            }
+
+            return val;
+        }
+
 
         /// <summary>
         /// Select the functiona based upon the request specification
@@ -161,7 +223,7 @@ namespace Qlik2DataRobot
             Logger.Info($"{reqHash} - Start DataRobot");
             DataRobotRestRequest dr = new DataRobotRestRequest(reqHash);
            
-            string api_token = Convert.ToString(config["auth_config"]["api_token"]);
+            string api_token = ValidateAndExtractKeyString(reqHash, config["auth_config"],"api_token", false);
 
             MemoryStream result = new MemoryStream();
             switch (config["request_type"])
