@@ -72,7 +72,6 @@ namespace Qlik2DataRobot
             CommonRequestHeader commonHeader;
 
             Qlik2DataRobotMetrics.RequestCounter.Inc();
-
             int reqHash = requestStream.GetHashCode();
 
             try
@@ -133,12 +132,18 @@ namespace Qlik2DataRobot
                 }
 
                 bool inc_details = false;
+                bool rawExplain = false;
                 if (config.ContainsKey("inc_details"))
                 {
                     inc_details = config["inc_details"];
                 }
 
-                await GenerateResult(outData, responseStream, context, reqHash, cacheResultInQlik: shouldCache, keyField:keyField, keyname:keyname, includeDetail:inc_details);
+                if (config.ContainsKey("explain"))
+                {
+                    rawExplain = config["explain"]["return_raw"];
+                }
+
+                await GenerateResult(outData, responseStream, context, reqHash, cacheResultInQlik: shouldCache, keyField:keyField, keyname:keyname, includeDetail: inc_details, rawExplain:rawExplain);
                 outData = null;
                 stopwatch.Stop();
                 Logger.Debug($"{reqHash} - Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
@@ -382,7 +387,7 @@ namespace Qlik2DataRobot
         /// Return the results from connector to Qlik Engine
         /// </summary>
         private async Task GenerateResult(MemoryStream returnedData, IServerStreamWriter<global::Qlik.Sse.BundledRows> responseStream, ServerCallContext context, int reqHash,
-            bool failIfWrongDataTypeInFirstCol = false, DataType expectedFirstDataType = DataType.Numeric, bool cacheResultInQlik = true, ResultDataColumn keyField = null, string keyname = null, bool includeDetail = false)
+            bool failIfWrongDataTypeInFirstCol = false, DataType expectedFirstDataType = DataType.Numeric, bool cacheResultInQlik = true, ResultDataColumn keyField = null, string keyname = null, bool includeDetail = false, bool rawExplain = false)
         {
             
             int nrOfCols = 0;
@@ -411,8 +416,19 @@ namespace Qlik2DataRobot
                     a.DataType = DataType.String;
                     a.Strings = new List<string>();
 
+                    var pe = new ResultDataColumn();
+                    if (rawExplain == true)
+                    {
+                        
+                        pe.Name = $"Prediction Explainations";
+                        pe.DataType = DataType.String;
+                        pe.Strings = new List<string>();
+                        
+                    }
+
                     //The first row will determine which fields to return in table for prediction values
                     bool fieldListAgreed = false;
+                    
 
 
                     //Loop through each response in array (one for each row of input data)
@@ -432,6 +448,7 @@ namespace Qlik2DataRobot
                                     pvi.Strings = new List<string>();
                                     resultDataColumns.Add(pvi);
                                 }
+
                                 fieldListAgreed = true;
                                 Logger.Trace($"{reqHash} - Columns: {resultDataColumns.Count}");
                             }
@@ -444,12 +461,27 @@ namespace Qlik2DataRobot
                                 resultDataColumns[index].Strings.Add(Convert.ToString(pv["value"]));
                                 index++;
                             }
+                            
                         }
-                        
+
+                        if (rawExplain == true)
+                        {
+                            pe.Strings.Add(Convert.ToString(p["predictionExplanations"]));
+                        }
+
                     }
 
                     if (keyname != null) resultDataColumns.Add(keyField);
+
+                    if (rawExplain == true)
+                    {
+                        resultDataColumns.Add(pe);
+                    }
+
+                    
                     resultDataColumns.Add(a);
+
+                    
 
                 }
                 else if(response.ContainsKey("response"))

@@ -194,6 +194,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Qlik2DataRobot\ConnectorLauncher.cs">
+      <Link>ConnectorLauncher.cs</Link>
+    </Compile>
     <Compile Include="..\Qlik2DataRobot\DataRobotRestRequest.cs">
       <Link>DataRobotRestRequest.cs</Link>
     </Compile>
