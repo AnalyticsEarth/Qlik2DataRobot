@@ -21,7 +21,6 @@ D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Microsoft.Extens
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Newtonsoft.Json.dll
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\System.Interactive.Async.dll
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\netstandard.dll
-D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\protobuf-net.dll
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Microsoft.Extensions.Options.dll
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Microsoft.Extensions.Logging.Abstractions.dll
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Microsoft.Extensions.Logging.dll
@@ -44,7 +43,6 @@ D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Microsoft.Extens
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Microsoft.Extensions.DependencyInjection.Abstractions.xml
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Newtonsoft.Json.xml
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\System.Interactive.Async.xml
-D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\protobuf-net.xml
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Microsoft.Extensions.Options.xml
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Microsoft.Extensions.Logging.Abstractions.xml
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Microsoft.Extensions.Logging.xml
@@ -61,3 +59,9 @@ D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\obj\Release\Qlik2DataRobotSe
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\obj\Release\Qlik2DataRobotService.csproj.CopyComplete
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\obj\Release\Qlik2DataRobotService.exe
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\obj\Release\Qlik2DataRobotService.pdb
+D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Grpc.Core.Api.dll
+D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\System.ValueTuple.dll
+D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Google.Protobuf.pdb
+D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Grpc.Core.Api.pdb
+D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Grpc.Core.Api.xml
+D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\System.ValueTuple.xml
