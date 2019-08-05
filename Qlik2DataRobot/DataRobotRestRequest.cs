@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -145,6 +146,10 @@ namespace Qlik2DataRobot
             
             message.Headers.Authorization = new AuthenticationHeaderValue("Token", api_token);
 
+            var verheader = $"QlikConnector/{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Revision}";
+            Logger.Trace($"{reqHash} - Request Version Header: {verheader}");
+            message.Headers.Add("X-DataRobot-API-Consumer", verheader);
+
             message.Content = new StreamContent(data);
             message.Content.Headers.Add("Content-Type", "text/csv; charset=UTF-8");
 
@@ -180,6 +185,11 @@ namespace Qlik2DataRobot
 
                 client.BaseAddress = new Uri(baseAddress);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", token);
+
+                var verheader = $"QlikConnector/{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Revision}";
+                Logger.Trace($"{reqHash} - Request Version Header: {verheader}");
+                client.DefaultRequestHeaders.Add("X-DataRobot-API-Consumer", verheader);
+
             }
             catch (Exception e)
             {
@@ -212,6 +222,8 @@ namespace Qlik2DataRobot
 
             return finalresponse;
         }
+
+       
 
     }
 
