@@ -222,15 +222,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Qlik2DataRobot\NLog.config">
-      <Link>NLog.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="..\Qlik2DataRobot\NLog.xsd">
-      <Link>NLog.xsd</Link>
+    <None Include="App.config" />
+    <None Include="NLog.config" />
+    <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Qlik2DataRobotWin_TemporaryKey.pfx" />
