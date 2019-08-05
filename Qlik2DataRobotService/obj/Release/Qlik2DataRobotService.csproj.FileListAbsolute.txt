@@ -65,3 +65,4 @@ D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Google.Protobuf.
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Grpc.Core.Api.pdb
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\Grpc.Core.Api.xml
 D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\System.ValueTuple.xml
+D:\Core\github\Qlik2DataRobot\Qlik2DataRobotService\bin\Release\NLog.config
