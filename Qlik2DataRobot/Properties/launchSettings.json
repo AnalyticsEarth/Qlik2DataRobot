@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Qlik2DataRobot": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "QLIK2DATAROBOT_LOG_LEVEL": "Debug"
+      }
+    }
+  }
+}
