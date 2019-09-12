@@ -7,12 +7,12 @@
     <ApplicationIcon>icon_connector_grey_eJp_icon.ico</ApplicationIcon>
     <Configurations>Debug;Release;Windows</Configurations>
     <StartupObject>Qlik2DataRobot.Program</StartupObject>
-    <Version>1.0.2</Version>
+    <Version>2.1.0.0</Version>
     <Authors>Steven Pressland</Authors>
     <Company>Qlik</Company>
     <PackageId>Qlik2DataRobot-Core</PackageId>
-    <AssemblyVersion>1.0.2.0</AssemblyVersion>
-    <FileVersion>1.0.2.0</FileVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <FileVersion>2.1.0.0</FileVersion>
     <Copyright>Steven Pressland 2019</Copyright>
   </PropertyGroup>
 
@@ -23,18 +23,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="9.2.3" />
-    <PackageReference Include="Google.Protobuf" Version="3.6.1" />
-    <PackageReference Include="Grpc.Core" Version="1.16.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Xml" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="2.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="NLog" Version="4.5.11" />
-    <PackageReference Include="prometheus-net" Version="2.1.3" />
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
+    <PackageReference Include="Google.Protobuf" Version="3.8.0" />
+    <PackageReference Include="Grpc.Core" Version="1.22.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Xml" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="NLog" Version="4.6.6" />
+    <PackageReference Include="prometheus-net" Version="3.1.4" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
     <PackageReference Include="System.Threading.ThreadPool" Version="4.3.0" />
   </ItemGroup>

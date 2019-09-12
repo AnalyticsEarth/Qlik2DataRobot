@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Qlik2DataRobot - Windows")]
+[assembly: AssemblyTitle("Qlik2DataRobotService")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Qlik")]
-[assembly: AssemblyProduct("Qlik2DataRobot - Windows")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Qlik2DataRobotService")]
 [assembly: AssemblyCopyright("Copyright © Steven Pressland 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("4fe2015a-5172-4f69-ad5f-120f83ae25c4")]
+[assembly: Guid("c232796b-b7bb-45f4-837b-5345fb4e813e")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -72,7 +72,6 @@ namespace Qlik2DataRobot
             CommonRequestHeader commonHeader;
 
             Qlik2DataRobotMetrics.RequestCounter.Inc();
-
             int reqHash = requestStream.GetHashCode();
 
             try
@@ -132,7 +131,19 @@ namespace Qlik2DataRobot
                     shouldCache = config["should_cache"];
                 }
 
-                await GenerateResult(outData, responseStream, context, reqHash, cacheResultInQlik: shouldCache, keyField:keyField, keyname:keyname);
+                bool inc_details = false;
+                bool rawExplain = false;
+                if (config.ContainsKey("inc_details"))
+                {
+                    inc_details = config["inc_details"];
+                }
+
+                if (config.ContainsKey("explain"))
+                {
+                    rawExplain = config["explain"]["return_raw"];
+                }
+
+                await GenerateResult(outData, responseStream, context, reqHash, cacheResultInQlik: shouldCache, keyField:keyField, keyname:keyname, includeDetail: inc_details, rawExplain:rawExplain);
                 outData = null;
                 stopwatch.Stop();
                 Logger.Debug($"{reqHash} - Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
@@ -182,7 +193,11 @@ namespace Qlik2DataRobot
 
                 case "predictapi":
                     Logger.Info($"{reqHash} - Predict API");
-                    string datarobot_key = Convert.ToString(config["auth_config"]["datarobot_key"]);
+                    string datarobot_key = null;
+                    if (config["auth_config"].ContainsKey("datarobot_key")){
+                        datarobot_key = Convert.ToString(config["auth_config"]["datarobot_key"]);
+                    }
+                    
                     string username = Convert.ToString(config["auth_config"]["username"]);
                     string host = Convert.ToString(config["auth_config"]["endpoint"]);
                     string project_id = null;
@@ -199,8 +214,21 @@ namespace Qlik2DataRobot
                         project_id = Convert.ToString(config["project_id"]);
                         model_id = Convert.ToString(config["model_id"]);
                     }
-                    
-                    result = await dr.PredictApiAsync(rowdatastream, api_token, datarobot_key, username, host, deployment_id:deployment_id, project_id:project_id, model_id:model_id);
+
+                    int maxCodes = 0;
+                    double thresholdHigh = 0;
+                    double thresholdLow = 0;
+                    bool explain = false;
+
+                    if (config.ContainsKey("explain"))
+                    {
+                        maxCodes = config["explain"]["max_codes"];
+                        thresholdHigh = config["explain"]["threshold_high"];
+                        thresholdLow = config["explain"]["threshold_low"];
+                        explain = true;
+                    }
+
+                    result = await dr.PredictApiAsync(rowdatastream, api_token, datarobot_key, username, host, deployment_id:deployment_id, project_id:project_id, model_id:model_id, explain:explain, maxCodes:maxCodes, thresholdHigh:thresholdHigh, thresholdLow:thresholdLow);
                     break;
 
                 default:
@@ -359,7 +387,7 @@ namespace Qlik2DataRobot
         /// Return the results from connector to Qlik Engine
         /// </summary>
         private async Task GenerateResult(MemoryStream returnedData, IServerStreamWriter<global::Qlik.Sse.BundledRows> responseStream, ServerCallContext context, int reqHash,
-            bool failIfWrongDataTypeInFirstCol = false, DataType expectedFirstDataType = DataType.Numeric, bool cacheResultInQlik = true, ResultDataColumn keyField = null, string keyname = null)
+            bool failIfWrongDataTypeInFirstCol = false, DataType expectedFirstDataType = DataType.Numeric, bool cacheResultInQlik = true, ResultDataColumn keyField = null, string keyname = null, bool includeDetail = false, bool rawExplain = false)
         {
             
             int nrOfCols = 0;
@@ -378,21 +406,82 @@ namespace Qlik2DataRobot
                 returnedData.Position = 0;
                 var data = sr.ReadToEnd();
                 Dictionary<string, dynamic> response = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(data);
-                //Logger.Trace($"{reqHash} - Returned Data: {data}");
+                Logger.Trace($"{reqHash} - Returned Data: {data}");
 
                 if (response.ContainsKey("data"))
                 {
+                    //Prediction Column
                     var a = new ResultDataColumn();
                     a.Name = "Prediction";
                     a.DataType = DataType.String;
                     a.Strings = new List<string>();
-                    foreach(dynamic p in response["data"])
+
+                    var pe = new ResultDataColumn();
+                    if (rawExplain == true)
+                    {
+                        
+                        pe.Name = $"Prediction Explanations";
+                        pe.DataType = DataType.String;
+                        pe.Strings = new List<string>();
+                        
+                    }
+
+                    //The first row will determine which fields to return in table for prediction values
+                    bool fieldListAgreed = false;
+                    
+
+
+                    //Loop through each response in array (one for each row of input data)
+                    foreach (dynamic p in response["data"])
                     {
                         a.Strings.Add(Convert.ToString(p["prediction"]));
+
+                        if(includeDetail == true)
+                        {
+                            if (fieldListAgreed == false)
+                            {
+                                foreach (dynamic pv in p["predictionValues"])
+                                {
+                                    var pvi = new ResultDataColumn();
+                                    pvi.Name = $"Prediction value for label: {pv["label"]}";
+                                    pvi.DataType = DataType.String;
+                                    pvi.Strings = new List<string>();
+                                    resultDataColumns.Add(pvi);
+                                }
+
+                                fieldListAgreed = true;
+                                Logger.Trace($"{reqHash} - Columns: {resultDataColumns.Count}");
+                            }
+
+                            //Loop through each predicted value and insert the row values to the column
+                            int index = 0;
+
+                            foreach (dynamic pv in p["predictionValues"])
+                            {
+                                resultDataColumns[index].Strings.Add(Convert.ToString(pv["value"]));
+                                index++;
+                            }
+                            
+                        }
+
+                        if (rawExplain == true)
+                        {
+                            pe.Strings.Add(Convert.ToString(p["predictionExplanations"]));
+                        }
+
                     }
 
                     if (keyname != null) resultDataColumns.Add(keyField);
+
+                    if (rawExplain == true)
+                    {
+                        resultDataColumns.Add(pe);
+                    }
+
+                    
                     resultDataColumns.Add(a);
+
+                    
 
                 }
                 else if(response.ContainsKey("response"))

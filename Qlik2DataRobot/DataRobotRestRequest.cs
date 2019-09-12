@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -101,7 +102,7 @@ namespace Qlik2DataRobot
         /// <summary>
         /// Process request against the prediction API
         /// </summary>
-        public async Task<MemoryStream> PredictApiAsync(MemoryStream data, string api_token, string datarobot_key, string username, string host, string deployment_id = null, string project_id = null, string model_id = null)
+        public async Task<MemoryStream> PredictApiAsync(MemoryStream data, string api_token, string datarobot_key, string username, string host, string deployment_id = null, string project_id = null, string model_id = null, bool explain = false, int maxCodes = 0, double thresholdHigh = 0, double thresholdLow = 0)
         {
 
             var client = Qlik2DataRobotHttpClientFactory.clientFactory.CreateClient();
@@ -112,7 +113,23 @@ namespace Qlik2DataRobot
             if(deployment_id != null)
             {
                 Logger.Trace($"{reqHash} - Deployment Score:{deployment_id}");
-                uri = new Uri($"{host}/predApi/v1.0/deployments/{deployment_id}/predictions");
+                if(explain == true)
+                {
+                    string param = "";
+                    if (maxCodes != 0) param += $"maxCodes={maxCodes}&";
+                    if (thresholdHigh != 0) param += $"thresholdHigh={thresholdHigh}&";
+                    if (thresholdLow != 0) param += $"thresholdLow={thresholdLow}";
+                    if (param != "") param = "?" + param;
+                    uri = new Uri($"{host}/predApi/v1.0/deployments/{deployment_id}/predictionExplanations{param}");
+                    
+                    Logger.Trace($"{reqHash} - URL:{uri}");
+
+                }
+                else
+                {
+                    uri = new Uri($"{host}/predApi/v1.0/deployments/{deployment_id}/predictions");
+                }
+                
             }
             else
             {
@@ -121,9 +138,17 @@ namespace Qlik2DataRobot
             }
 
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, uri);
-            message.Headers.Add("datarobot-key", datarobot_key);
+            if(datarobot_key != null)
+            {
+                message.Headers.Add("datarobot-key", datarobot_key);
+            }
+            
             
             message.Headers.Authorization = new AuthenticationHeaderValue("Token", api_token);
+
+            var verheader = $"QlikConnector/{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Revision}";
+            Logger.Trace($"{reqHash} - Request Version Header: {verheader}");
+            message.Headers.Add("X-DataRobot-API-Consumer", verheader);
 
             message.Content = new StreamContent(data);
             message.Content.Headers.Add("Content-Type", "text/csv; charset=UTF-8");
@@ -160,6 +185,11 @@ namespace Qlik2DataRobot
 
                 client.BaseAddress = new Uri(baseAddress);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", token);
+
+                var verheader = $"QlikConnector/{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Revision}";
+                Logger.Trace($"{reqHash} - Request Version Header: {verheader}");
+                client.DefaultRequestHeaders.Add("X-DataRobot-API-Consumer", verheader);
+
             }
             catch (Exception e)
             {
@@ -192,6 +222,8 @@ namespace Qlik2DataRobot
 
             return finalresponse;
         }
+
+       
 
     }
 
