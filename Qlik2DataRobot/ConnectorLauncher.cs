@@ -73,7 +73,7 @@ namespace Qlik2DataRobot
 
             //foreach (DictionaryEntry de in Environment.GetEnvironmentVariables())
             //    Console.WriteLine("  {0} = {1}", de.Key, de.Value);
-            string loglevel = Environment.GetEnvironmentVariable("QLIK2DATAROBOT_LOG_LEVEL");
+            /*string loglevel = Environment.GetEnvironmentVariable("QLIK2DATAROBOT_LOG_LEVEL");
 
 
             if(LogManager.Configuration.LoggingRules.Count == 1 && loglevel != null)
@@ -82,7 +82,7 @@ namespace Qlik2DataRobot
                 LogManager.Configuration.LoggingRules[0].SetLoggingLevels(LogLevel.FromString(loglevel), LogLevel.Fatal);
                 LogManager.ReconfigExistingLoggers();
                
-            }
+            }*/
             
 
 

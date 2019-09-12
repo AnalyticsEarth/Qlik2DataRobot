@@ -65,6 +65,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Qlik2DataRobotWin\NLog.config">
+      <Link>NLog.config</Link>
+    </None>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
