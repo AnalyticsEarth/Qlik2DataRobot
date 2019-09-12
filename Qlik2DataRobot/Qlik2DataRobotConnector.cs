@@ -420,7 +420,7 @@ namespace Qlik2DataRobot
                     if (rawExplain == true)
                     {
                         
-                        pe.Name = $"Prediction Explainations";
+                        pe.Name = $"Prediction Explanations";
                         pe.DataType = DataType.String;
                         pe.Strings = new List<string>();
                         
