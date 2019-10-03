@@ -274,6 +274,9 @@ namespace Qlik2DataRobot
             var streamWriter = new StreamWriter(memStream);
             var tw = TextWriter.Synchronized(streamWriter);
             var csv = new CsvWriter(tw);
+            csv.Configuration.Delimiter = ",";
+            
+           
 
             var keyindex = 0;
 
