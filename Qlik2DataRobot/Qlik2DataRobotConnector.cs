@@ -143,7 +143,9 @@ namespace Qlik2DataRobot
                     rawExplain = config["explain"]["return_raw"];
                 }
 
-                await GenerateResult(outData, responseStream, context, reqHash, cacheResultInQlik: shouldCache, keyField:keyField, keyname:keyname, includeDetail: inc_details, rawExplain:rawExplain);
+                string request_type = config["request_type"];
+
+                await GenerateResult(request_type, outData, responseStream, context, reqHash, cacheResultInQlik: shouldCache, keyField:keyField, keyname:keyname, includeDetail: inc_details, rawExplain:rawExplain);
                 outData = null;
                 stopwatch.Stop();
                 Logger.Debug($"{reqHash} - Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
@@ -229,6 +231,42 @@ namespace Qlik2DataRobot
                     }
 
                     result = await dr.PredictApiAsync(rowdatastream, api_token, datarobot_key, username, host, deployment_id:deployment_id, project_id:project_id, model_id:model_id, explain:explain, maxCodes:maxCodes, thresholdHigh:thresholdHigh, thresholdLow:thresholdLow);
+                    break;
+
+                case "timeseries":
+                    Logger.Info($"{reqHash} - Time Series Prediction API");
+                    datarobot_key = null;
+                    if (config["auth_config"].ContainsKey("datarobot_key"))
+                    {
+                        datarobot_key = Convert.ToString(config["auth_config"]["datarobot_key"]);
+                    }
+
+                    username = Convert.ToString(config["auth_config"]["username"]);
+                    host = Convert.ToString(config["auth_config"]["endpoint"]);
+                    project_id = null;
+                    model_id = null;
+                    deployment_id = null;
+                    string forecast_point = null;
+
+                    if (config.ContainsKey("deployment_id"))
+                    {
+                        deployment_id = Convert.ToString(config["deployment_id"]);
+                    }
+
+                    if (config.ContainsKey("project_id") && config.ContainsKey("model_id"))
+                    {
+                        project_id = Convert.ToString(config["project_id"]);
+                        model_id = Convert.ToString(config["model_id"]);
+                    }
+
+                    if (config.ContainsKey("forecast_point"))
+                    {
+                        //forecast_point = Convert.ToString(config["forecast_point"]);
+                        forecast_point = config["forecast_point"].ToString("s");
+                    }
+
+
+                    result = await dr.TimeSeriesAsync(rowdatastream, api_token, datarobot_key, username, host, deployment_id: deployment_id, project_id: project_id, model_id: model_id, forecast_point: forecast_point);
                     break;
 
                 default:
@@ -386,7 +424,7 @@ namespace Qlik2DataRobot
         /// <summary>
         /// Return the results from connector to Qlik Engine
         /// </summary>
-        private async Task GenerateResult(MemoryStream returnedData, IServerStreamWriter<global::Qlik.Sse.BundledRows> responseStream, ServerCallContext context, int reqHash,
+        private async Task GenerateResult(string request_type, MemoryStream returnedData, IServerStreamWriter<global::Qlik.Sse.BundledRows> responseStream, ServerCallContext context, int reqHash,
             bool failIfWrongDataTypeInFirstCol = false, DataType expectedFirstDataType = DataType.Numeric, bool cacheResultInQlik = true, ResultDataColumn keyField = null, string keyname = null, bool includeDetail = false, bool rawExplain = false)
         {
             
@@ -401,12 +439,14 @@ namespace Qlik2DataRobot
                 Logger.Debug($"{reqHash} - Extract JSON");
                 //Convert the stream (json) to dictionary
                 Logger.Info($"{reqHash} - Returned Datasize: {returnedData.Length}");
-                
+                Logger.Info($"{reqHash} - Request Type: {request_type}");
+
                 StreamReader sr = new StreamReader(returnedData);
                 returnedData.Position = 0;
                 var data = sr.ReadToEnd();
                 Dictionary<string, dynamic> response = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(data);
                 Logger.Trace($"{reqHash} - Returned Data: {data}");
+              
 
                 if (response.ContainsKey("data"))
                 {
@@ -415,6 +455,35 @@ namespace Qlik2DataRobot
                     a.Name = "Prediction";
                     a.DataType = DataType.String;
                     a.Strings = new List<string>();
+
+                    //Time Series Columns
+                    var seriesId = new ResultDataColumn();
+                    var forecastPoint = new ResultDataColumn();
+                    var rowId = new ResultDataColumn();
+                    var timestamp = new ResultDataColumn();
+                    var forecastDistance = new ResultDataColumn();
+                    if (request_type == "timeseries")
+                    {
+                        seriesId.Name = "seriesId";
+                        seriesId.DataType = DataType.String;
+                        seriesId.Strings = new List<string>();
+
+                        forecastPoint.Name = "forecastPoint";
+                        forecastPoint.DataType = DataType.String;
+                        forecastPoint.Strings = new List<string>();
+
+                        rowId.Name = "rowId";
+                        rowId.DataType = DataType.String;
+                        rowId.Strings = new List<string>();
+
+                        timestamp.Name = "timestamp";
+                        timestamp.DataType = DataType.String;
+                        timestamp.Strings = new List<string>();
+
+                        forecastDistance.Name = "forecastDistance";
+                        forecastDistance.DataType = DataType.String;
+                        forecastDistance.Strings = new List<string>();
+                    }
 
                     var pe = new ResultDataColumn();
                     if (rawExplain == true)
@@ -434,7 +503,21 @@ namespace Qlik2DataRobot
                     //Loop through each response in array (one for each row of input data)
                     foreach (dynamic p in response["data"])
                     {
+                        // **** For debug to display array data on console ****
+                        Logger.Info($"{reqHash} {p}"); 
+
                         a.Strings.Add(Convert.ToString(p["prediction"]));
+
+                        // Add Time Series Column Data
+                        if (request_type == "timeseries")
+                        {
+                            seriesId.Strings.Add(Convert.ToString(p["seriesId"]));
+                            forecastPoint.Strings.Add(Convert.ToString(p["forecastPoint"]));
+                            rowId.Strings.Add(Convert.ToString(p["rowId"]));
+                            timestamp.Strings.Add(Convert.ToString(p["timestamp"]));
+                            forecastDistance.Strings.Add(Convert.ToString(p["forecastDistance"]));
+
+                        }
 
                         if(includeDetail == true)
                         {
@@ -478,7 +561,17 @@ namespace Qlik2DataRobot
                         resultDataColumns.Add(pe);
                     }
 
-                    
+                    // Add Time Series Columns to resultData
+                    if (request_type == "timeseries")
+                    {
+                        resultDataColumns.Add(seriesId);
+                        resultDataColumns.Add(forecastPoint);
+                        resultDataColumns.Add(rowId);
+                        resultDataColumns.Add(timestamp);
+                        resultDataColumns.Add(forecastDistance);
+                    }
+
+
                     resultDataColumns.Add(a);
 
                     
