@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.1.403-sdk as builder  
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as builder  
  
 RUN mkdir -p /root/src/app/qlik2datarobot
 WORKDIR /root/src/app/qlik2datarobot
@@ -9,7 +9,7 @@ RUN dotnet restore ./Qlik2DataRobot.csproj
 COPY Qlik2DataRobot .
 RUN dotnet publish -c release -o published 
 
-FROM microsoft/dotnet:2.1.5-runtime
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 
 WORKDIR /root/  
 COPY --from=builder /root/src/app/qlik2datarobot/published .
