@@ -415,13 +415,17 @@ namespace Qlik2DataRobot
                     List<DataSpecification> sortedData = response.data.OrderBy(o => o.rowId).ToList();
 
                     //Return Raw Explain First So Works In Chart Expression
-                    if (shouldExplain && rawExplain)
+                    if (request_type != "timeseries")
                     {
-                        var pe = new ResultDataColumn();
-                        pe.Name = $"Prediction Explanations";
-                        pe.DataType = DataType.String;
-                        resultDataColumns.Add(pe);
+                        if (shouldExplain && rawExplain)
+                        {
+                            var pe = new ResultDataColumn();
+                            pe.Name = $"Prediction Explanations";
+                            pe.DataType = DataType.String;
+                            resultDataColumns.Add(pe);
+                        }
                     }
+                        
 
                     //Prediction Column
                     var a = new ResultDataColumn();
@@ -487,12 +491,11 @@ namespace Qlik2DataRobot
                     }
 
 
-                    
 
-                    if (shouldExplain && !rawExplain)
+                    if (request_type != "timeseries")
                     {
-                        
-
+                        if (shouldExplain && !rawExplain)
+                        {
                             for (int j = 0; j < explain_max; j++)
                             {
                                 foreach (string field in new[] { "label", "feature", "featureValue", "strength", "qualitativeStrength" })
@@ -503,7 +506,9 @@ namespace Qlik2DataRobot
                                     resultDataColumns.Add(pe);
                                 }
                             }
+                        }
                     }
+                        
 
                     nrOfRows = sortedData.Count;
                     nrOfCols = resultDataColumns.Count;
@@ -522,10 +527,22 @@ namespace Qlik2DataRobot
                     {
                         var row = new Row();
 
-                        if (shouldExplain && rawExplain)
+                        if(request_type != "timeseries")
                         {
-                            row.Duals.Add(new Dual() { StrData = JsonConvert.SerializeObject(p.predictionExplanations) ?? "" });
+                            if (shouldExplain && rawExplain)
+                            {
+                                if (p.predictionExplanations != null)
+                                {
+                                    row.Duals.Add(new Dual() { StrData = JsonConvert.SerializeObject(p.predictionExplanations) ?? "" });
+                                }
+                                else
+                                {
+                                    row.Duals.Add(new Dual() { StrData = "[]" });
+                                }
+
+                            }
                         }
+                        
 
                         //Prediction Column
                         row.Duals.Add(new Dual() { StrData = Convert.ToString(p.prediction) ?? "" });
@@ -602,40 +619,24 @@ namespace Qlik2DataRobot
                         await responseStream.WriteAsync(bundledRows);
                         bundledRows = null;
                     }
-                        
-
-                        //////////////////////////////////
-
-                    /*
-                        // Add Time Series Column Data
-                        if (request_type == "timeseries")
-                        {
-                            seriesId.Strings.Add(Convert.ToString(p.seriesId));
-                            forecastPoint.Strings.Add(Convert.ToString(p.forecastPoint));
-                            rowId.Strings.Add(Convert.ToString(p.rowId));
-                            timestamp.Strings.Add(Convert.ToString(p.timestamp));
-                            forecastDistance.Strings.Add(Convert.ToString(p.forecastDistance));
-                        }
-
-                       */ 
-
-                        
-
+                       
 
                 }
                 else if(response.response != null)
                 {
+                    Logger.Trace($"{reqHash} - Processing Status Response for Project ID: {response.response.id}");
                     var a = new ResultDataColumn();
                     a.Name = "Result";
                     a.DataType = DataType.String;
 
                     resultDataColumns.Add(a);
 
-                    await GenerateAndSendHeadersAsync(context, nrOfRows, nrOfCols, resultDataColumns, cacheResultInQlik);
+                    await GenerateAndSendHeadersAsync(context, 1, 1, resultDataColumns, cacheResultInQlik);
 
                     var bundledRows = new BundledRows();
                     var row = new Row();
                     row.Duals.Add(new Dual() { StrData = Convert.ToString(response.response.id) ?? "" });
+                    bundledRows.Rows.Add(row);
                     await responseStream.WriteAsync(bundledRows);
                     bundledRows = null;
 
