@@ -102,7 +102,7 @@ namespace Qlik2DataRobot
         /// <summary>
         /// Process request against the prediction API
         /// </summary>
-        public async Task<MemoryStream> PredictApiAsync(MemoryStream data, string api_token, string datarobot_key, string username, string host, string deployment_id = null, string project_id = null, string model_id = null, bool explain = false, int maxCodes = 0, double thresholdHigh = 0, double thresholdLow = 0)
+        public async Task<MemoryStream> PredictApiAsync(MemoryStream data, string api_token, string datarobot_key, string host, string deployment_id = null, string project_id = null, string model_id = null, string keyField = null, bool explain = false, int maxCodes = 0, double thresholdHigh = 0, double thresholdLow = 0)
         {
 
             var client = Qlik2DataRobotHttpClientFactory.clientFactory.CreateClient();
@@ -113,9 +113,10 @@ namespace Qlik2DataRobot
             if(deployment_id != null)
             {
                 Logger.Trace($"{reqHash} - Deployment Score:{deployment_id}");
-                if(explain == true)
+                string param = "";
+                if (keyField != null) param += $"passthroughColumns={keyField}&";
+                if (explain == true)
                 {
-                    string param = "";
                     if (maxCodes != 0) param += $"maxCodes={maxCodes}&";
                     if (thresholdHigh != 0) param += $"thresholdHigh={thresholdHigh}&";
                     if (thresholdLow != 0) param += $"thresholdLow={thresholdLow}";
@@ -127,7 +128,9 @@ namespace Qlik2DataRobot
                 }
                 else
                 {
-                    uri = new Uri($"{host}/predApi/v1.0/deployments/{deployment_id}/predictions");
+                    if (param != "") param = "?" + param;
+                    uri = new Uri($"{host}/predApi/v1.0/deployments/{deployment_id}/predictions{param}");
+                    Logger.Trace($"{reqHash} - URL:{uri}");
                 }
                 
             }
@@ -144,6 +147,69 @@ namespace Qlik2DataRobot
             }
             
             
+            message.Headers.Authorization = new AuthenticationHeaderValue("Token", api_token);
+
+            var verheader = $"QlikConnector/{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Revision}";
+            Logger.Trace($"{reqHash} - Request Version Header: {verheader}");
+            message.Headers.Add("X-DataRobot-API-Consumer", verheader);
+
+            message.Content = new StreamContent(data);
+            message.Content.Headers.Add("Content-Type", "text/csv; charset=UTF-8");
+
+            HttpResponseMessage response = client.SendAsync(message).Result;
+
+            Logger.Trace($"{reqHash} - Status Code: {response.StatusCode}");
+
+            Stream rdata = await response.Content.ReadAsStreamAsync();
+
+            var mdata = new MemoryStream();
+            rdata.Position = 0;
+            rdata.CopyTo(mdata);
+
+            return mdata;
+        }
+
+        /// <summary>
+        /// Process request against the Time Series Prediction API
+        /// </summary>
+        public async Task<MemoryStream> TimeSeriesAsync(MemoryStream data, string api_token, string datarobot_key, string host, string deployment_id = null, string project_id = null, string model_id = null, string forecast_point = null)
+        {
+
+            var client = Qlik2DataRobotHttpClientFactory.clientFactory.CreateClient();
+            client.Timeout = new System.TimeSpan(0, 5, 0);
+
+            Uri uri;
+
+            if (deployment_id != null)
+            {
+                Logger.Trace($"{reqHash} - Deployment Score:{deployment_id}");
+                if (forecast_point != null)
+                {
+                    string param = $"?forecastPoint={forecast_point}";
+                    uri = new Uri($"{host}/predApi/v1.0/deployments/{deployment_id}/timeSeriesPredictions{param}");
+
+                    Logger.Trace($"{reqHash} - URL:{uri}");
+
+                }
+                else
+                {
+                    uri = new Uri($"{host}/predApi/v1.0/deployments/{deployment_id}/timeSeriesPredictions");
+                }
+
+            }
+            else
+            {
+                Logger.Trace($"{reqHash} - Project/Model Score:{project_id} {model_id}");
+                uri = new Uri($"{host}/predApi/v1.0/{project_id}/{model_id}/timeSeriesPredictions");
+            }
+
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, uri);
+            if (datarobot_key != null)
+            {
+                message.Headers.Add("datarobot-key", datarobot_key);
+            }
+
+
             message.Headers.Authorization = new AuthenticationHeaderValue("Token", api_token);
 
             var verheader = $"QlikConnector/{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Revision}";
