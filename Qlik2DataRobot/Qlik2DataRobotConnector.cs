@@ -105,47 +105,42 @@ namespace Qlik2DataRobot
                 Logger.Trace("{0}", paramnames);
 
                 Logger.Trace(scriptHeader.Script);
-                Dictionary< string,dynamic> config = JsonConvert.DeserializeObject<Dictionary<string,dynamic>>(scriptHeader.Script);
+                RequestSpecification config = JsonConvert.DeserializeObject<RequestSpecification>(scriptHeader.Script);
 
                 var Params = GetParams(scriptHeader.Params.ToArray());
 
                 string keyname = null;
-                if(config.ContainsKey("keyfield"))
+                if(config.keyfield != null)
                 {
-                    keyname = Convert.ToString(config["keyfield"]);
+                    keyname = config.keyfield;
 
                 }
                 
 
                 ResultDataColumn keyField = new ResultDataColumn();
-                var rowdatastream = await ConvertBundledRowsToCSV(Params, requestStream, context, keyField, keyname);
+                var rowdatastream = await ConvertBundledRowsToCSV(Params, requestStream, context, keyField, keyname, config.timestamp_field, config.timestamp_format);
                 Logger.Debug($"{reqHash} - Input Data Size: {rowdatastream.Length}");
                 
                 var outData = await SelectFunction(config, rowdatastream, reqHash);
                 rowdatastream = null;
 
-                bool shouldCache = false;
+                bool shouldCache = config.should_cache;
 
-                if (config.ContainsKey("should_cache"))
-                {
-                    shouldCache = config["should_cache"];
-                }
-
-                bool inc_details = false;
+                bool inc_details = config.inc_details;
                 bool rawExplain = false;
-                if (config.ContainsKey("inc_details"))
+                bool shouldExplain = false;
+                int max_codes = 0;
+
+                if (config.explain != null)
                 {
-                    inc_details = config["inc_details"];
+                    shouldExplain = true;
+                    rawExplain = config.explain.return_raw;
+                    max_codes = config.explain.max_codes;
                 }
 
-                if (config.ContainsKey("explain"))
-                {
-                    rawExplain = config["explain"]["return_raw"];
-                }
+                string request_type = config.request_type;
 
-                string request_type = config["request_type"];
-
-                await GenerateResult(request_type, outData, responseStream, context, reqHash, cacheResultInQlik: shouldCache, keyField:keyField, keyname:keyname, includeDetail: inc_details, rawExplain:rawExplain);
+                await GenerateResult(request_type, outData, responseStream, context, reqHash, cacheResultInQlik: shouldCache, keyField:keyField, keyname:keyname, includeDetail: inc_details, shouldExplain:shouldExplain, rawExplain:rawExplain, explain_max:max_codes);
                 outData = null;
                 stopwatch.Stop();
                 Logger.Debug($"{reqHash} - Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
@@ -168,26 +163,33 @@ namespace Qlik2DataRobot
         /// <summary>
         /// Select the functiona based upon the request specification
         /// </summary>
-        private async Task<MemoryStream> SelectFunction(Dictionary<string, dynamic> config, MemoryStream rowdatastream, int reqHash)
+        private async Task<MemoryStream> SelectFunction(RequestSpecification config, MemoryStream rowdatastream, int reqHash)
         {
            
             Logger.Info($"{reqHash} - Start DataRobot");
             DataRobotRestRequest dr = new DataRobotRestRequest(reqHash);
            
-            string api_token = Convert.ToString(config["auth_config"]["api_token"]);
+            string api_token = Convert.ToString(config.auth_config.api_token);
+            string datarobot_key = config.auth_config.datarobot_key;
+
+            string host = config.auth_config.endpoint;
+            string project_id = config.project_id;
+            string model_id = config.model_id;
+            string deployment_id = config.deployment_id;
+            string keyField = config.keyfield;
 
             MemoryStream result = new MemoryStream();
-            switch (config["request_type"])
+            switch (config.request_type)
             {
                 case "createproject":
                     Logger.Info($"{reqHash} - Create Project");
-                    string project_name = Convert.ToString(config["project_name"]);
+                    string project_name = Convert.ToString(config.project_name);
 
                     var zippedstream = await CompressStream(rowdatastream, project_name, reqHash);
                     
                     Logger.Info($"{reqHash} - Zipped Data Size: {zippedstream.Length}");
 
-                    string endpoint = Convert.ToString(config["auth_config"]["endpoint"]);
+                    string endpoint = Convert.ToString(config.auth_config.endpoint);
                     if (endpoint.Substring(endpoint.Length - 2) != "/") endpoint = endpoint + "/";
                     
                     result = await dr.CreateProjectsAsync(endpoint, api_token, zippedstream, project_name, project_name + ".zip");
@@ -195,78 +197,40 @@ namespace Qlik2DataRobot
 
                 case "predictapi":
                     Logger.Info($"{reqHash} - Predict API");
-                    string datarobot_key = null;
-                    if (config["auth_config"].ContainsKey("datarobot_key")){
-                        datarobot_key = Convert.ToString(config["auth_config"]["datarobot_key"]);
-                    }
+                                        
                     
-                    string username = Convert.ToString(config["auth_config"]["username"]);
-                    string host = Convert.ToString(config["auth_config"]["endpoint"]);
-                    string project_id = null;
-                    string model_id = null;
-                    string deployment_id = null;
-
-                    if (config.ContainsKey("deployment_id"))
-                    {
-                        deployment_id = Convert.ToString(config["deployment_id"]);
-                    }
-
-                    if (config.ContainsKey("project_id") && config.ContainsKey("model_id"))
-                    {
-                        project_id = Convert.ToString(config["project_id"]);
-                        model_id = Convert.ToString(config["model_id"]);
-                    }
 
                     int maxCodes = 0;
                     double thresholdHigh = 0;
                     double thresholdLow = 0;
                     bool explain = false;
 
-                    if (config.ContainsKey("explain"))
+                    if (config.explain != null)
                     {
-                        maxCodes = config["explain"]["max_codes"];
-                        thresholdHigh = config["explain"]["threshold_high"];
-                        thresholdLow = config["explain"]["threshold_low"];
+                        maxCodes = config.explain.max_codes;
+                        thresholdHigh = config.explain.threshold_high;
+                        thresholdLow = config.explain.threshold_low;
                         explain = true;
                     }
 
-                    result = await dr.PredictApiAsync(rowdatastream, api_token, datarobot_key, username, host, deployment_id:deployment_id, project_id:project_id, model_id:model_id, explain:explain, maxCodes:maxCodes, thresholdHigh:thresholdHigh, thresholdLow:thresholdLow);
+                    result = await dr.PredictApiAsync(rowdatastream, api_token, datarobot_key, host, deployment_id:deployment_id, project_id:project_id, model_id:model_id, keyField:keyField, explain:explain, maxCodes:maxCodes, thresholdHigh:thresholdHigh, thresholdLow:thresholdLow);
                     break;
 
                 case "timeseries":
                     Logger.Info($"{reqHash} - Time Series Prediction API");
-                    datarobot_key = null;
-                    if (config["auth_config"].ContainsKey("datarobot_key"))
-                    {
-                        datarobot_key = Convert.ToString(config["auth_config"]["datarobot_key"]);
-                    }
-
-                    username = Convert.ToString(config["auth_config"]["username"]);
-                    host = Convert.ToString(config["auth_config"]["endpoint"]);
-                    project_id = null;
-                    model_id = null;
-                    deployment_id = null;
+                    
                     string forecast_point = null;
 
-                    if (config.ContainsKey("deployment_id"))
-                    {
-                        deployment_id = Convert.ToString(config["deployment_id"]);
-                    }
+                    
 
-                    if (config.ContainsKey("project_id") && config.ContainsKey("model_id"))
+                    if (config.forecast_point != null)
                     {
-                        project_id = Convert.ToString(config["project_id"]);
-                        model_id = Convert.ToString(config["model_id"]);
-                    }
-
-                    if (config.ContainsKey("forecast_point"))
-                    {
-                        //forecast_point = Convert.ToString(config["forecast_point"]);
-                        forecast_point = config["forecast_point"].ToString("s");
+                        forecast_point = Convert.ToString(config.forecast_point);
+                        //forecast_point = config.forecast_point.ToString("s");
                     }
 
 
-                    result = await dr.TimeSeriesAsync(rowdatastream, api_token, datarobot_key, username, host, deployment_id: deployment_id, project_id: project_id, model_id: model_id, forecast_point: forecast_point);
+                    result = await dr.TimeSeriesAsync(rowdatastream, api_token, datarobot_key, host, deployment_id: deployment_id, project_id: project_id, model_id: model_id, forecast_point: forecast_point);
                     break;
 
                 default:
@@ -303,7 +267,7 @@ namespace Qlik2DataRobot
         /// <summary>
         /// Convert the input data into a CSV file within memory stream
         /// </summary>
-        private async Task<MemoryStream> ConvertBundledRowsToCSV(ParameterData[] Parameters, IAsyncStreamReader<global::Qlik.Sse.BundledRows> requestStream, ServerCallContext context, ResultDataColumn keyField, string keyname)
+        private async Task<MemoryStream> ConvertBundledRowsToCSV(ParameterData[] Parameters, IAsyncStreamReader<global::Qlik.Sse.BundledRows> requestStream, ServerCallContext context, ResultDataColumn keyField, string keyname, string timestamp_field = "", string timestamp_format = "s")
         {
             int reqHash = requestStream.GetHashCode();
             Logger.Debug($"{reqHash} - Start Create CSV");
@@ -365,26 +329,20 @@ namespace Qlik2DataRobot
                         switch (param.DataType)
                         {
                             case DataType.Numeric:
-
-                                if (keyindex == i && keyname != null)
+                            case DataType.Dual:
+                                if (param.ParamName == timestamp_field)
                                 {
-                                    keyField.Numerics.Add(dual.NumData);
+                                    Logger.Trace($"{reqHash} - Timestamp: {dual.NumData} {dual.StrData}");
+                                    var date = (new DateTime(1900, 1, 1)).AddMilliseconds(dual.NumData * 86400000);
+                                    csv.WriteField(date.ToString(timestamp_format));
                                 }
-                                csv.WriteField(dual.NumData.ToString());
+                                else
+                                {
+                                    csv.WriteField(dual.NumData.ToString());
+                                }
                                 break;
                             case DataType.String:
-                                if (keyindex == i && keyname != null)
-                                {
-                                    keyField.Strings.Add(dual.StrData);
-                                }
                                 csv.WriteField(dual.StrData);
-                                break;
-                            case DataType.Dual:
-                                if (keyindex == i && keyname != null)
-                                {
-                                    keyField.Numerics.Add(dual.NumData);
-                                }
-                                csv.WriteField(dual.NumData.ToString());
                                 break;
                         }
                         
@@ -425,7 +383,7 @@ namespace Qlik2DataRobot
         /// Return the results from connector to Qlik Engine
         /// </summary>
         private async Task GenerateResult(string request_type, MemoryStream returnedData, IServerStreamWriter<global::Qlik.Sse.BundledRows> responseStream, ServerCallContext context, int reqHash,
-            bool failIfWrongDataTypeInFirstCol = false, DataType expectedFirstDataType = DataType.Numeric, bool cacheResultInQlik = true, ResultDataColumn keyField = null, string keyname = null, bool includeDetail = false, bool rawExplain = false)
+            bool failIfWrongDataTypeInFirstCol = false, DataType expectedFirstDataType = DataType.Numeric, bool cacheResultInQlik = true, ResultDataColumn keyField = null, string keyname = null, bool includeDetail = false, bool shouldExplain = false, bool rawExplain = false, int explain_max = 0)
         {
             
             int nrOfCols = 0;
@@ -444,153 +402,250 @@ namespace Qlik2DataRobot
                 StreamReader sr = new StreamReader(returnedData);
                 returnedData.Position = 0;
                 var data = sr.ReadToEnd();
-                Dictionary<string, dynamic> response = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(data);
+                //Dictionary<string, dynamic> response = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(data);
+                ResponseSpecification response = JsonConvert.DeserializeObject<ResponseSpecification>(data);
                 Logger.Trace($"{reqHash} - Returned Data: {data}");
               
 
-                if (response.ContainsKey("data"))
+                if (response.data != null)
                 {
+                    Logger.Trace($"{reqHash} - Response Data: {response.data}");
+
+                    //Sort the response by RowId
+                    List<DataSpecification> sortedData = response.data.OrderBy(o => o.rowId).ToList();
+
+                    //Return Raw Explain First So Works In Chart Expression
+                    if (shouldExplain && rawExplain)
+                    {
+                        var pe = new ResultDataColumn();
+                        pe.Name = $"Prediction Explanations";
+                        pe.DataType = DataType.String;
+                        resultDataColumns.Add(pe);
+                    }
+
                     //Prediction Column
                     var a = new ResultDataColumn();
                     a.Name = "Prediction";
                     a.DataType = DataType.String;
-                    a.Strings = new List<string>();
+                    //a.Strings = new List<string>();
+                    resultDataColumns.Add(a);
 
-                    //Time Series Columns
-                    var seriesId = new ResultDataColumn();
-                    var forecastPoint = new ResultDataColumn();
-                    var rowId = new ResultDataColumn();
-                    var timestamp = new ResultDataColumn();
-                    var forecastDistance = new ResultDataColumn();
-                    if (request_type == "timeseries")
-                    {
-                        seriesId.Name = "seriesId";
-                        seriesId.DataType = DataType.String;
-                        seriesId.Strings = new List<string>();
-
-                        forecastPoint.Name = "forecastPoint";
-                        forecastPoint.DataType = DataType.String;
-                        forecastPoint.Strings = new List<string>();
-
-                        rowId.Name = "rowId";
-                        rowId.DataType = DataType.String;
-                        rowId.Strings = new List<string>();
-
-                        timestamp.Name = "timestamp";
-                        timestamp.DataType = DataType.String;
-                        timestamp.Strings = new List<string>();
-
-                        forecastDistance.Name = "forecastDistance";
-                        forecastDistance.DataType = DataType.String;
-                        forecastDistance.Strings = new List<string>();
-                    }
-
-                    var pe = new ResultDataColumn();
-                    if (rawExplain == true)
-                    {
-                        
-                        pe.Name = $"Prediction Explanations";
-                        pe.DataType = DataType.String;
-                        pe.Strings = new List<string>();
-                        
-                    }
-
-                    //The first row will determine which fields to return in table for prediction values
-                    bool fieldListAgreed = false;
-                    
-
-
-                    //Loop through each response in array (one for each row of input data)
-                    foreach (dynamic p in response["data"])
-                    {
-                        // **** For debug to display array data on console ****
-                        Logger.Info($"{reqHash} {p}"); 
-
-                        a.Strings.Add(Convert.ToString(p["prediction"]));
-
-                        // Add Time Series Column Data
-                        if (request_type == "timeseries")
-                        {
-                            seriesId.Strings.Add(Convert.ToString(p["seriesId"]));
-                            forecastPoint.Strings.Add(Convert.ToString(p["forecastPoint"]));
-                            rowId.Strings.Add(Convert.ToString(p["rowId"]));
-                            timestamp.Strings.Add(Convert.ToString(p["timestamp"]));
-                            forecastDistance.Strings.Add(Convert.ToString(p["forecastDistance"]));
-
-                        }
-
-                        if(includeDetail == true)
-                        {
-                            if (fieldListAgreed == false)
-                            {
-                                foreach (dynamic pv in p["predictionValues"])
-                                {
-                                    var pvi = new ResultDataColumn();
-                                    pvi.Name = $"Prediction value for label: {pv["label"]}";
-                                    pvi.DataType = DataType.String;
-                                    pvi.Strings = new List<string>();
-                                    resultDataColumns.Add(pvi);
-                                }
-
-                                fieldListAgreed = true;
-                                Logger.Trace($"{reqHash} - Columns: {resultDataColumns.Count}");
-                            }
-
-                            //Loop through each predicted value and insert the row values to the column
-                            int index = 0;
-
-                            foreach (dynamic pv in p["predictionValues"])
-                            {
-                                resultDataColumns[index].Strings.Add(Convert.ToString(pv["value"]));
-                                index++;
-                            }
-                            
-                        }
-
-                        if (rawExplain == true)
-                        {
-                            pe.Strings.Add(Convert.ToString(p["predictionExplanations"]));
-                        }
-
-                    }
-
+                    //Include Keyfield
                     if (keyname != null) resultDataColumns.Add(keyField);
 
-                    if (rawExplain == true)
+                    //The first row will determine which fields to return in table for prediction values
+                    if (includeDetail == true)
                     {
-                        resultDataColumns.Add(pe);
+                        foreach (PredictionValueSpecification pv in sortedData[0].predictionValues)
+                        {
+                            var pvi = new ResultDataColumn();
+                            pvi.Name = $"Prediction value for label: {pv.label}";
+                            pvi.DataType = DataType.String;
+                            resultDataColumns.Add(pvi);
+                        }
                     }
+
 
                     // Add Time Series Columns to resultData
                     if (request_type == "timeseries")
                     {
+                        //Row Id
+                        var rowId = new ResultDataColumn();
+                        rowId.Name = "rowId";
+                        rowId.DataType = DataType.String;
+
+                        //Time Series Columns
+                        var seriesId = new ResultDataColumn();
+                        seriesId.Name = "seriesId";
+                        seriesId.DataType = DataType.String;
+
+                        var forecastPoint = new ResultDataColumn();
+                        forecastPoint.Name = "forecastPoint";
+                        forecastPoint.DataType = DataType.String;
+
+                        var timestamp = new ResultDataColumn();
+                        timestamp.Name = "timestamp";
+                        timestamp.DataType = DataType.String;
+
+                        var forecastDistance = new ResultDataColumn();
+                        forecastDistance.Name = "forecastDistance";
+                        forecastDistance.DataType = DataType.String;
+
+                        var originalFormatTimestamp = new ResultDataColumn();
+                        originalFormatTimestamp.Name = "originalFormatTimestamp";
+                        originalFormatTimestamp.DataType = DataType.String;
+
+                      
+
+                        resultDataColumns.Add(rowId);
                         resultDataColumns.Add(seriesId);
                         resultDataColumns.Add(forecastPoint);
-                        resultDataColumns.Add(rowId);
                         resultDataColumns.Add(timestamp);
                         resultDataColumns.Add(forecastDistance);
+                        resultDataColumns.Add(originalFormatTimestamp);
+
                     }
 
 
-                    resultDataColumns.Add(a);
-
                     
 
+                    if (shouldExplain && !rawExplain)
+                    {
+                        
+
+                            for (int j = 0; j < explain_max; j++)
+                            {
+                                foreach (string field in new[] { "label", "feature", "featureValue", "strength", "qualitativeStrength" })
+                                {
+                                    var pe = new ResultDataColumn();
+                                    pe.Name = $"PE_{j + 1}_{field}";
+                                    pe.DataType = DataType.String;
+                                    resultDataColumns.Add(pe);
+                                }
+                            }
+                    }
+
+                    nrOfRows = sortedData.Count;
+                    nrOfCols = resultDataColumns.Count;
+                    Logger.Debug($"{reqHash} - Result Number of Columns: {nrOfCols}");
+
+                    await GenerateAndSendHeadersAsync(context, nrOfRows, nrOfCols, resultDataColumns, cacheResultInQlik);
+
+                    Logger.Trace($"{reqHash} - Start Loop");
+
+                    // Send data
+                    var bundledRows = new BundledRows();
+
+                    //Loop through each response in array (one for each row of input data)
+                    int i = 0;
+                    foreach (DataSpecification p in sortedData)
+                    {
+                        var row = new Row();
+
+                        if (shouldExplain && rawExplain)
+                        {
+                            row.Duals.Add(new Dual() { StrData = JsonConvert.SerializeObject(p.predictionExplanations) ?? "" });
+                        }
+
+                        //Prediction Column
+                        row.Duals.Add(new Dual() { StrData = Convert.ToString(p.prediction) ?? "" });
+                        Logger.Trace($"{reqHash} - In Loop RowId: {p.rowId}");
+
+                        //KeyField Column
+                        if (p.passthroughValues != null)
+                        {
+                            row.Duals.Add(new Dual() { StrData = Convert.ToString(p.passthroughValues[keyField.Name]) ?? "" });
+                        }
+
+                        //Include Details
+                        if (includeDetail == true)
+                        {
+                            //Loop through each predicted value and insert the row values to the column
+                            foreach (PredictionValueSpecification pv in p.predictionValues)
+                            {
+                                row.Duals.Add(new Dual() { StrData = Convert.ToString(pv.value) ?? "" });
+                            }
+                        }
+
+                        //Timeseries field
+                        if (request_type == "timeseries")
+                        {
+                            row.Duals.Add(new Dual() { StrData = Convert.ToString(p.rowId) ?? "" });
+                            row.Duals.Add(new Dual() { StrData = Convert.ToString(p.seriesId) ?? "" });
+                            row.Duals.Add(new Dual() { StrData = Convert.ToString(p.forecastPoint) ?? "" });
+                            row.Duals.Add(new Dual() { StrData = Convert.ToString(p.timestamp) ?? "" });
+                            row.Duals.Add(new Dual() { StrData = Convert.ToString(p.forecastDistance) ?? "" });
+                            row.Duals.Add(new Dual() { StrData = Convert.ToString(p.originalFormatTimestamp) ?? "" });
+                        }
+
+                        //Include Prediction Explanations
+                        if (shouldExplain && !rawExplain)
+                        {
+                                foreach(PredictionExplanationSpecification pe in p.predictionExplanations)
+                                {
+                                    row.Duals.Add(new Dual() { StrData = Convert.ToString(pe.label) ?? "" });
+                                    row.Duals.Add(new Dual() { StrData = Convert.ToString(pe.feature) ?? "" });
+                                    row.Duals.Add(new Dual() { StrData = Convert.ToString(pe.featureValue) ?? "" });
+                                    row.Duals.Add(new Dual() { StrData = Convert.ToString(pe.strength) ?? "" });
+                                    row.Duals.Add(new Dual() { StrData = Convert.ToString(pe.qualitativeStrength) ?? "" });
+                                }
+
+                                for(int j = p.predictionExplanations.Count; j < explain_max; j++)
+                                {
+                                    row.Duals.Add(new Dual() { });
+                                    row.Duals.Add(new Dual() { });
+                                    row.Duals.Add(new Dual() { });
+                                    row.Duals.Add(new Dual() { });
+                                    row.Duals.Add(new Dual() { });
+                                }
+                        }
+
+                        //Add the row the bundle
+                        bundledRows.Rows.Add(row);
+
+                        //When we get a batch of 2000 rows, send the response 
+                        if (((i + 1) % 2000) == 0)
+                        {
+                            // Send a bundle
+                            await responseStream.WriteAsync(bundledRows);
+                            //Reset the bundle
+                            bundledRows = null;
+                            bundledRows = new BundledRows();
+                        }
+                        i++;
+                    }        
+
+                    //Send any left over rows after the final loop
+                    if (bundledRows.Rows.Count() > 0)
+                    {
+                        // Send last bundle
+                        await responseStream.WriteAsync(bundledRows);
+                        bundledRows = null;
+                    }
+                        
+
+                        //////////////////////////////////
+
+                    /*
+                        // Add Time Series Column Data
+                        if (request_type == "timeseries")
+                        {
+                            seriesId.Strings.Add(Convert.ToString(p.seriesId));
+                            forecastPoint.Strings.Add(Convert.ToString(p.forecastPoint));
+                            rowId.Strings.Add(Convert.ToString(p.rowId));
+                            timestamp.Strings.Add(Convert.ToString(p.timestamp));
+                            forecastDistance.Strings.Add(Convert.ToString(p.forecastDistance));
+                        }
+
+                       */ 
+
+                        
+
+
                 }
-                else if(response.ContainsKey("response"))
+                else if(response.response != null)
                 {
                     var a = new ResultDataColumn();
                     a.Name = "Result";
                     a.DataType = DataType.String;
-                    a.Strings = new List<string>();
-                    a.Strings.Add(Convert.ToString(response["response"]["id"]));
 
                     resultDataColumns.Add(a);
+
+                    await GenerateAndSendHeadersAsync(context, nrOfRows, nrOfCols, resultDataColumns, cacheResultInQlik);
+
+                    var bundledRows = new BundledRows();
+                    var row = new Row();
+                    row.Duals.Add(new Dual() { StrData = Convert.ToString(response.response.id) ?? "" });
+                    await responseStream.WriteAsync(bundledRows);
+                    bundledRows = null;
+
+
+
                 } else
                 {
-                    if (response.ContainsKey("message"))
+                    if (response.message != null)
                     {
-                        throw new Exception($"The following error message was returned from DataRobot: {response["message"]}");
+                        throw new Exception($"The following error message was returned from DataRobot: {response.message}");
                     }
                     else
                     {
@@ -599,94 +654,52 @@ namespace Qlik2DataRobot
                     
                 }
 
-                nrOfRows = resultDataColumns[0].DataType == DataType.String ? resultDataColumns[0].Strings.Count : resultDataColumns[0].Numerics.Count;
-                nrOfCols = resultDataColumns.Count;
-                Logger.Debug($"{reqHash} - Result Number of Columns: {nrOfCols}");
+                
 
             }
+            
+        }
 
+        private async Task GenerateAndSendHeadersAsync(ServerCallContext context, int nrOfRows, int nrOfCols, List<ResultDataColumn> resultDataColumns, bool cacheResultInQlik)
+        {
 
-            if (resultDataColumns != null)
+            //Send TableDescription header
+            TableDescription tableDesc = new TableDescription
             {
-                if (failIfWrongDataTypeInFirstCol && expectedFirstDataType != resultDataColumns[0].DataType)
-                {
-                    string msg = $"Result datatype mismatch in first column, expected {expectedFirstDataType}, got {resultDataColumns[0].DataType}";
-                    Logger.Warn($"{reqHash} - {msg}");
-                    throw new RpcException(new Status(StatusCode.InvalidArgument, $"{msg}"));
-                }
+                NumberOfRows = nrOfRows
+            };
 
-                //Send TableDescription header
-                TableDescription tableDesc = new TableDescription
+            for (int col = 0; col < nrOfCols; col++)
+            {
+                if (String.IsNullOrEmpty(resultDataColumns[col].Name))
                 {
-                    NumberOfRows = nrOfRows
-                };
-
-                for (int col = 0; col < nrOfCols; col++)
-                {
-                    if (String.IsNullOrEmpty(resultDataColumns[col].Name))
+                    tableDesc.Fields.Add(new FieldDescription
                     {
-                        tableDesc.Fields.Add(new FieldDescription
-                        {
-                            DataType = resultDataColumns[col].DataType
-                        });
-                    }
-                    else
-                    {
-                        tableDesc.Fields.Add(new FieldDescription
-                        {
-                            DataType = resultDataColumns[col].DataType,
-                            Name = resultDataColumns[col].Name
-                        });
-                    }
+                        DataType = resultDataColumns[col].DataType
+                    });
                 }
-
-                var tableMetadata = new Metadata
+                else
                 {
-                    { new Metadata.Entry("qlik-tabledescription-bin", MessageExtensions.ToByteArray(tableDesc)) }
-                };
-
-                if (!cacheResultInQlik)
-                {
-                    tableMetadata.Add("qlik-cache", "no-store");
-                }
-
-                await context.WriteResponseHeadersAsync(tableMetadata);
-
-                // Send data
-                var bundledRows = new BundledRows();
-
-                for (int i = 0; i < nrOfRows; i++)
-                {
-                    var row = new Row();
-
-                    for (int col = 0; col < nrOfCols; col++)
+                    tableDesc.Fields.Add(new FieldDescription
                     {
-                        if (resultDataColumns[col].DataType == DataType.Numeric)
-                        {
-                            row.Duals.Add(new Dual() { NumData = resultDataColumns[col].Numerics[i] });
-                        }
-                        else if (resultDataColumns[col].DataType == DataType.String)
-                        {
-                            row.Duals.Add(new Dual() { StrData = resultDataColumns[col].Strings[i] ?? "" });
-                        }
-                    }
-                    bundledRows.Rows.Add(row);
-                    if (((i + 1) % 2000) == 0)
-                    {
-                        // Send a bundle
-                        await responseStream.WriteAsync(bundledRows);
-                        bundledRows = null;
-                        bundledRows = new BundledRows();
-                    }
-                }
-
-                if (bundledRows.Rows.Count() > 0)
-                {
-                    // Send last bundle
-                    await responseStream.WriteAsync(bundledRows);
-                    bundledRows = null;
+                        DataType = resultDataColumns[col].DataType,
+                        Name = resultDataColumns[col].Name
+                    });
                 }
             }
+
+            var tableMetadata = new Metadata
+                    {
+                        { new Metadata.Entry("qlik-tabledescription-bin", MessageExtensions.ToByteArray(tableDesc)) }
+                    };
+
+            if (!cacheResultInQlik)
+            {
+                tableMetadata.Add("qlik-cache", "no-store");
+            }
+
+            await context.WriteResponseHeadersAsync(tableMetadata);
+
         }
 
         byte[] GetHeader(Metadata Headers, string Key)

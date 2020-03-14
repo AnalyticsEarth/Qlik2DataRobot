@@ -102,7 +102,7 @@ namespace Qlik2DataRobot
         /// <summary>
         /// Process request against the prediction API
         /// </summary>
-        public async Task<MemoryStream> PredictApiAsync(MemoryStream data, string api_token, string datarobot_key, string username, string host, string deployment_id = null, string project_id = null, string model_id = null, bool explain = false, int maxCodes = 0, double thresholdHigh = 0, double thresholdLow = 0)
+        public async Task<MemoryStream> PredictApiAsync(MemoryStream data, string api_token, string datarobot_key, string host, string deployment_id = null, string project_id = null, string model_id = null, string keyField = null, bool explain = false, int maxCodes = 0, double thresholdHigh = 0, double thresholdLow = 0)
         {
 
             var client = Qlik2DataRobotHttpClientFactory.clientFactory.CreateClient();
@@ -113,9 +113,10 @@ namespace Qlik2DataRobot
             if(deployment_id != null)
             {
                 Logger.Trace($"{reqHash} - Deployment Score:{deployment_id}");
-                if(explain == true)
+                string param = "";
+                if (keyField != null) param += $"passthroughColumns={keyField}&";
+                if (explain == true)
                 {
-                    string param = "";
                     if (maxCodes != 0) param += $"maxCodes={maxCodes}&";
                     if (thresholdHigh != 0) param += $"thresholdHigh={thresholdHigh}&";
                     if (thresholdLow != 0) param += $"thresholdLow={thresholdLow}";
@@ -127,7 +128,9 @@ namespace Qlik2DataRobot
                 }
                 else
                 {
-                    uri = new Uri($"{host}/predApi/v1.0/deployments/{deployment_id}/predictions");
+                    if (param != "") param = "?" + param;
+                    uri = new Uri($"{host}/predApi/v1.0/deployments/{deployment_id}/predictions{param}");
+                    Logger.Trace($"{reqHash} - URL:{uri}");
                 }
                 
             }
@@ -169,7 +172,7 @@ namespace Qlik2DataRobot
         /// <summary>
         /// Process request against the Time Series Prediction API
         /// </summary>
-        public async Task<MemoryStream> TimeSeriesAsync(MemoryStream data, string api_token, string datarobot_key, string username, string host, string deployment_id = null, string project_id = null, string model_id = null, string forecast_point = null)
+        public async Task<MemoryStream> TimeSeriesAsync(MemoryStream data, string api_token, string datarobot_key, string host, string deployment_id = null, string project_id = null, string model_id = null, string forecast_point = null)
         {
 
             var client = Qlik2DataRobotHttpClientFactory.clientFactory.CreateClient();

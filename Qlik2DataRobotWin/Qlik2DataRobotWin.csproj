@@ -223,6 +223,12 @@
     <Compile Include="..\Qlik2DataRobot\Qlik2DataRobotConnector.cs">
       <Link>Qlik2DataRobotConnector.cs</Link>
     </Compile>
+    <Compile Include="..\Qlik2DataRobot\RequestSpecification.cs">
+      <Link>RequestSpecification.cs</Link>
+    </Compile>
+    <Compile Include="..\Qlik2DataRobot\ResponseSpecification.cs">
+      <Link>ResponseSpecification.cs</Link>
+    </Compile>
     <Compile Include="InstallerSetup.cs">
       <SubType>Component</SubType>
     </Compile>
