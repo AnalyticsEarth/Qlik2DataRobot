@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -12,7 +13,9 @@ using NLog;
 using Qlik.Sse;
 using Newtonsoft.Json;
 using CsvHelper;
+using CsvHelper.Configuration;
 using System.Reflection;
+using System.Text;
 
 namespace Qlik2DataRobot
 {
@@ -275,10 +278,13 @@ namespace Qlik2DataRobot
             var memStream = new MemoryStream();
             var streamWriter = new StreamWriter(memStream);
             var tw = TextWriter.Synchronized(streamWriter);
-            var csv = new CsvWriter(tw);
-
+            var config = new CsvHelper.Configuration.Configuration(CultureInfo.CurrentCulture)
+            {
+                Delimiter = ",",
+                Encoding = Encoding.UTF8
+            };
+            var csv = new CsvWriter(tw, config);
             var keyindex = 0;
-
             for (int i = 0; i < Parameters.Length; i++)
             {
                 var param = Parameters[i];
