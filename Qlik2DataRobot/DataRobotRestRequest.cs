@@ -77,16 +77,20 @@ namespace Qlik2DataRobot
                 string responseContent = await response.Content.ReadAsStringAsync();
                 Dictionary<string, dynamic> responseobj = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(responseContent);
 
+                if (responseobj.ContainsKey("catalogId"))
+                {
+                    Logger.Info($"{reqHash} - Successfully pushed Dataset");
+                    dynamic catalogId;
+                    responseobj.TryGetValue("catalogId", out catalogId);
+                    Logger.Info($"{reqHash} - Dataset ID (): {catalogId}");
+                }
+
                 if (responseobj.ContainsKey("catalogVersionId"))
                 {
                     Logger.Info($"{reqHash} - Successfully pushed Dataset");
-
-                    string catalogVersionId = responseobj.GetValueOrDefault("catalogVersionId");
+                    dynamic catalogVersionId;
+                    responseobj.TryGetValue("catalogVersionId", out catalogVersionId);
                     Logger.Info($"{reqHash} - Dataset Version ID (): {catalogVersionId}");
-
-
-                    string catalogId = responseobj.GetValueOrDefault("catalogId");
-                    Logger.Info($"{reqHash} - Dataset ID (): {catalogId}");
                 }
 
                 streamWriter.WriteLine("{\"status\":\"success\",\"response\":" + responseContent +"}");
