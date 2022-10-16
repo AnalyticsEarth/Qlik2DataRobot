@@ -181,6 +181,37 @@ namespace Qlik2DataRobot
             MemoryStream result = new MemoryStream();
             switch (config.request_type)
             {
+                case "dataset":
+                    Logger.Info($"{reqHash} - Create dataset");
+                    string dataset_name = Convert.ToString(config.dataset_name);
+                    Logger.Info($"{reqHash} - Dataset name - {dataset_name}");
+
+                    var zippeddatasetstream = await CompressStream(rowdatastream, dataset_name, reqHash);
+                    Logger.Info($"{reqHash} - Zipped Data Size: {zippeddatasetstream.Length}");
+
+                    string dataset_endpoint = Convert.ToString(config.auth_config.endpoint);
+                    if (dataset_endpoint.Substring(dataset_endpoint.Length - 2) != "/") dataset_endpoint = dataset_endpoint + "/";
+                    
+                    Logger.Info($"{reqHash} - Dataset ID from Config: ''");
+                    result = await dr.CreateDatasetAsync(dataset_endpoint, api_token, zippeddatasetstream, dataset_name, datasetId: "");
+                    break;
+
+                case "datasetversion":
+                    Logger.Info($"{reqHash} - Create dataset");
+                    string dataset_version_name = Convert.ToString(config.dataset_name);
+                    Logger.Info($"{reqHash} - Dataset name - {dataset_version_name}");
+
+                    var zippeddatasetversionstream = await CompressStream(rowdatastream, dataset_version_name, reqHash);
+                    Logger.Info($"{reqHash} - Zipped Data Size: {zippeddatasetversionstream.Length}");
+
+                    string dataset_version_endpoint = Convert.ToString(config.auth_config.endpoint);
+                    if (dataset_version_endpoint.Substring(dataset_version_endpoint.Length - 2) != "/") dataset_version_endpoint = dataset_version_endpoint + "/";
+                    
+                    string dataset_id = Convert.ToString(config.dataset_id);
+                    Logger.Info($"{reqHash} - Dataset ID from Config: {dataset_id}");
+                    result = await dr.CreateDatasetAsync(dataset_version_endpoint, api_token, zippeddatasetversionstream, dataset_version_name, dataset_id);
+                    break;
+
                 case "createproject":
                     Logger.Info($"{reqHash} - Create Project");
                     string project_name = Convert.ToString(config.project_name);
