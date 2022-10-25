@@ -10,9 +10,11 @@ namespace Qlik2DataRobot
     {
         public string request_type { get; set; }
         public AuthConfigSpecification auth_config { get; set; }
+        public string dataset_name { get; set; }
         public string project_name { get; set; }
         public string deployment_id { get; set; }
 
+        public string dataset_id { get; set; }
         public string project_id { get; set; } //Backwards Compatible (not in published spec)
         public string model_id { get; set; } //Backwards Compatible (not in published spec)
 

@@ -1,6 +1,7 @@
 Qlik2DataRobot/bin
 Qlik2DataRobot/obj
 .vs
+.vscode
 packages
 Qlik2DataRobotWin/bin
 Qlik2DataRobotWin/obj

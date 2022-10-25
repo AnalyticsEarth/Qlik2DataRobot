@@ -25,6 +25,90 @@ namespace Qlik2DataRobot
         }
 
         /// <summary>
+        /// Create a datarobot dataset
+        /// </summary>
+        public async Task<MemoryStream> CreateDatasetAsync(string baseAddress, string token, MemoryStream data, string datasetName, string datasetId = "")
+        {
+
+            Logger.Trace($"{reqHash} - Create Client");
+            var client = Qlik2DataRobotHttpClientFactory.clientFactory.CreateClient();
+            ConfigureAsync(client, baseAddress, token);
+            Logger.Trace($"{reqHash} - Configured Client");
+
+            var requestContent = new MultipartFormDataContent("----");
+            
+            Logger.Trace($"{reqHash} - Building Request Headers");
+
+            var fileContent = new StreamContent(data);
+            // May cause an issue to have filename as a header?
+            fileContent.Headers.Add("Content-Disposition", "form-data; name=\"file\"; filename=\"" + datasetName + "\"");
+            fileContent.Headers.Add("Content-Encoding", "zip");
+            fileContent.Headers.Add("Content-Type", "application/zip");
+
+            Logger.Trace($"{reqHash} - Headers: {fileContent.Headers}");
+
+            // Try adding this back in if the dataset name isn't set
+            // requestContent.Add(datasetContent);
+            requestContent.Add(fileContent);
+
+            Logger.Trace($"{reqHash} - Headers: {requestContent.Headers}");
+            Logger.Trace($"{reqHash} - Finished Building Request");
+
+            MemoryStream outStream = new MemoryStream();
+            var streamWriter = new StreamWriter(outStream);
+
+            Logger.Trace($"{reqHash} - Finished Setting Up Stream");
+
+            // If we passed in a datasetId, create a new version of that dataset
+            // Otherwise create a new dataset from file
+            var url = "datasets";
+            if (datasetId != "") { url = $"{url}/{datasetId}/versions"; } 
+            url = $"{url}/fromFile/";
+
+            Logger.Trace($"{reqHash} - Sending to url: {url}");
+
+            try
+            {
+                HttpResponseMessage response = await checkRedirectAuth(client, await client.PostAsync(url, requestContent), null);
+                Logger.Trace($"{reqHash} - Status Code: {response.StatusCode}");
+                Logger.Debug($"{reqHash} - Upload Finished - Starting Registration");
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+                Dictionary<string, dynamic> responseobj = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(responseContent);
+
+                if (responseobj.ContainsKey("catalogId"))
+                {
+                    Logger.Info($"{reqHash} - Successfully pushed Dataset");
+                    dynamic catalogId;
+                    responseobj.TryGetValue("catalogId", out catalogId);
+                    Logger.Info($"{reqHash} - Dataset ID (): {catalogId}");
+                }
+
+                if (responseobj.ContainsKey("catalogVersionId"))
+                {
+                    Logger.Info($"{reqHash} - Successfully pushed Dataset");
+                    dynamic catalogVersionId;
+                    responseobj.TryGetValue("catalogVersionId", out catalogVersionId);
+                    Logger.Info($"{reqHash} - Dataset Version ID (): {catalogVersionId}");
+                }
+
+                streamWriter.WriteLine("{\"status\":\"success\",\"response\":" + responseContent +"}");
+            }
+            catch (Exception e)
+            {
+                Logger.Warn($"{reqHash} - Create dataset Error");
+                Logger.Warn($"{reqHash} - Error: {e.Message}");
+                streamWriter.WriteLine("{\"status\":\"error\"}");
+            }
+
+            streamWriter.Flush();
+            outStream.Position = 0;
+
+            return outStream;
+        }
+
+
+        /// <summary>
         /// Create a datarobot project
         /// </summary>
         public async Task<MemoryStream> CreateProjectsAsync(string baseAddress, string token, MemoryStream data, string projectName, string filename)
