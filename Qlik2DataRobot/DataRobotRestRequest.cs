@@ -45,11 +45,13 @@ namespace Qlik2DataRobot
             fileContent.Headers.Add("Content-Encoding", "zip");
             fileContent.Headers.Add("Content-Type", "application/zip");
 
+            Logger.Trace($"{reqHash} - Headers: {fileContent.Headers}");
 
             // Try adding this back in if the dataset name isn't set
             // requestContent.Add(datasetContent);
             requestContent.Add(fileContent);
 
+            Logger.Trace($"{reqHash} - Headers: {requestContent.Headers}");
             Logger.Trace($"{reqHash} - Finished Building Request");
 
             MemoryStream outStream = new MemoryStream();
@@ -62,6 +64,8 @@ namespace Qlik2DataRobot
             var url = "datasets";
             if (datasetId != "") { url = $"{url}/{datasetId}/versions"; } 
             url = $"{url}/fromFile/";
+
+            Logger.Trace($"{reqHash} - Sending to url: {url}");
 
             try
             {
