@@ -34,15 +34,10 @@ namespace Qlik2DataRobot
             var client = Qlik2DataRobotHttpClientFactory.clientFactory.CreateClient();
             ConfigureAsync(client, baseAddress, token);
             Logger.Trace($"{reqHash} - Configured Client");
-            var datasetRequestContent = new MultipartFormDataContent("----");
-            var emptyDatasetContent = new StringContent(datasetName);
-            emptyDatasetContent.Headers.Add("Content-Type", "Disposition");
 
             var requestContent = new MultipartFormDataContent("----");
             
             Logger.Trace($"{reqHash} - Building Request Headers");
-            var datasetContent = new StringContent(datasetName);
-            datasetContent.Headers.Add("Content-Disposition", "form-data; name=\"datasetName\"");
 
             var fileContent = new StreamContent(data);
             // May cause an issue to have filename as a header?
@@ -65,7 +60,7 @@ namespace Qlik2DataRobot
             // If we passed in a datasetId, create a new version of that dataset
             // Otherwise create a new dataset from file
             var url = "datasets";
-            if (datasetId != "") { url = $"{url}/{datasetId}/version"; } 
+            if (datasetId != "") { url = $"{url}/{datasetId}/versions"; } 
             url = $"{url}/fromFile/";
 
             try
