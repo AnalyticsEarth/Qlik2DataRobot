@@ -11,6 +11,10 @@ namespace Qlik2DataRobot
         public MetaResponseSpecification response { get; set; }
 
         public string message { get; set; }
+
+        public string csvdata { get; set; }
+
+        public string status { get; set; }
     }
 
     class MetaResponseSpecification
@@ -52,5 +56,10 @@ namespace Qlik2DataRobot
         public string feature { get; set; }
         public string qualitativeStrength { get; set; }
         public dynamic label { get; set; } 
+    }
+
+    class DatasetUploadStatus
+    {
+        public string datasetStatus { get; set; }
     }
 }

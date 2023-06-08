@@ -10,6 +10,7 @@ namespace Qlik2DataRobot
     {
         public string request_type { get; set; }
         public AuthConfigSpecification auth_config { get; set; }
+        public string mlops_endpoint { get; set; }
         public string dataset_name { get; set; }
         public string project_name { get; set; }
         public string deployment_id { get; set; }
@@ -37,6 +38,12 @@ namespace Qlik2DataRobot
         [DefaultValue("s")]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public string timestamp_format { get; set; }
+
+        public string association_id_name { get; set; }
+        public string target_name { get; set; }
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string passthroughColumnsSet { get; set; }
     }
 
     class AuthConfigSpecification

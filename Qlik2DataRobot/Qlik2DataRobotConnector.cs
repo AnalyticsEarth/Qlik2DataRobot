@@ -13,6 +13,7 @@ using Qlik.Sse;
 using Newtonsoft.Json;
 using CsvHelper;
 using System.Reflection;
+using System.Globalization;
 
 namespace Qlik2DataRobot
 {
@@ -165,110 +166,151 @@ namespace Qlik2DataRobot
         /// </summary>
         private async Task<MemoryStream> SelectFunction(RequestSpecification config, MemoryStream rowdatastream, int reqHash)
         {
-           
             Logger.Info($"{reqHash} - Start DataRobot");
             DataRobotRestRequest dr = new DataRobotRestRequest(reqHash);
            
             string api_token = Convert.ToString(config.auth_config.api_token);
             string datarobot_key = config.auth_config.datarobot_key;
-
             string host = config.auth_config.endpoint;
+            string mlops_host = config.mlops_endpoint;
+            if (host.Substring(host.Length - 2) != "/") host = host + "/";
+            if (!String.IsNullOrEmpty(mlops_host) && mlops_host.Substring(mlops_host.Length - 2) != "/") mlops_host = mlops_host + "/";
+
             string project_id = config.project_id;
+            string project_name = Convert.ToString(config.project_name);
+
             string model_id = config.model_id;
             string deployment_id = config.deployment_id;
             string keyField = config.keyfield;
+            string dataset_name = Convert.ToString(config.dataset_name);
+            string dataset_id = Convert.ToString(config.dataset_id);
+
+            string association_id_name = Convert.ToString(config.association_id_name);
+            string target_name = Convert.ToString(config.target_name);
+
+            string passthroughColumnsSet = config.passthroughColumnsSet;
 
             MemoryStream result = new MemoryStream();
-            switch (config.request_type)
+
+            string[] zipped_request_types = { "actuals", "dataset", "datasetversion", "createproject", "batchpred"};
+            Logger.Info($"{reqHash} - Entering if");
+            if (zipped_request_types.Contains(config.request_type))
             {
-                case "dataset":
-                    Logger.Info($"{reqHash} - Create dataset");
-                    string dataset_name = Convert.ToString(config.dataset_name);
-                    Logger.Info($"{reqHash} - Dataset name - {dataset_name}");
+                var zip_stream = await CompressStream(rowdatastream, dataset_name, reqHash);
+                Logger.Info($"{reqHash} - Zipped Data Size: {zip_stream.Length}");
 
-                    var zippeddatasetstream = await CompressStream(rowdatastream, dataset_name, reqHash);
-                    Logger.Info($"{reqHash} - Zipped Data Size: {zippeddatasetstream.Length}");
+                switch (config.request_type)
+                {
+                    case "actuals":
+                        Logger.Info($"{reqHash} - Sending actuals");
+                        Logger.Info($"{reqHash} - dataset_id (optional): '{dataset_id}'");
+                        if (String.IsNullOrEmpty(dataset_name))
+                        {
+                            dataset_name = "Actuals";
+                        }
 
-                    string dataset_endpoint = Convert.ToString(config.auth_config.endpoint);
-                    if (dataset_endpoint.Substring(dataset_endpoint.Length - 2) != "/") dataset_endpoint = dataset_endpoint + "/";
-                    
-                    Logger.Info($"{reqHash} - Dataset ID from Config: ''");
-                    result = await dr.CreateDatasetAsync(dataset_endpoint, api_token, zippeddatasetstream, dataset_name, datasetId: "");
-                    break;
+                        Logger.Trace($"{reqHash} - Dataset name: '{dataset_name}'");
 
-                case "datasetversion":
-                    Logger.Info($"{reqHash} - Create dataset");
-                    string dataset_version_name = Convert.ToString(config.dataset_name);
-                    Logger.Info($"{reqHash} - Dataset name - {dataset_version_name}");
+                        result = await dr.SendActualsAsync(host, api_token, zip_stream, deployment_id, keyField, dataset_name, dataset_id, associationIdColumn: association_id_name, actualValueColumn: target_name);
+                        break;
 
-                    var zippeddatasetversionstream = await CompressStream(rowdatastream, dataset_version_name, reqHash);
-                    Logger.Info($"{reqHash} - Zipped Data Size: {zippeddatasetversionstream.Length}");
+                    case "batchpred":
+                        Logger.Info($"{reqHash} - Sending batch prediction");
+                        Logger.Info($"{reqHash} - dataset_id (optional): '{dataset_id}'");
+                        if (String.IsNullOrEmpty(dataset_name))
+                        {
+                            dataset_name = "Batch Prediction";
+                        }
 
-                    string dataset_version_endpoint = Convert.ToString(config.auth_config.endpoint);
-                    if (dataset_version_endpoint.Substring(dataset_version_endpoint.Length - 2) != "/") dataset_version_endpoint = dataset_version_endpoint + "/";
-                    
-                    string dataset_id = Convert.ToString(config.dataset_id);
-                    Logger.Info($"{reqHash} - Dataset ID from Config: {dataset_id}");
-                    result = await dr.CreateDatasetAsync(dataset_version_endpoint, api_token, zippeddatasetversionstream, dataset_version_name, dataset_id);
-                    break;
+                        Logger.Trace($"{reqHash} - Dataset name: '{dataset_name}'");
 
-                case "createproject":
-                    Logger.Info($"{reqHash} - Create Project");
-                    string project_name = Convert.ToString(config.project_name);
+                        int maxCodes = 0;
+                        double thresholdHigh = 0.75;
+                        double thresholdLow = 0.25;
+                        bool explain = false;
+                        if (config.explain != null)
+                        {
+                            Logger.Info($"{reqHash} - {JsonConvert.SerializeObject(config.explain)}");
+                            maxCodes = config.explain.max_codes;
+                            thresholdHigh = config.explain.threshold_high;
+                            thresholdLow = config.explain.threshold_low;
+                            explain = true;
+                        }
 
-                    var zippedstream = await CompressStream(rowdatastream, project_name, reqHash);
-                    
-                    Logger.Info($"{reqHash} - Zipped Data Size: {zippedstream.Length}");
+                        result = await dr.ScoreBatchAsync(host, api_token, zip_stream, deployment_id, keyField,
+                        passthroughColumnsSet, dataset_name, dataset_id,
+                            maxCodes,
+                        thresholdHigh,
+                        thresholdLow,
+                        explain);
+                        break;
 
-                    string endpoint = Convert.ToString(config.auth_config.endpoint);
-                    if (endpoint.Substring(endpoint.Length - 2) != "/") endpoint = endpoint + "/";
-                    
-                    result = await dr.CreateProjectsAsync(endpoint, api_token, zippedstream, project_name, project_name + ".zip");
-                    break;
+                    case "dataset":
+                        Logger.Info($"{reqHash} - Create dataset");
+                        Logger.Info($"{reqHash} - Dataset name - {dataset_name}");
+                        result = await dr.CreateDatasetAsync2(host, api_token, zip_stream, dataset_name, datasetId: "");
+                        break;
 
-                case "predictapi":
-                    Logger.Info($"{reqHash} - Predict API");
-                                        
-                    
+                    case "datasetversion":
+                        Logger.Info($"{reqHash} - Create dataset");
+                        Logger.Info($"{reqHash} - Dataset name - {dataset_name}");
+                        Logger.Info($"{reqHash} - Dataset ID from Config: {dataset_id}");
+                        result = await dr.CreateDatasetAsync(host, api_token, zip_stream, dataset_name, dataset_id);
+                        break;
 
-                    int maxCodes = 0;
-                    double thresholdHigh = 0;
-                    double thresholdLow = 0;
-                    bool explain = false;
+                    case "createproject":
+                        Logger.Info($"{reqHash} - Create Project");
+                        result = await dr.CreateProjectsAsync(host, api_token, zip_stream, project_name, project_name + ".zip");
+                        break;
 
-                    if (config.explain != null)
-                    {
-                        maxCodes = config.explain.max_codes;
-                        thresholdHigh = config.explain.threshold_high;
-                        thresholdLow = config.explain.threshold_low;
-                        explain = true;
-                    }
+                    default:
+                        break;
+                }
+            } else
+            {
+                switch (config.request_type)
+                {
+                    case "predictapi":
+                        Logger.Info($"{reqHash} - Predict API");
 
-                    result = await dr.PredictApiAsync(rowdatastream, api_token, datarobot_key, host, deployment_id:deployment_id, project_id:project_id, model_id:model_id, keyField:keyField, explain:explain, maxCodes:maxCodes, thresholdHigh:thresholdHigh, thresholdLow:thresholdLow);
-                    break;
+                        int maxCodes = 0;
+                        double thresholdHigh = 0;
+                        double thresholdLow = 0;
+                        bool explain = false;
 
-                case "timeseries":
-                    Logger.Info($"{reqHash} - Time Series Prediction API");
-                    
-                    string forecast_point = null;
+                        if (config.explain != null)
+                        {
+                            maxCodes = config.explain.max_codes;
+                            thresholdHigh = config.explain.threshold_high;
+                            thresholdLow = config.explain.threshold_low;
+                            explain = true;
+                        }
 
-                    
+                        result = await dr.PredictApiAsync(rowdatastream, api_token, datarobot_key, host, deployment_id: deployment_id, project_id: project_id, model_id: model_id, keyField: keyField, explain: explain, maxCodes: maxCodes, thresholdHigh: thresholdHigh, thresholdLow: thresholdLow);
+                        break;
 
-                    if (config.forecast_point != null)
-                    {
-                        forecast_point = Convert.ToString(config.forecast_point);
-                        //forecast_point = config.forecast_point.ToString("s");
-                    }
+                    case "timeseries":
+                        Logger.Info($"{reqHash} - Time Series Prediction API");
+
+                        string forecast_point = null;
 
 
-                    result = await dr.TimeSeriesAsync(rowdatastream, api_token, datarobot_key, host, deployment_id: deployment_id, project_id: project_id, model_id: model_id, forecast_point: forecast_point);
-                    break;
 
-                default:
-                    break;
+                        if (config.forecast_point != null)
+                        {
+                            forecast_point = Convert.ToString(config.forecast_point);
+                            //forecast_point = config.forecast_point.ToString("s");
+                        }
+                        result = await dr.TimeSeriesAsync(rowdatastream, api_token, datarobot_key, host, deployment_id: deployment_id, project_id: project_id, model_id: model_id, forecast_point: forecast_point);
+                        break;
+
+                    default:
+                        break;
+                }
             }
 
             Logger.Info($"{reqHash} - DataRobot Finish");
+            Logger.Trace($"{reqHash} - Result {result}");
             return result;
         }
 
@@ -435,11 +477,79 @@ namespace Qlik2DataRobot
                 var data = sr.ReadToEnd();
                 //Dictionary<string, dynamic> response = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(data);
                 ResponseSpecification response = JsonConvert.DeserializeObject<ResponseSpecification>(data);
-                Logger.Trace($"{reqHash} - Returned Data: {data}");
-              
 
-                if (response.data != null)
+                if (response.csvdata != null)
                 {
+                    var reader = new StringReader(response.csvdata);
+                    var config = new CsvHelper.Configuration.Configuration(CultureInfo.InvariantCulture)
+                    {
+                        HasHeaderRecord = true,
+                    };
+                    var csvReader = new CsvReader(reader, config);
+
+                    csvReader.Read();
+                    csvReader.ReadHeader();
+
+                    var bundledRows = new BundledRows();
+
+                    Logger.Info("Reading records");
+                    var records = csvReader.GetRecords<dynamic>().ToList();
+
+                    int count = records.Count;
+                    int i = 0;
+                    foreach (dynamic record in records)
+                    {
+                        int j = 0;
+                        var row = new Row();
+                        foreach (dynamic field in record)
+                        {
+                            j += 1;                           
+                            row.Duals.Add(new Dual() { StrData = Convert.ToString(field.Value) ?? "" });
+                            
+                        }
+
+                        bundledRows.Rows.Add(row);
+
+                        if (i == 0)
+                        {
+                            nrOfCols = j;
+                            
+                            foreach (dynamic field in record)
+                            {
+                                var a = new ResultDataColumn();
+                                a.Name = field.Key;
+                                a.DataType = DataType.String;
+                                resultDataColumns.Add(a);
+                            }
+                            Logger.Info("Sending headers");
+                            Logger.Info($"Headers count: {count}");
+                            Logger.Info($"Headers nrOfCols: {nrOfCols}");
+                            Logger.Info($"Headers resultDataColumns: {resultDataColumns}");
+                            await GenerateAndSendHeadersAsync(context, count, nrOfCols, resultDataColumns, cacheResultInQlik);
+                            Logger.Info("Sent headers");
+                        }
+                        i += 1;
+                        
+                        if (i % 1000 == 0) {
+                            nrOfRows = i;
+                            Logger.Info("Sending batch");
+                            await responseStream.WriteAsync(bundledRows);
+                            bundledRows = new BundledRows();
+                        }
+                    }
+                    nrOfRows = i;
+                    if (i > 0)
+                    {
+                        Logger.Info($"Sending final batch");
+                        
+                        await responseStream.WriteAsync(bundledRows);
+                        bundledRows = null;
+                    }
+                    
+                } 
+                else if (response.data != null)
+                {
+                    
                     Logger.Trace($"{reqHash} - Response Data: {response.data}");
 
                     //Sort the response by RowId
@@ -456,7 +566,7 @@ namespace Qlik2DataRobot
                             resultDataColumns.Add(pe);
                         }
                     }
-                        
+
 
                     //Prediction Column
                     var a = new ResultDataColumn();
@@ -510,7 +620,7 @@ namespace Qlik2DataRobot
                         originalFormatTimestamp.Name = "originalFormatTimestamp";
                         originalFormatTimestamp.DataType = DataType.String;
 
-                      
+
 
                         resultDataColumns.Add(rowId);
                         resultDataColumns.Add(seriesId);
@@ -539,7 +649,7 @@ namespace Qlik2DataRobot
                             }
                         }
                     }
-                        
+
 
                     nrOfRows = sortedData.Count;
                     nrOfCols = resultDataColumns.Count;
@@ -558,7 +668,7 @@ namespace Qlik2DataRobot
                     {
                         var row = new Row();
 
-                        if(request_type != "timeseries")
+                        if (request_type != "timeseries")
                         {
                             if (shouldExplain && rawExplain)
                             {
@@ -573,7 +683,7 @@ namespace Qlik2DataRobot
 
                             }
                         }
-                        
+
 
                         //Prediction Column
                         row.Duals.Add(new Dual() { StrData = Convert.ToString(p.prediction) ?? "" });
@@ -609,23 +719,23 @@ namespace Qlik2DataRobot
                         //Include Prediction Explanations
                         if (shouldExplain && !rawExplain)
                         {
-                                foreach(PredictionExplanationSpecification pe in p.predictionExplanations)
-                                {
-                                    row.Duals.Add(new Dual() { StrData = Convert.ToString(pe.label) ?? "" });
-                                    row.Duals.Add(new Dual() { StrData = Convert.ToString(pe.feature) ?? "" });
-                                    row.Duals.Add(new Dual() { StrData = Convert.ToString(pe.featureValue) ?? "" });
-                                    row.Duals.Add(new Dual() { StrData = Convert.ToString(pe.strength) ?? "" });
-                                    row.Duals.Add(new Dual() { StrData = Convert.ToString(pe.qualitativeStrength) ?? "" });
-                                }
+                            foreach (PredictionExplanationSpecification pe in p.predictionExplanations)
+                            {
+                                row.Duals.Add(new Dual() { StrData = Convert.ToString(pe.label) ?? "" });
+                                row.Duals.Add(new Dual() { StrData = Convert.ToString(pe.feature) ?? "" });
+                                row.Duals.Add(new Dual() { StrData = Convert.ToString(pe.featureValue) ?? "" });
+                                row.Duals.Add(new Dual() { StrData = Convert.ToString(pe.strength) ?? "" });
+                                row.Duals.Add(new Dual() { StrData = Convert.ToString(pe.qualitativeStrength) ?? "" });
+                            }
 
-                                for(int j = p.predictionExplanations.Count; j < explain_max; j++)
-                                {
-                                    row.Duals.Add(new Dual() { });
-                                    row.Duals.Add(new Dual() { });
-                                    row.Duals.Add(new Dual() { });
-                                    row.Duals.Add(new Dual() { });
-                                    row.Duals.Add(new Dual() { });
-                                }
+                            for (int j = p.predictionExplanations.Count; j < explain_max; j++)
+                            {
+                                row.Duals.Add(new Dual() { });
+                                row.Duals.Add(new Dual() { });
+                                row.Duals.Add(new Dual() { });
+                                row.Duals.Add(new Dual() { });
+                                row.Duals.Add(new Dual() { });
+                            }
                         }
 
                         //Add the row the bundle
@@ -641,7 +751,7 @@ namespace Qlik2DataRobot
                             bundledRows = new BundledRows();
                         }
                         i++;
-                    }        
+                    }
 
                     //Send any left over rows after the final loop
                     if (bundledRows.Rows.Count() > 0)
@@ -650,10 +760,10 @@ namespace Qlik2DataRobot
                         await responseStream.WriteAsync(bundledRows);
                         bundledRows = null;
                     }
-                       
+
 
                 }
-                else if(response.response != null)
+                else if (response.response != null)
                 {
                     Logger.Trace($"{reqHash} - Processing Status Response for Project ID: {response.response.id}");
                     var a = new ResultDataColumn();
@@ -683,7 +793,7 @@ namespace Qlik2DataRobot
                     {
                         throw new Exception($"An Unknown Error Occured: {data}");
                     }
-                    
+
                 }
 
                 
@@ -719,12 +829,12 @@ namespace Qlik2DataRobot
                     });
                 }
             }
-
+            Logger.Info("Generating Metadata");
             var tableMetadata = new Metadata
                     {
                         { new Metadata.Entry("qlik-tabledescription-bin", MessageExtensions.ToByteArray(tableDesc)) }
                     };
-
+            Logger.Info($"Generating Metadata");
             if (!cacheResultInQlik)
             {
                 tableMetadata.Add("qlik-cache", "no-store");

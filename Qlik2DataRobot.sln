@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2015
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Qlik2DataRobot", "Qlik2DataRobot\Qlik2DataRobot.csproj", "{07A35C61-85B2-499F-8140-984058AD6AFA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qlik2DataRobotWin", "Qlik2DataRobotWin\Qlik2DataRobotWin.csproj", "{4FE2015A-5172-4F69-AD5F-120F83AE25C4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{07A35C61-85B2-499F-8140-984058AD6AFA} = {07A35C61-85B2-499F-8140-984058AD6AFA}
+	EndProjectSection
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Qlik2DataRobot Installer", "Qlik2DataRobot Windows Installer\Qlik2DataRobot Windows Installer.vdproj", "{1653F777-89A6-4343-84E9-ADAC85B83291}"
 EndProject
