@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using CsvHelper;
 using System.Reflection;
 using System.Globalization;
+using CsvHelper.Configuration;
 
 namespace Qlik2DataRobot
 {
@@ -67,7 +68,7 @@ namespace Qlik2DataRobot
         /// <summary>
         /// All requests are processed through evaluate script, however in the context of this connector, the script is a JSON notation string which contains the metadata required to correctly process the attached data.
         /// </summary>
-        public override async Task EvaluateScript(IAsyncStreamReader<global::Qlik.Sse.BundledRows> requestStream, IServerStreamWriter<global::Qlik.Sse.BundledRows> responseStream, ServerCallContext context)
+        public override async Task EvaluateScript(IAsyncStreamReader<BundledRows> requestStream, IServerStreamWriter<BundledRows> responseStream, ServerCallContext context)
         {
             ScriptRequestHeader scriptHeader;
             CommonRequestHeader commonHeader;
@@ -340,7 +341,7 @@ namespace Qlik2DataRobot
         /// <summary>
         /// Convert the input data into a CSV file within memory stream
         /// </summary>
-        private async Task<MemoryStream> ConvertBundledRowsToCSV(ParameterData[] Parameters, IAsyncStreamReader<global::Qlik.Sse.BundledRows> requestStream, ServerCallContext context, ResultDataColumn keyField, string keyname, string timestamp_field = "", string timestamp_format = "s")
+        private async Task<MemoryStream> ConvertBundledRowsToCSV(ParameterData[] Parameters, IAsyncStreamReader<BundledRows> requestStream, ServerCallContext context, ResultDataColumn keyField, string keyname, string timestamp_field = "", string timestamp_format = "s")
         {
             int reqHash = requestStream.GetHashCode();
             Logger.Debug($"{reqHash} - Start Create CSV");
@@ -348,7 +349,8 @@ namespace Qlik2DataRobot
             var memStream = new MemoryStream();
             var streamWriter = new StreamWriter(memStream);
             var tw = TextWriter.Synchronized(streamWriter);
-            var csv = new CsvWriter(tw);
+            var config = new CsvConfiguration(CultureInfo.CurrentCulture);
+            var csv = new CsvWriter(tw, config);
 
             var keyindex = 0;
 
@@ -455,7 +457,7 @@ namespace Qlik2DataRobot
         /// <summary>
         /// Return the results from connector to Qlik Engine
         /// </summary>
-        private async Task GenerateResult(string request_type, MemoryStream returnedData, IServerStreamWriter<global::Qlik.Sse.BundledRows> responseStream, ServerCallContext context, int reqHash,
+        private async Task GenerateResult(string request_type, MemoryStream returnedData, IServerStreamWriter<BundledRows> responseStream, ServerCallContext context, int reqHash,
             bool failIfWrongDataTypeInFirstCol = false, DataType expectedFirstDataType = DataType.Numeric, bool cacheResultInQlik = true, ResultDataColumn keyField = null, string keyname = null, bool includeDetail = false, bool shouldExplain = false, bool rawExplain = false, int explain_max = 0)
         {
             
@@ -481,10 +483,11 @@ namespace Qlik2DataRobot
                 if (response.csvdata != null)
                 {
                     var reader = new StringReader(response.csvdata);
-                    var config = new CsvHelper.Configuration.Configuration(CultureInfo.InvariantCulture)
+                    var config = new CsvConfiguration(CultureInfo.InvariantCulture);
+                      /*  CsvConfiguration(CultureInfo.InvariantCulture)
                     {
                         HasHeaderRecord = true,
-                    };
+                    };*/
                     var csvReader = new CsvReader(reader, config);
 
                     csvReader.Read();

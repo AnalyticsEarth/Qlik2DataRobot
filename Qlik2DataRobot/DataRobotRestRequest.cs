@@ -11,9 +11,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
-using static System.ValueTuple;
-using System.ComponentModel;
 
 namespace Qlik2DataRobot
 {
