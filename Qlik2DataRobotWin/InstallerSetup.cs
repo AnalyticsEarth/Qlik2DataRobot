@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Text;
@@ -30,9 +29,9 @@ namespace Qlik2DataRobotWin
             {
                 AddConfigurationFileDetails();
             }
-            catch 
+            catch
             {
-                
+
                 base.Rollback(savedState);
             }
         }
@@ -59,7 +58,7 @@ namespace Qlik2DataRobotWin
                     this.Context.Parameters[myString]);
                 }
             }
-            
+
         }
 
         private void AddConfigurationFileDetails()
@@ -83,7 +82,7 @@ namespace Qlik2DataRobotWin
                         configuration = node;
 
                 if (configuration != null)
-                { 
+                {
                     // Get the ‘appSettings’ node  
                     XmlNode settingNode = null;
                     foreach (XmlNode node in configuration.ChildNodes)
@@ -95,12 +94,12 @@ namespace Qlik2DataRobotWin
                     if (settingNode != null)
                     {
                         foreach (XmlNode node in settingNode.ChildNodes)
-                        { 
+                        {
                             if (node.Attributes == null)
                                 continue;
                             XmlAttribute attribute = node.Attributes["value"];
                             if (node.Attributes["key"] != null)
-                            {  
+                            {
                                 switch (node.Attributes["key"].Value)
                                 {
                                     case "grpcPort":

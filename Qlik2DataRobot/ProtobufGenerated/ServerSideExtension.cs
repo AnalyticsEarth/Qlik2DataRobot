@@ -6,56 +6,59 @@
 using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
-using scg = global::System.Collections.Generic;
-namespace Qlik.Sse {
+namespace Qlik.Sse
+{
 
-  /// <summary>Holder for reflection information generated from ServerSideExtension.proto</summary>
-  public static partial class ServerSideExtensionReflection {
+    /// <summary>Holder for reflection information generated from ServerSideExtension.proto</summary>
+    public static partial class ServerSideExtensionReflection
+    {
 
-    #region Descriptor
-    /// <summary>File descriptor for ServerSideExtension.proto</summary>
-    public static pbr::FileDescriptor Descriptor {
-      get { return descriptor; }
-    }
-    private static pbr::FileDescriptor descriptor;
+        #region Descriptor
+        /// <summary>File descriptor for ServerSideExtension.proto</summary>
+        public static pbr::FileDescriptor Descriptor
+        {
+            get { return descriptor; }
+        }
+        private static pbr::FileDescriptor descriptor;
 
-    static ServerSideExtensionReflection() {
-      byte[] descriptorData = global::System.Convert.FromBase64String(
-          string.Concat(
-            "ChlTZXJ2ZXJTaWRlRXh0ZW5zaW9uLnByb3RvEghxbGlrLnNzZSIHCgVFbXB0",
-            "eSI/CglQYXJhbWV0ZXISJAoIZGF0YVR5cGUYASABKA4yEi5xbGlrLnNzZS5E",
-            "YXRhVHlwZRIMCgRuYW1lGAIgASgJIlQKEEZpZWxkRGVzY3JpcHRpb24SJAoI",
-            "ZGF0YVR5cGUYASABKA4yEi5xbGlrLnNzZS5EYXRhVHlwZRIMCgRuYW1lGAIg",
-            "ASgJEgwKBHRhZ3MYAyADKAkisQEKEkZ1bmN0aW9uRGVmaW5pdGlvbhIMCgRu",
-            "YW1lGAEgASgJEiwKDGZ1bmN0aW9uVHlwZRgCIAEoDjIWLnFsaWsuc3NlLkZ1",
-            "bmN0aW9uVHlwZRImCgpyZXR1cm5UeXBlGAMgASgOMhIucWxpay5zc2UuRGF0",
-            "YVR5cGUSIwoGcGFyYW1zGAQgAygLMhMucWxpay5zc2UuUGFyYW1ldGVyEhIK",
-            "CmZ1bmN0aW9uSWQYBSABKAUihQEKDENhcGFiaWxpdGllcxITCgthbGxvd1Nj",
-            "cmlwdBgBIAEoCBIvCglmdW5jdGlvbnMYAiADKAsyHC5xbGlrLnNzZS5GdW5j",
-            "dGlvbkRlZmluaXRpb24SGAoQcGx1Z2luSWRlbnRpZmllchgDIAEoCRIVCg1w",
-            "bHVnaW5WZXJzaW9uGAQgASgJIigKBER1YWwSDwoHbnVtRGF0YRgBIAEoARIP",
-            "CgdzdHJEYXRhGAIgASgJIiQKA1JvdxIdCgVkdWFscxgBIAMoCzIOLnFsaWsu",
-            "c3NlLkR1YWwiKgoLQnVuZGxlZFJvd3MSGwoEcm93cxgBIAMoCzINLnFsaWsu",
-            "c3NlLlJvdyKgAQoTU2NyaXB0UmVxdWVzdEhlYWRlchIOCgZzY3JpcHQYASAB",
-            "KAkSLAoMZnVuY3Rpb25UeXBlGAIgASgOMhYucWxpay5zc2UuRnVuY3Rpb25U",
-            "eXBlEiYKCnJldHVyblR5cGUYAyABKA4yEi5xbGlrLnNzZS5EYXRhVHlwZRIj",
-            "CgZwYXJhbXMYBCADKAsyEy5xbGlrLnNzZS5QYXJhbWV0ZXIiPAoVRnVuY3Rp",
-            "b25SZXF1ZXN0SGVhZGVyEhIKCmZ1bmN0aW9uSWQYASABKAUSDwoHdmVyc2lv",
-            "bhgCIAEoCSJJChNDb21tb25SZXF1ZXN0SGVhZGVyEg0KBWFwcElkGAEgASgJ",
-            "Eg4KBnVzZXJJZBgCIAEoCRITCgtjYXJkaW5hbGl0eRgDIAEoAyJiChBUYWJs",
-            "ZURlc2NyaXB0aW9uEioKBmZpZWxkcxgBIAMoCzIaLnFsaWsuc3NlLkZpZWxk",
-            "RGVzY3JpcHRpb24SDAoEbmFtZRgCIAEoCRIUCgxudW1iZXJPZlJvd3MYAyAB",
-            "KAMqLQoIRGF0YVR5cGUSCgoGU1RSSU5HEAASCwoHTlVNRVJJQxABEggKBERV",
-            "QUwQAio3CgxGdW5jdGlvblR5cGUSCgoGU0NBTEFSEAASDwoLQUdHUkVHQVRJ",
-            "T04QARIKCgZURU5TT1IQAjLWAQoJQ29ubmVjdG9yEjwKD0dldENhcGFiaWxp",
-            "dGllcxIPLnFsaWsuc3NlLkVtcHR5GhYucWxpay5zc2UuQ2FwYWJpbGl0aWVz",
-            "IgASRQoPRXhlY3V0ZUZ1bmN0aW9uEhUucWxpay5zc2UuQnVuZGxlZFJvd3Ma",
-            "FS5xbGlrLnNzZS5CdW5kbGVkUm93cyIAKAEwARJECg5FdmFsdWF0ZVNjcmlw",
-            "dBIVLnFsaWsuc3NlLkJ1bmRsZWRSb3dzGhUucWxpay5zc2UuQnVuZGxlZFJv",
-            "d3MiACgBMAFCA/gBAWIGcHJvdG8z"));
-      descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Qlik.Sse.DataType), typeof(global::Qlik.Sse.FunctionType), }, new pbr::GeneratedClrTypeInfo[] {
+        static ServerSideExtensionReflection()
+        {
+            byte[] descriptorData = global::System.Convert.FromBase64String(
+                string.Concat(
+                  "ChlTZXJ2ZXJTaWRlRXh0ZW5zaW9uLnByb3RvEghxbGlrLnNzZSIHCgVFbXB0",
+                  "eSI/CglQYXJhbWV0ZXISJAoIZGF0YVR5cGUYASABKA4yEi5xbGlrLnNzZS5E",
+                  "YXRhVHlwZRIMCgRuYW1lGAIgASgJIlQKEEZpZWxkRGVzY3JpcHRpb24SJAoI",
+                  "ZGF0YVR5cGUYASABKA4yEi5xbGlrLnNzZS5EYXRhVHlwZRIMCgRuYW1lGAIg",
+                  "ASgJEgwKBHRhZ3MYAyADKAkisQEKEkZ1bmN0aW9uRGVmaW5pdGlvbhIMCgRu",
+                  "YW1lGAEgASgJEiwKDGZ1bmN0aW9uVHlwZRgCIAEoDjIWLnFsaWsuc3NlLkZ1",
+                  "bmN0aW9uVHlwZRImCgpyZXR1cm5UeXBlGAMgASgOMhIucWxpay5zc2UuRGF0",
+                  "YVR5cGUSIwoGcGFyYW1zGAQgAygLMhMucWxpay5zc2UuUGFyYW1ldGVyEhIK",
+                  "CmZ1bmN0aW9uSWQYBSABKAUihQEKDENhcGFiaWxpdGllcxITCgthbGxvd1Nj",
+                  "cmlwdBgBIAEoCBIvCglmdW5jdGlvbnMYAiADKAsyHC5xbGlrLnNzZS5GdW5j",
+                  "dGlvbkRlZmluaXRpb24SGAoQcGx1Z2luSWRlbnRpZmllchgDIAEoCRIVCg1w",
+                  "bHVnaW5WZXJzaW9uGAQgASgJIigKBER1YWwSDwoHbnVtRGF0YRgBIAEoARIP",
+                  "CgdzdHJEYXRhGAIgASgJIiQKA1JvdxIdCgVkdWFscxgBIAMoCzIOLnFsaWsu",
+                  "c3NlLkR1YWwiKgoLQnVuZGxlZFJvd3MSGwoEcm93cxgBIAMoCzINLnFsaWsu",
+                  "c3NlLlJvdyKgAQoTU2NyaXB0UmVxdWVzdEhlYWRlchIOCgZzY3JpcHQYASAB",
+                  "KAkSLAoMZnVuY3Rpb25UeXBlGAIgASgOMhYucWxpay5zc2UuRnVuY3Rpb25U",
+                  "eXBlEiYKCnJldHVyblR5cGUYAyABKA4yEi5xbGlrLnNzZS5EYXRhVHlwZRIj",
+                  "CgZwYXJhbXMYBCADKAsyEy5xbGlrLnNzZS5QYXJhbWV0ZXIiPAoVRnVuY3Rp",
+                  "b25SZXF1ZXN0SGVhZGVyEhIKCmZ1bmN0aW9uSWQYASABKAUSDwoHdmVyc2lv",
+                  "bhgCIAEoCSJJChNDb21tb25SZXF1ZXN0SGVhZGVyEg0KBWFwcElkGAEgASgJ",
+                  "Eg4KBnVzZXJJZBgCIAEoCRITCgtjYXJkaW5hbGl0eRgDIAEoAyJiChBUYWJs",
+                  "ZURlc2NyaXB0aW9uEioKBmZpZWxkcxgBIAMoCzIaLnFsaWsuc3NlLkZpZWxk",
+                  "RGVzY3JpcHRpb24SDAoEbmFtZRgCIAEoCRIUCgxudW1iZXJPZlJvd3MYAyAB",
+                  "KAMqLQoIRGF0YVR5cGUSCgoGU1RSSU5HEAASCwoHTlVNRVJJQxABEggKBERV",
+                  "QUwQAio3CgxGdW5jdGlvblR5cGUSCgoGU0NBTEFSEAASDwoLQUdHUkVHQVRJ",
+                  "T04QARIKCgZURU5TT1IQAjLWAQoJQ29ubmVjdG9yEjwKD0dldENhcGFiaWxp",
+                  "dGllcxIPLnFsaWsuc3NlLkVtcHR5GhYucWxpay5zc2UuQ2FwYWJpbGl0aWVz",
+                  "IgASRQoPRXhlY3V0ZUZ1bmN0aW9uEhUucWxpay5zc2UuQnVuZGxlZFJvd3Ma",
+                  "FS5xbGlrLnNzZS5CdW5kbGVkUm93cyIAKAEwARJECg5FdmFsdWF0ZVNjcmlw",
+                  "dBIVLnFsaWsuc3NlLkJ1bmRsZWRSb3dzGhUucWxpay5zc2UuQnVuZGxlZFJv",
+                  "d3MiACgBMAFCA/gBAWIGcHJvdG8z"));
+            descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
+                new pbr::FileDescriptor[] { },
+                new pbr::GeneratedClrTypeInfo(new[] { typeof(global::Qlik.Sse.DataType), typeof(global::Qlik.Sse.FunctionType), }, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Qlik.Sse.Empty), global::Qlik.Sse.Empty.Parser, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Qlik.Sse.Parameter), global::Qlik.Sse.Parameter.Parser, new[]{ "DataType", "Name" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Qlik.Sse.FieldDescription), global::Qlik.Sse.FieldDescription.Parser, new[]{ "DataType", "Name", "Tags" }, null, null, null),
@@ -68,2041 +71,2423 @@ namespace Qlik.Sse {
             new pbr::GeneratedClrTypeInfo(typeof(global::Qlik.Sse.FunctionRequestHeader), global::Qlik.Sse.FunctionRequestHeader.Parser, new[]{ "FunctionId", "Version" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Qlik.Sse.CommonRequestHeader), global::Qlik.Sse.CommonRequestHeader.Parser, new[]{ "AppId", "UserId", "Cardinality" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Qlik.Sse.TableDescription), global::Qlik.Sse.TableDescription.Parser, new[]{ "Fields", "Name", "NumberOfRows" }, null, null, null)
-          }));
+                }));
+        }
+        #endregion
+
     }
+    #region Enums
+    /// <summary>
+    ///*
+    /// Data types of the parameters and return values.
+    /// </summary>
+    public enum DataType
+    {
+        /// <summary>
+        //// Contains only string.
+        /// </summary>
+        [pbr::OriginalName("STRING")] String = 0,
+        /// <summary>
+        //// Contains only double.
+        /// </summary>
+        [pbr::OriginalName("NUMERIC")] Numeric = 1,
+        /// <summary>
+        //// Contains both a string and a double.
+        /// </summary>
+        [pbr::OriginalName("DUAL")] Dual = 2,
+    }
+
+    /// <summary>
+    ///*
+    /// Types of functions (determined by their return values).
+    /// </summary>
+    public enum FunctionType
+    {
+        /// <summary>
+        //// The return value is a scalar per row.
+        /// </summary>
+        [pbr::OriginalName("SCALAR")] Scalar = 0,
+        /// <summary>
+        //// All rows are aggregated into a single scalar.
+        /// </summary>
+        [pbr::OriginalName("AGGREGATION")] Aggregation = 1,
+        /// <summary>
+        //// Multiple rows in, multiple rows out.
+        /// </summary>
+        [pbr::OriginalName("TENSOR")] Tensor = 2,
+    }
+
     #endregion
 
-  }
-  #region Enums
-  /// <summary>
-  ///*
-  /// Data types of the parameters and return values.
-  /// </summary>
-  public enum DataType {
+    #region Messages
     /// <summary>
-    //// Contains only string.
+    ///*
+    /// An empty message used when nothing is to be passed in a call.
     /// </summary>
-    [pbr::OriginalName("STRING")] String = 0,
-    /// <summary>
-    //// Contains only double.
-    /// </summary>
-    [pbr::OriginalName("NUMERIC")] Numeric = 1,
-    /// <summary>
-    //// Contains both a string and a double.
-    /// </summary>
-    [pbr::OriginalName("DUAL")] Dual = 2,
-  }
+    public sealed partial class Empty : pb::IMessage<Empty>
+    {
+        private static readonly pb::MessageParser<Empty> _parser = new pb::MessageParser<Empty>(() => new Empty());
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<Empty> Parser { get { return _parser; } }
 
-  /// <summary>
-  ///*
-  /// Types of functions (determined by their return values).
-  /// </summary>
-  public enum FunctionType {
-    /// <summary>
-    //// The return value is a scalar per row.
-    /// </summary>
-    [pbr::OriginalName("SCALAR")] Scalar = 0,
-    /// <summary>
-    //// All rows are aggregated into a single scalar.
-    /// </summary>
-    [pbr::OriginalName("AGGREGATION")] Aggregation = 1,
-    /// <summary>
-    //// Multiple rows in, multiple rows out.
-    /// </summary>
-    [pbr::OriginalName("TENSOR")] Tensor = 2,
-  }
-
-  #endregion
-
-  #region Messages
-  /// <summary>
-  ///*
-  /// An empty message used when nothing is to be passed in a call.
-  /// </summary>
-  public sealed partial class Empty : pb::IMessage<Empty> {
-    private static readonly pb::MessageParser<Empty> _parser = new pb::MessageParser<Empty>(() => new Empty());
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<Empty> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[0]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Empty() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Empty(Empty other) : this() {
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Empty Clone() {
-      return new Empty(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as Empty);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(Empty other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      return true;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(Empty other) {
-      if (other == null) {
-        return;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            input.SkipLastField();
-            break;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor
+        {
+            get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[0]; }
         }
-      }
-    }
 
-  }
-
-  /// <summary>
-  ///*
-  /// Parameter definition for functions and script calls.
-  /// </summary>
-  public sealed partial class Parameter : pb::IMessage<Parameter> {
-    private static readonly pb::MessageParser<Parameter> _parser = new pb::MessageParser<Parameter>(() => new Parameter());
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<Parameter> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[1]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Parameter() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Parameter(Parameter other) : this() {
-      dataType_ = other.dataType_;
-      name_ = other.name_;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Parameter Clone() {
-      return new Parameter(this);
-    }
-
-    /// <summary>Field number for the "dataType" field.</summary>
-    public const int DataTypeFieldNumber = 1;
-    private global::Qlik.Sse.DataType dataType_ = 0;
-    /// <summary>
-    //// The data type of the parameter.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Qlik.Sse.DataType DataType {
-      get { return dataType_; }
-      set {
-        dataType_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "name" field.</summary>
-    public const int NameFieldNumber = 2;
-    private string name_ = "";
-    /// <summary>
-    //// The name of the parameter.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Name {
-      get { return name_; }
-      set {
-        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as Parameter);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(Parameter other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (DataType != other.DataType) return false;
-      if (Name != other.Name) return false;
-      return true;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (DataType != 0) hash ^= DataType.GetHashCode();
-      if (Name.Length != 0) hash ^= Name.GetHashCode();
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (DataType != 0) {
-        output.WriteRawTag(8);
-        output.WriteEnum((int) DataType);
-      }
-      if (Name.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(Name);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (DataType != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) DataType);
-      }
-      if (Name.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(Parameter other) {
-      if (other == null) {
-        return;
-      }
-      if (other.DataType != 0) {
-        DataType = other.DataType;
-      }
-      if (other.Name.Length != 0) {
-        Name = other.Name;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            input.SkipLastField();
-            break;
-          case 8: {
-            dataType_ = (global::Qlik.Sse.DataType) input.ReadEnum();
-            break;
-          }
-          case 18: {
-            Name = input.ReadString();
-            break;
-          }
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor
+        {
+            get { return Descriptor; }
         }
-      }
-    }
 
-  }
-
-  /// <summary>
-  ///*
-  /// Field definition for function and script calls.
-  /// </summary>
-  public sealed partial class FieldDescription : pb::IMessage<FieldDescription> {
-    private static readonly pb::MessageParser<FieldDescription> _parser = new pb::MessageParser<FieldDescription>(() => new FieldDescription());
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<FieldDescription> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[2]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FieldDescription() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FieldDescription(FieldDescription other) : this() {
-      dataType_ = other.dataType_;
-      name_ = other.name_;
-      tags_ = other.tags_.Clone();
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FieldDescription Clone() {
-      return new FieldDescription(this);
-    }
-
-    /// <summary>Field number for the "dataType" field.</summary>
-    public const int DataTypeFieldNumber = 1;
-    private global::Qlik.Sse.DataType dataType_ = 0;
-    /// <summary>
-    //// The data type of the field.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Qlik.Sse.DataType DataType {
-      get { return dataType_; }
-      set {
-        dataType_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "name" field.</summary>
-    public const int NameFieldNumber = 2;
-    private string name_ = "";
-    /// <summary>
-    //// The name of the field.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Name {
-      get { return name_; }
-      set {
-        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "tags" field.</summary>
-    public const int TagsFieldNumber = 3;
-    private static readonly pb::FieldCodec<string> _repeated_tags_codec
-        = pb::FieldCodec.ForString(26);
-    private readonly pbc::RepeatedField<string> tags_ = new pbc::RepeatedField<string>();
-    /// <summary>
-    //// The tags of the field.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<string> Tags {
-      get { return tags_; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as FieldDescription);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(FieldDescription other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (DataType != other.DataType) return false;
-      if (Name != other.Name) return false;
-      if(!tags_.Equals(other.tags_)) return false;
-      return true;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (DataType != 0) hash ^= DataType.GetHashCode();
-      if (Name.Length != 0) hash ^= Name.GetHashCode();
-      hash ^= tags_.GetHashCode();
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (DataType != 0) {
-        output.WriteRawTag(8);
-        output.WriteEnum((int) DataType);
-      }
-      if (Name.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(Name);
-      }
-      tags_.WriteTo(output, _repeated_tags_codec);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (DataType != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) DataType);
-      }
-      if (Name.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
-      }
-      size += tags_.CalculateSize(_repeated_tags_codec);
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(FieldDescription other) {
-      if (other == null) {
-        return;
-      }
-      if (other.DataType != 0) {
-        DataType = other.DataType;
-      }
-      if (other.Name.Length != 0) {
-        Name = other.Name;
-      }
-      tags_.Add(other.tags_);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            input.SkipLastField();
-            break;
-          case 8: {
-            dataType_ = (global::Qlik.Sse.DataType) input.ReadEnum();
-            break;
-          }
-          case 18: {
-            Name = input.ReadString();
-            break;
-          }
-          case 26: {
-            tags_.AddEntriesFrom(input, _repeated_tags_codec);
-            break;
-          }
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Empty()
+        {
+            OnConstruction();
         }
-      }
-    }
 
-  }
+        partial void OnConstruction();
 
-  /// <summary>
-  ///*
-  /// The definition of a function, which informs the Qlik engine how to use it.
-  /// </summary>
-  public sealed partial class FunctionDefinition : pb::IMessage<FunctionDefinition> {
-    private static readonly pb::MessageParser<FunctionDefinition> _parser = new pb::MessageParser<FunctionDefinition>(() => new FunctionDefinition());
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<FunctionDefinition> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[3]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FunctionDefinition() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FunctionDefinition(FunctionDefinition other) : this() {
-      name_ = other.name_;
-      functionType_ = other.functionType_;
-      returnType_ = other.returnType_;
-      params_ = other.params_.Clone();
-      functionId_ = other.functionId_;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FunctionDefinition Clone() {
-      return new FunctionDefinition(this);
-    }
-
-    /// <summary>Field number for the "name" field.</summary>
-    public const int NameFieldNumber = 1;
-    private string name_ = "";
-    /// <summary>
-    //// The name of the function.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Name {
-      get { return name_; }
-      set {
-        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "functionType" field.</summary>
-    public const int FunctionTypeFieldNumber = 2;
-    private global::Qlik.Sse.FunctionType functionType_ = 0;
-    /// <summary>
-    //// The type of the function.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Qlik.Sse.FunctionType FunctionType {
-      get { return functionType_; }
-      set {
-        functionType_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "returnType" field.</summary>
-    public const int ReturnTypeFieldNumber = 3;
-    private global::Qlik.Sse.DataType returnType_ = 0;
-    /// <summary>
-    //// The return type of the function.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Qlik.Sse.DataType ReturnType {
-      get { return returnType_; }
-      set {
-        returnType_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "params" field.</summary>
-    public const int ParamsFieldNumber = 4;
-    private static readonly pb::FieldCodec<global::Qlik.Sse.Parameter> _repeated_params_codec
-        = pb::FieldCodec.ForMessage(34, global::Qlik.Sse.Parameter.Parser);
-    private readonly pbc::RepeatedField<global::Qlik.Sse.Parameter> params_ = new pbc::RepeatedField<global::Qlik.Sse.Parameter>();
-    /// <summary>
-    //// The parameters the function takes.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Qlik.Sse.Parameter> Params {
-      get { return params_; }
-    }
-
-    /// <summary>Field number for the "functionId" field.</summary>
-    public const int FunctionIdFieldNumber = 5;
-    private int functionId_;
-    /// <summary>
-    //// A unique ID number for the function, set by the plugin, to be used in calls from the Qlik engine to the plugin.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int FunctionId {
-      get { return functionId_; }
-      set {
-        functionId_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as FunctionDefinition);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(FunctionDefinition other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (Name != other.Name) return false;
-      if (FunctionType != other.FunctionType) return false;
-      if (ReturnType != other.ReturnType) return false;
-      if(!params_.Equals(other.params_)) return false;
-      if (FunctionId != other.FunctionId) return false;
-      return true;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (Name.Length != 0) hash ^= Name.GetHashCode();
-      if (FunctionType != 0) hash ^= FunctionType.GetHashCode();
-      if (ReturnType != 0) hash ^= ReturnType.GetHashCode();
-      hash ^= params_.GetHashCode();
-      if (FunctionId != 0) hash ^= FunctionId.GetHashCode();
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (Name.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Name);
-      }
-      if (FunctionType != 0) {
-        output.WriteRawTag(16);
-        output.WriteEnum((int) FunctionType);
-      }
-      if (ReturnType != 0) {
-        output.WriteRawTag(24);
-        output.WriteEnum((int) ReturnType);
-      }
-      params_.WriteTo(output, _repeated_params_codec);
-      if (FunctionId != 0) {
-        output.WriteRawTag(40);
-        output.WriteInt32(FunctionId);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (Name.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
-      }
-      if (FunctionType != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) FunctionType);
-      }
-      if (ReturnType != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ReturnType);
-      }
-      size += params_.CalculateSize(_repeated_params_codec);
-      if (FunctionId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FunctionId);
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(FunctionDefinition other) {
-      if (other == null) {
-        return;
-      }
-      if (other.Name.Length != 0) {
-        Name = other.Name;
-      }
-      if (other.FunctionType != 0) {
-        FunctionType = other.FunctionType;
-      }
-      if (other.ReturnType != 0) {
-        ReturnType = other.ReturnType;
-      }
-      params_.Add(other.params_);
-      if (other.FunctionId != 0) {
-        FunctionId = other.FunctionId;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            input.SkipLastField();
-            break;
-          case 10: {
-            Name = input.ReadString();
-            break;
-          }
-          case 16: {
-            functionType_ = (global::Qlik.Sse.FunctionType) input.ReadEnum();
-            break;
-          }
-          case 24: {
-            returnType_ = (global::Qlik.Sse.DataType) input.ReadEnum();
-            break;
-          }
-          case 34: {
-            params_.AddEntriesFrom(input, _repeated_params_codec);
-            break;
-          }
-          case 40: {
-            FunctionId = input.ReadInt32();
-            break;
-          }
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Empty(Empty other) : this()
+        {
         }
-      }
-    }
 
-  }
-
-  /// <summary>
-  ///*
-  /// A full description of the plugin, sent to the Qlik engine, listing all functions available and indicating whether script evaluation is allowed.
-  /// </summary>
-  public sealed partial class Capabilities : pb::IMessage<Capabilities> {
-    private static readonly pb::MessageParser<Capabilities> _parser = new pb::MessageParser<Capabilities>(() => new Capabilities());
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<Capabilities> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[4]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Capabilities() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Capabilities(Capabilities other) : this() {
-      allowScript_ = other.allowScript_;
-      functions_ = other.functions_.Clone();
-      pluginIdentifier_ = other.pluginIdentifier_;
-      pluginVersion_ = other.pluginVersion_;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Capabilities Clone() {
-      return new Capabilities(this);
-    }
-
-    /// <summary>Field number for the "allowScript" field.</summary>
-    public const int AllowScriptFieldNumber = 1;
-    private bool allowScript_;
-    /// <summary>
-    //// When true, the Qlik engine allows scripts to be sent to the plugin.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool AllowScript {
-      get { return allowScript_; }
-      set {
-        allowScript_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "functions" field.</summary>
-    public const int FunctionsFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::Qlik.Sse.FunctionDefinition> _repeated_functions_codec
-        = pb::FieldCodec.ForMessage(18, global::Qlik.Sse.FunctionDefinition.Parser);
-    private readonly pbc::RepeatedField<global::Qlik.Sse.FunctionDefinition> functions_ = new pbc::RepeatedField<global::Qlik.Sse.FunctionDefinition>();
-    /// <summary>
-    //// The definitions of all available functions.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Qlik.Sse.FunctionDefinition> Functions {
-      get { return functions_; }
-    }
-
-    /// <summary>Field number for the "pluginIdentifier" field.</summary>
-    public const int PluginIdentifierFieldNumber = 3;
-    private string pluginIdentifier_ = "";
-    /// <summary>
-    //// The ID or name of the plugin.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string PluginIdentifier {
-      get { return pluginIdentifier_; }
-      set {
-        pluginIdentifier_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "pluginVersion" field.</summary>
-    public const int PluginVersionFieldNumber = 4;
-    private string pluginVersion_ = "";
-    /// <summary>
-    //// The version of the plugin.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string PluginVersion {
-      get { return pluginVersion_; }
-      set {
-        pluginVersion_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as Capabilities);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(Capabilities other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (AllowScript != other.AllowScript) return false;
-      if(!functions_.Equals(other.functions_)) return false;
-      if (PluginIdentifier != other.PluginIdentifier) return false;
-      if (PluginVersion != other.PluginVersion) return false;
-      return true;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (AllowScript != false) hash ^= AllowScript.GetHashCode();
-      hash ^= functions_.GetHashCode();
-      if (PluginIdentifier.Length != 0) hash ^= PluginIdentifier.GetHashCode();
-      if (PluginVersion.Length != 0) hash ^= PluginVersion.GetHashCode();
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (AllowScript != false) {
-        output.WriteRawTag(8);
-        output.WriteBool(AllowScript);
-      }
-      functions_.WriteTo(output, _repeated_functions_codec);
-      if (PluginIdentifier.Length != 0) {
-        output.WriteRawTag(26);
-        output.WriteString(PluginIdentifier);
-      }
-      if (PluginVersion.Length != 0) {
-        output.WriteRawTag(34);
-        output.WriteString(PluginVersion);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (AllowScript != false) {
-        size += 1 + 1;
-      }
-      size += functions_.CalculateSize(_repeated_functions_codec);
-      if (PluginIdentifier.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(PluginIdentifier);
-      }
-      if (PluginVersion.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(PluginVersion);
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(Capabilities other) {
-      if (other == null) {
-        return;
-      }
-      if (other.AllowScript != false) {
-        AllowScript = other.AllowScript;
-      }
-      functions_.Add(other.functions_);
-      if (other.PluginIdentifier.Length != 0) {
-        PluginIdentifier = other.PluginIdentifier;
-      }
-      if (other.PluginVersion.Length != 0) {
-        PluginVersion = other.PluginVersion;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            input.SkipLastField();
-            break;
-          case 8: {
-            AllowScript = input.ReadBool();
-            break;
-          }
-          case 18: {
-            functions_.AddEntriesFrom(input, _repeated_functions_codec);
-            break;
-          }
-          case 26: {
-            PluginIdentifier = input.ReadString();
-            break;
-          }
-          case 34: {
-            PluginVersion = input.ReadString();
-            break;
-          }
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Empty Clone()
+        {
+            return new Empty(this);
         }
-      }
-    }
 
-  }
-
-  /// <summary>
-  ///*
-  /// The basic data type for the data stream. Can contain double, string, or both.
-  /// </summary>
-  public sealed partial class Dual : pb::IMessage<Dual> {
-    private static readonly pb::MessageParser<Dual> _parser = new pb::MessageParser<Dual>(() => new Dual());
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<Dual> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[5]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Dual() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Dual(Dual other) : this() {
-      numData_ = other.numData_;
-      strData_ = other.strData_;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Dual Clone() {
-      return new Dual(this);
-    }
-
-    /// <summary>Field number for the "numData" field.</summary>
-    public const int NumDataFieldNumber = 1;
-    private double numData_;
-    /// <summary>
-    //// Numeric value as double.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public double NumData {
-      get { return numData_; }
-      set {
-        numData_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "strData" field.</summary>
-    public const int StrDataFieldNumber = 2;
-    private string strData_ = "";
-    /// <summary>
-    //// String.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string StrData {
-      get { return strData_; }
-      set {
-        strData_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as Dual);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(Dual other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (NumData != other.NumData) return false;
-      if (StrData != other.StrData) return false;
-      return true;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (NumData != 0D) hash ^= NumData.GetHashCode();
-      if (StrData.Length != 0) hash ^= StrData.GetHashCode();
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (NumData != 0D) {
-        output.WriteRawTag(9);
-        output.WriteDouble(NumData);
-      }
-      if (StrData.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(StrData);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (NumData != 0D) {
-        size += 1 + 8;
-      }
-      if (StrData.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(StrData);
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(Dual other) {
-      if (other == null) {
-        return;
-      }
-      if (other.NumData != 0D) {
-        NumData = other.NumData;
-      }
-      if (other.StrData.Length != 0) {
-        StrData = other.StrData;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            input.SkipLastField();
-            break;
-          case 9: {
-            NumData = input.ReadDouble();
-            break;
-          }
-          case 18: {
-            StrData = input.ReadString();
-            break;
-          }
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other)
+        {
+            return Equals(other as Empty);
         }
-      }
-    }
 
-  }
-
-  /// <summary>
-  ///*
-  /// A row of duals.
-  /// </summary>
-  public sealed partial class Row : pb::IMessage<Row> {
-    private static readonly pb::MessageParser<Row> _parser = new pb::MessageParser<Row>(() => new Row());
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<Row> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[6]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Row() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Row(Row other) : this() {
-      duals_ = other.duals_.Clone();
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Row Clone() {
-      return new Row(this);
-    }
-
-    /// <summary>Field number for the "duals" field.</summary>
-    public const int DualsFieldNumber = 1;
-    private static readonly pb::FieldCodec<global::Qlik.Sse.Dual> _repeated_duals_codec
-        = pb::FieldCodec.ForMessage(10, global::Qlik.Sse.Dual.Parser);
-    private readonly pbc::RepeatedField<global::Qlik.Sse.Dual> duals_ = new pbc::RepeatedField<global::Qlik.Sse.Dual>();
-    /// <summary>
-    //// Row of duals.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Qlik.Sse.Dual> Duals {
-      get { return duals_; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as Row);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(Row other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if(!duals_.Equals(other.duals_)) return false;
-      return true;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      hash ^= duals_.GetHashCode();
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      duals_.WriteTo(output, _repeated_duals_codec);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      size += duals_.CalculateSize(_repeated_duals_codec);
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(Row other) {
-      if (other == null) {
-        return;
-      }
-      duals_.Add(other.duals_);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            input.SkipLastField();
-            break;
-          case 10: {
-            duals_.AddEntriesFrom(input, _repeated_duals_codec);
-            break;
-          }
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(Empty other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+            if (ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            return true;
         }
-      }
-    }
 
-  }
-
-  /// <summary>
-  ///*
-  /// A number of rows collected in one message. The actual number will depend on the size of each row and is adjusted to optimize throughput.
-  /// </summary>
-  public sealed partial class BundledRows : pb::IMessage<BundledRows> {
-    private static readonly pb::MessageParser<BundledRows> _parser = new pb::MessageParser<BundledRows>(() => new BundledRows());
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<BundledRows> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[7]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BundledRows() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BundledRows(BundledRows other) : this() {
-      rows_ = other.rows_.Clone();
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public BundledRows Clone() {
-      return new BundledRows(this);
-    }
-
-    /// <summary>Field number for the "rows" field.</summary>
-    public const int RowsFieldNumber = 1;
-    private static readonly pb::FieldCodec<global::Qlik.Sse.Row> _repeated_rows_codec
-        = pb::FieldCodec.ForMessage(10, global::Qlik.Sse.Row.Parser);
-    private readonly pbc::RepeatedField<global::Qlik.Sse.Row> rows_ = new pbc::RepeatedField<global::Qlik.Sse.Row>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Qlik.Sse.Row> Rows {
-      get { return rows_; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as BundledRows);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(BundledRows other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if(!rows_.Equals(other.rows_)) return false;
-      return true;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      hash ^= rows_.GetHashCode();
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      rows_.WriteTo(output, _repeated_rows_codec);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      size += rows_.CalculateSize(_repeated_rows_codec);
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(BundledRows other) {
-      if (other == null) {
-        return;
-      }
-      rows_.Add(other.rows_);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            input.SkipLastField();
-            break;
-          case 10: {
-            rows_.AddEntriesFrom(input, _repeated_rows_codec);
-            break;
-          }
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            return hash;
         }
-      }
-    }
 
-  }
-
-  /// <summary>
-  ///*
-  /// A header sent at the start of an EvaluateScript request under the key "qlik-scriptrequestheader-bin".
-  /// </summary>
-  public sealed partial class ScriptRequestHeader : pb::IMessage<ScriptRequestHeader> {
-    private static readonly pb::MessageParser<ScriptRequestHeader> _parser = new pb::MessageParser<ScriptRequestHeader>(() => new ScriptRequestHeader());
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<ScriptRequestHeader> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[8]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ScriptRequestHeader() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ScriptRequestHeader(ScriptRequestHeader other) : this() {
-      script_ = other.script_;
-      functionType_ = other.functionType_;
-      returnType_ = other.returnType_;
-      params_ = other.params_.Clone();
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ScriptRequestHeader Clone() {
-      return new ScriptRequestHeader(this);
-    }
-
-    /// <summary>Field number for the "script" field.</summary>
-    public const int ScriptFieldNumber = 1;
-    private string script_ = "";
-    /// <summary>
-    //// The script to be executed.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Script {
-      get { return script_; }
-      set {
-        script_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "functionType" field.</summary>
-    public const int FunctionTypeFieldNumber = 2;
-    private global::Qlik.Sse.FunctionType functionType_ = 0;
-    /// <summary>
-    //// The function type of the script evaluation: scalar, aggregation or tensor.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Qlik.Sse.FunctionType FunctionType {
-      get { return functionType_; }
-      set {
-        functionType_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "returnType" field.</summary>
-    public const int ReturnTypeFieldNumber = 3;
-    private global::Qlik.Sse.DataType returnType_ = 0;
-    /// <summary>
-    //// The return type from the script evaluation: numeric, string or both.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Qlik.Sse.DataType ReturnType {
-      get { return returnType_; }
-      set {
-        returnType_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "params" field.</summary>
-    public const int ParamsFieldNumber = 4;
-    private static readonly pb::FieldCodec<global::Qlik.Sse.Parameter> _repeated_params_codec
-        = pb::FieldCodec.ForMessage(34, global::Qlik.Sse.Parameter.Parser);
-    private readonly pbc::RepeatedField<global::Qlik.Sse.Parameter> params_ = new pbc::RepeatedField<global::Qlik.Sse.Parameter>();
-    /// <summary>
-    //// The parameters names and types passed to the script.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Qlik.Sse.Parameter> Params {
-      get { return params_; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as ScriptRequestHeader);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(ScriptRequestHeader other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (Script != other.Script) return false;
-      if (FunctionType != other.FunctionType) return false;
-      if (ReturnType != other.ReturnType) return false;
-      if(!params_.Equals(other.params_)) return false;
-      return true;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (Script.Length != 0) hash ^= Script.GetHashCode();
-      if (FunctionType != 0) hash ^= FunctionType.GetHashCode();
-      if (ReturnType != 0) hash ^= ReturnType.GetHashCode();
-      hash ^= params_.GetHashCode();
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (Script.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Script);
-      }
-      if (FunctionType != 0) {
-        output.WriteRawTag(16);
-        output.WriteEnum((int) FunctionType);
-      }
-      if (ReturnType != 0) {
-        output.WriteRawTag(24);
-        output.WriteEnum((int) ReturnType);
-      }
-      params_.WriteTo(output, _repeated_params_codec);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (Script.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Script);
-      }
-      if (FunctionType != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) FunctionType);
-      }
-      if (ReturnType != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ReturnType);
-      }
-      size += params_.CalculateSize(_repeated_params_codec);
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(ScriptRequestHeader other) {
-      if (other == null) {
-        return;
-      }
-      if (other.Script.Length != 0) {
-        Script = other.Script;
-      }
-      if (other.FunctionType != 0) {
-        FunctionType = other.FunctionType;
-      }
-      if (other.ReturnType != 0) {
-        ReturnType = other.ReturnType;
-      }
-      params_.Add(other.params_);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            input.SkipLastField();
-            break;
-          case 10: {
-            Script = input.ReadString();
-            break;
-          }
-          case 16: {
-            functionType_ = (global::Qlik.Sse.FunctionType) input.ReadEnum();
-            break;
-          }
-          case 24: {
-            returnType_ = (global::Qlik.Sse.DataType) input.ReadEnum();
-            break;
-          }
-          case 34: {
-            params_.AddEntriesFrom(input, _repeated_params_codec);
-            break;
-          }
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString()
+        {
+            return pb::JsonFormatter.ToDiagnosticString(this);
         }
-      }
-    }
 
-  }
-
-  /// <summary>
-  ///*
-  /// A header sent at the start of an ExecuteFunction request under the key "qlik-functionrequestheader-bin".
-  /// </summary>
-  public sealed partial class FunctionRequestHeader : pb::IMessage<FunctionRequestHeader> {
-    private static readonly pb::MessageParser<FunctionRequestHeader> _parser = new pb::MessageParser<FunctionRequestHeader>(() => new FunctionRequestHeader());
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<FunctionRequestHeader> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[9]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FunctionRequestHeader() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FunctionRequestHeader(FunctionRequestHeader other) : this() {
-      functionId_ = other.functionId_;
-      version_ = other.version_;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FunctionRequestHeader Clone() {
-      return new FunctionRequestHeader(this);
-    }
-
-    /// <summary>Field number for the "functionId" field.</summary>
-    public const int FunctionIdFieldNumber = 1;
-    private int functionId_;
-    /// <summary>
-    //// The ID of the function to be executed.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int FunctionId {
-      get { return functionId_; }
-      set {
-        functionId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "version" field.</summary>
-    public const int VersionFieldNumber = 2;
-    private string version_ = "";
-    /// <summary>
-    //// A dummy variable as a workaround for an issue.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Version {
-      get { return version_; }
-      set {
-        version_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as FunctionRequestHeader);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(FunctionRequestHeader other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (FunctionId != other.FunctionId) return false;
-      if (Version != other.Version) return false;
-      return true;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (FunctionId != 0) hash ^= FunctionId.GetHashCode();
-      if (Version.Length != 0) hash ^= Version.GetHashCode();
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (FunctionId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(FunctionId);
-      }
-      if (Version.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(Version);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (FunctionId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FunctionId);
-      }
-      if (Version.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Version);
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(FunctionRequestHeader other) {
-      if (other == null) {
-        return;
-      }
-      if (other.FunctionId != 0) {
-        FunctionId = other.FunctionId;
-      }
-      if (other.Version.Length != 0) {
-        Version = other.Version;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            input.SkipLastField();
-            break;
-          case 8: {
-            FunctionId = input.ReadInt32();
-            break;
-          }
-          case 18: {
-            Version = input.ReadString();
-            break;
-          }
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output)
+        {
         }
-      }
-    }
 
-  }
-
-  /// <summary>
-  ///*
-  /// A header sent at the start of both an EvaluateScript request and an ExecuteFunction request under the key "qlik-commonrequestheader-bin".
-  /// </summary>
-  public sealed partial class CommonRequestHeader : pb::IMessage<CommonRequestHeader> {
-    private static readonly pb::MessageParser<CommonRequestHeader> _parser = new pb::MessageParser<CommonRequestHeader>(() => new CommonRequestHeader());
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<CommonRequestHeader> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[10]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CommonRequestHeader() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CommonRequestHeader(CommonRequestHeader other) : this() {
-      appId_ = other.appId_;
-      userId_ = other.userId_;
-      cardinality_ = other.cardinality_;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CommonRequestHeader Clone() {
-      return new CommonRequestHeader(this);
-    }
-
-    /// <summary>Field number for the "appId" field.</summary>
-    public const int AppIdFieldNumber = 1;
-    private string appId_ = "";
-    /// <summary>
-    //// The ID of the app the request was executed in.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string AppId {
-      get { return appId_; }
-      set {
-        appId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "userId" field.</summary>
-    public const int UserIdFieldNumber = 2;
-    private string userId_ = "";
-    /// <summary>
-    //// The ID of the user the request was executed by.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string UserId {
-      get { return userId_; }
-      set {
-        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "cardinality" field.</summary>
-    public const int CardinalityFieldNumber = 3;
-    private long cardinality_;
-    /// <summary>
-    //// The cardinality of the parameters.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public long Cardinality {
-      get { return cardinality_; }
-      set {
-        cardinality_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as CommonRequestHeader);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(CommonRequestHeader other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (AppId != other.AppId) return false;
-      if (UserId != other.UserId) return false;
-      if (Cardinality != other.Cardinality) return false;
-      return true;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (AppId.Length != 0) hash ^= AppId.GetHashCode();
-      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
-      if (Cardinality != 0L) hash ^= Cardinality.GetHashCode();
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (AppId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(AppId);
-      }
-      if (UserId.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(UserId);
-      }
-      if (Cardinality != 0L) {
-        output.WriteRawTag(24);
-        output.WriteInt64(Cardinality);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (AppId.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(AppId);
-      }
-      if (UserId.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
-      }
-      if (Cardinality != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(Cardinality);
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(CommonRequestHeader other) {
-      if (other == null) {
-        return;
-      }
-      if (other.AppId.Length != 0) {
-        AppId = other.AppId;
-      }
-      if (other.UserId.Length != 0) {
-        UserId = other.UserId;
-      }
-      if (other.Cardinality != 0L) {
-        Cardinality = other.Cardinality;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            input.SkipLastField();
-            break;
-          case 10: {
-            AppId = input.ReadString();
-            break;
-          }
-          case 18: {
-            UserId = input.ReadString();
-            break;
-          }
-          case 24: {
-            Cardinality = input.ReadInt64();
-            break;
-          }
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize()
+        {
+            int size = 0;
+            return size;
         }
-      }
-    }
 
-  }
-
-  /// <summary>
-  ///*
-  /// A header sent before returning data to Qlik, under the key "qlik-tabledescription-bin".
-  /// </summary>
-  public sealed partial class TableDescription : pb::IMessage<TableDescription> {
-    private static readonly pb::MessageParser<TableDescription> _parser = new pb::MessageParser<TableDescription>(() => new TableDescription());
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<TableDescription> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[11]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public TableDescription() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public TableDescription(TableDescription other) : this() {
-      fields_ = other.fields_.Clone();
-      name_ = other.name_;
-      numberOfRows_ = other.numberOfRows_;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public TableDescription Clone() {
-      return new TableDescription(this);
-    }
-
-    /// <summary>Field number for the "fields" field.</summary>
-    public const int FieldsFieldNumber = 1;
-    private static readonly pb::FieldCodec<global::Qlik.Sse.FieldDescription> _repeated_fields_codec
-        = pb::FieldCodec.ForMessage(10, global::Qlik.Sse.FieldDescription.Parser);
-    private readonly pbc::RepeatedField<global::Qlik.Sse.FieldDescription> fields_ = new pbc::RepeatedField<global::Qlik.Sse.FieldDescription>();
-    /// <summary>
-    //// The fields of the table.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Qlik.Sse.FieldDescription> Fields {
-      get { return fields_; }
-    }
-
-    /// <summary>Field number for the "name" field.</summary>
-    public const int NameFieldNumber = 2;
-    private string name_ = "";
-    /// <summary>
-    //// The name of the table.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Name {
-      get { return name_; }
-      set {
-        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "numberOfRows" field.</summary>
-    public const int NumberOfRowsFieldNumber = 3;
-    private long numberOfRows_;
-    /// <summary>
-    //// Number of rows in table.
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public long NumberOfRows {
-      get { return numberOfRows_; }
-      set {
-        numberOfRows_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as TableDescription);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(TableDescription other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if(!fields_.Equals(other.fields_)) return false;
-      if (Name != other.Name) return false;
-      if (NumberOfRows != other.NumberOfRows) return false;
-      return true;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      hash ^= fields_.GetHashCode();
-      if (Name.Length != 0) hash ^= Name.GetHashCode();
-      if (NumberOfRows != 0L) hash ^= NumberOfRows.GetHashCode();
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      fields_.WriteTo(output, _repeated_fields_codec);
-      if (Name.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(Name);
-      }
-      if (NumberOfRows != 0L) {
-        output.WriteRawTag(24);
-        output.WriteInt64(NumberOfRows);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      size += fields_.CalculateSize(_repeated_fields_codec);
-      if (Name.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
-      }
-      if (NumberOfRows != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(NumberOfRows);
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(TableDescription other) {
-      if (other == null) {
-        return;
-      }
-      fields_.Add(other.fields_);
-      if (other.Name.Length != 0) {
-        Name = other.Name;
-      }
-      if (other.NumberOfRows != 0L) {
-        NumberOfRows = other.NumberOfRows;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            input.SkipLastField();
-            break;
-          case 10: {
-            fields_.AddEntriesFrom(input, _repeated_fields_codec);
-            break;
-          }
-          case 18: {
-            Name = input.ReadString();
-            break;
-          }
-          case 24: {
-            NumberOfRows = input.ReadInt64();
-            break;
-          }
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(Empty other)
+        {
+            if (other == null)
+            {
+                return;
+            }
         }
-      }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input)
+        {
+            uint tag;
+            while ((tag = input.ReadTag()) != 0)
+            {
+                switch (tag)
+                {
+                    default:
+                        input.SkipLastField();
+                        break;
+                }
+            }
+        }
+
     }
 
-  }
+    /// <summary>
+    ///*
+    /// Parameter definition for functions and script calls.
+    /// </summary>
+    public sealed partial class Parameter : pb::IMessage<Parameter>
+    {
+        private static readonly pb::MessageParser<Parameter> _parser = new pb::MessageParser<Parameter>(() => new Parameter());
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<Parameter> Parser { get { return _parser; } }
 
-  #endregion
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor
+        {
+            get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[1]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor
+        {
+            get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Parameter()
+        {
+            OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Parameter(Parameter other) : this()
+        {
+            dataType_ = other.dataType_;
+            name_ = other.name_;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Parameter Clone()
+        {
+            return new Parameter(this);
+        }
+
+        /// <summary>Field number for the "dataType" field.</summary>
+        public const int DataTypeFieldNumber = 1;
+        private global::Qlik.Sse.DataType dataType_ = 0;
+        /// <summary>
+        //// The data type of the parameter.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::Qlik.Sse.DataType DataType
+        {
+            get { return dataType_; }
+            set
+            {
+                dataType_ = value;
+            }
+        }
+
+        /// <summary>Field number for the "name" field.</summary>
+        public const int NameFieldNumber = 2;
+        private string name_ = "";
+        /// <summary>
+        //// The name of the parameter.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string Name
+        {
+            get { return name_; }
+            set
+            {
+                name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other)
+        {
+            return Equals(other as Parameter);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(Parameter other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+            if (ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            if (DataType != other.DataType) return false;
+            if (Name != other.Name) return false;
+            return true;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            if (DataType != 0) hash ^= DataType.GetHashCode();
+            if (Name.Length != 0) hash ^= Name.GetHashCode();
+            return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString()
+        {
+            return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output)
+        {
+            if (DataType != 0)
+            {
+                output.WriteRawTag(8);
+                output.WriteEnum((int)DataType);
+            }
+            if (Name.Length != 0)
+            {
+                output.WriteRawTag(18);
+                output.WriteString(Name);
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize()
+        {
+            int size = 0;
+            if (DataType != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeEnumSize((int)DataType);
+            }
+            if (Name.Length != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+            }
+            return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(Parameter other)
+        {
+            if (other == null)
+            {
+                return;
+            }
+            if (other.DataType != 0)
+            {
+                DataType = other.DataType;
+            }
+            if (other.Name.Length != 0)
+            {
+                Name = other.Name;
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input)
+        {
+            uint tag;
+            while ((tag = input.ReadTag()) != 0)
+            {
+                switch (tag)
+                {
+                    default:
+                        input.SkipLastField();
+                        break;
+                    case 8:
+                        {
+                            dataType_ = (global::Qlik.Sse.DataType)input.ReadEnum();
+                            break;
+                        }
+                    case 18:
+                        {
+                            Name = input.ReadString();
+                            break;
+                        }
+                }
+            }
+        }
+
+    }
+
+    /// <summary>
+    ///*
+    /// Field definition for function and script calls.
+    /// </summary>
+    public sealed partial class FieldDescription : pb::IMessage<FieldDescription>
+    {
+        private static readonly pb::MessageParser<FieldDescription> _parser = new pb::MessageParser<FieldDescription>(() => new FieldDescription());
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<FieldDescription> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor
+        {
+            get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[2]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor
+        {
+            get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public FieldDescription()
+        {
+            OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public FieldDescription(FieldDescription other) : this()
+        {
+            dataType_ = other.dataType_;
+            name_ = other.name_;
+            tags_ = other.tags_.Clone();
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public FieldDescription Clone()
+        {
+            return new FieldDescription(this);
+        }
+
+        /// <summary>Field number for the "dataType" field.</summary>
+        public const int DataTypeFieldNumber = 1;
+        private global::Qlik.Sse.DataType dataType_ = 0;
+        /// <summary>
+        //// The data type of the field.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::Qlik.Sse.DataType DataType
+        {
+            get { return dataType_; }
+            set
+            {
+                dataType_ = value;
+            }
+        }
+
+        /// <summary>Field number for the "name" field.</summary>
+        public const int NameFieldNumber = 2;
+        private string name_ = "";
+        /// <summary>
+        //// The name of the field.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string Name
+        {
+            get { return name_; }
+            set
+            {
+                name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            }
+        }
+
+        /// <summary>Field number for the "tags" field.</summary>
+        public const int TagsFieldNumber = 3;
+        private static readonly pb::FieldCodec<string> _repeated_tags_codec
+            = pb::FieldCodec.ForString(26);
+        private readonly pbc::RepeatedField<string> tags_ = new pbc::RepeatedField<string>();
+        /// <summary>
+        //// The tags of the field.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public pbc::RepeatedField<string> Tags
+        {
+            get { return tags_; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other)
+        {
+            return Equals(other as FieldDescription);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(FieldDescription other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+            if (ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            if (DataType != other.DataType) return false;
+            if (Name != other.Name) return false;
+            if (!tags_.Equals(other.tags_)) return false;
+            return true;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            if (DataType != 0) hash ^= DataType.GetHashCode();
+            if (Name.Length != 0) hash ^= Name.GetHashCode();
+            hash ^= tags_.GetHashCode();
+            return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString()
+        {
+            return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output)
+        {
+            if (DataType != 0)
+            {
+                output.WriteRawTag(8);
+                output.WriteEnum((int)DataType);
+            }
+            if (Name.Length != 0)
+            {
+                output.WriteRawTag(18);
+                output.WriteString(Name);
+            }
+            tags_.WriteTo(output, _repeated_tags_codec);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize()
+        {
+            int size = 0;
+            if (DataType != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeEnumSize((int)DataType);
+            }
+            if (Name.Length != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+            }
+            size += tags_.CalculateSize(_repeated_tags_codec);
+            return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(FieldDescription other)
+        {
+            if (other == null)
+            {
+                return;
+            }
+            if (other.DataType != 0)
+            {
+                DataType = other.DataType;
+            }
+            if (other.Name.Length != 0)
+            {
+                Name = other.Name;
+            }
+            tags_.Add(other.tags_);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input)
+        {
+            uint tag;
+            while ((tag = input.ReadTag()) != 0)
+            {
+                switch (tag)
+                {
+                    default:
+                        input.SkipLastField();
+                        break;
+                    case 8:
+                        {
+                            dataType_ = (global::Qlik.Sse.DataType)input.ReadEnum();
+                            break;
+                        }
+                    case 18:
+                        {
+                            Name = input.ReadString();
+                            break;
+                        }
+                    case 26:
+                        {
+                            tags_.AddEntriesFrom(input, _repeated_tags_codec);
+                            break;
+                        }
+                }
+            }
+        }
+
+    }
+
+    /// <summary>
+    ///*
+    /// The definition of a function, which informs the Qlik engine how to use it.
+    /// </summary>
+    public sealed partial class FunctionDefinition : pb::IMessage<FunctionDefinition>
+    {
+        private static readonly pb::MessageParser<FunctionDefinition> _parser = new pb::MessageParser<FunctionDefinition>(() => new FunctionDefinition());
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<FunctionDefinition> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor
+        {
+            get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[3]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor
+        {
+            get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public FunctionDefinition()
+        {
+            OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public FunctionDefinition(FunctionDefinition other) : this()
+        {
+            name_ = other.name_;
+            functionType_ = other.functionType_;
+            returnType_ = other.returnType_;
+            params_ = other.params_.Clone();
+            functionId_ = other.functionId_;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public FunctionDefinition Clone()
+        {
+            return new FunctionDefinition(this);
+        }
+
+        /// <summary>Field number for the "name" field.</summary>
+        public const int NameFieldNumber = 1;
+        private string name_ = "";
+        /// <summary>
+        //// The name of the function.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string Name
+        {
+            get { return name_; }
+            set
+            {
+                name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            }
+        }
+
+        /// <summary>Field number for the "functionType" field.</summary>
+        public const int FunctionTypeFieldNumber = 2;
+        private global::Qlik.Sse.FunctionType functionType_ = 0;
+        /// <summary>
+        //// The type of the function.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::Qlik.Sse.FunctionType FunctionType
+        {
+            get { return functionType_; }
+            set
+            {
+                functionType_ = value;
+            }
+        }
+
+        /// <summary>Field number for the "returnType" field.</summary>
+        public const int ReturnTypeFieldNumber = 3;
+        private global::Qlik.Sse.DataType returnType_ = 0;
+        /// <summary>
+        //// The return type of the function.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::Qlik.Sse.DataType ReturnType
+        {
+            get { return returnType_; }
+            set
+            {
+                returnType_ = value;
+            }
+        }
+
+        /// <summary>Field number for the "params" field.</summary>
+        public const int ParamsFieldNumber = 4;
+        private static readonly pb::FieldCodec<global::Qlik.Sse.Parameter> _repeated_params_codec
+            = pb::FieldCodec.ForMessage(34, global::Qlik.Sse.Parameter.Parser);
+        private readonly pbc::RepeatedField<global::Qlik.Sse.Parameter> params_ = new pbc::RepeatedField<global::Qlik.Sse.Parameter>();
+        /// <summary>
+        //// The parameters the function takes.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public pbc::RepeatedField<global::Qlik.Sse.Parameter> Params
+        {
+            get { return params_; }
+        }
+
+        /// <summary>Field number for the "functionId" field.</summary>
+        public const int FunctionIdFieldNumber = 5;
+        private int functionId_;
+        /// <summary>
+        //// A unique ID number for the function, set by the plugin, to be used in calls from the Qlik engine to the plugin.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int FunctionId
+        {
+            get { return functionId_; }
+            set
+            {
+                functionId_ = value;
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other)
+        {
+            return Equals(other as FunctionDefinition);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(FunctionDefinition other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+            if (ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            if (Name != other.Name) return false;
+            if (FunctionType != other.FunctionType) return false;
+            if (ReturnType != other.ReturnType) return false;
+            if (!params_.Equals(other.params_)) return false;
+            if (FunctionId != other.FunctionId) return false;
+            return true;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            if (Name.Length != 0) hash ^= Name.GetHashCode();
+            if (FunctionType != 0) hash ^= FunctionType.GetHashCode();
+            if (ReturnType != 0) hash ^= ReturnType.GetHashCode();
+            hash ^= params_.GetHashCode();
+            if (FunctionId != 0) hash ^= FunctionId.GetHashCode();
+            return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString()
+        {
+            return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output)
+        {
+            if (Name.Length != 0)
+            {
+                output.WriteRawTag(10);
+                output.WriteString(Name);
+            }
+            if (FunctionType != 0)
+            {
+                output.WriteRawTag(16);
+                output.WriteEnum((int)FunctionType);
+            }
+            if (ReturnType != 0)
+            {
+                output.WriteRawTag(24);
+                output.WriteEnum((int)ReturnType);
+            }
+            params_.WriteTo(output, _repeated_params_codec);
+            if (FunctionId != 0)
+            {
+                output.WriteRawTag(40);
+                output.WriteInt32(FunctionId);
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize()
+        {
+            int size = 0;
+            if (Name.Length != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+            }
+            if (FunctionType != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeEnumSize((int)FunctionType);
+            }
+            if (ReturnType != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeEnumSize((int)ReturnType);
+            }
+            size += params_.CalculateSize(_repeated_params_codec);
+            if (FunctionId != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeInt32Size(FunctionId);
+            }
+            return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(FunctionDefinition other)
+        {
+            if (other == null)
+            {
+                return;
+            }
+            if (other.Name.Length != 0)
+            {
+                Name = other.Name;
+            }
+            if (other.FunctionType != 0)
+            {
+                FunctionType = other.FunctionType;
+            }
+            if (other.ReturnType != 0)
+            {
+                ReturnType = other.ReturnType;
+            }
+            params_.Add(other.params_);
+            if (other.FunctionId != 0)
+            {
+                FunctionId = other.FunctionId;
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input)
+        {
+            uint tag;
+            while ((tag = input.ReadTag()) != 0)
+            {
+                switch (tag)
+                {
+                    default:
+                        input.SkipLastField();
+                        break;
+                    case 10:
+                        {
+                            Name = input.ReadString();
+                            break;
+                        }
+                    case 16:
+                        {
+                            functionType_ = (global::Qlik.Sse.FunctionType)input.ReadEnum();
+                            break;
+                        }
+                    case 24:
+                        {
+                            returnType_ = (global::Qlik.Sse.DataType)input.ReadEnum();
+                            break;
+                        }
+                    case 34:
+                        {
+                            params_.AddEntriesFrom(input, _repeated_params_codec);
+                            break;
+                        }
+                    case 40:
+                        {
+                            FunctionId = input.ReadInt32();
+                            break;
+                        }
+                }
+            }
+        }
+
+    }
+
+    /// <summary>
+    ///*
+    /// A full description of the plugin, sent to the Qlik engine, listing all functions available and indicating whether script evaluation is allowed.
+    /// </summary>
+    public sealed partial class Capabilities : pb::IMessage<Capabilities>
+    {
+        private static readonly pb::MessageParser<Capabilities> _parser = new pb::MessageParser<Capabilities>(() => new Capabilities());
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<Capabilities> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor
+        {
+            get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[4]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor
+        {
+            get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Capabilities()
+        {
+            OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Capabilities(Capabilities other) : this()
+        {
+            allowScript_ = other.allowScript_;
+            functions_ = other.functions_.Clone();
+            pluginIdentifier_ = other.pluginIdentifier_;
+            pluginVersion_ = other.pluginVersion_;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Capabilities Clone()
+        {
+            return new Capabilities(this);
+        }
+
+        /// <summary>Field number for the "allowScript" field.</summary>
+        public const int AllowScriptFieldNumber = 1;
+        private bool allowScript_;
+        /// <summary>
+        //// When true, the Qlik engine allows scripts to be sent to the plugin.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool AllowScript
+        {
+            get { return allowScript_; }
+            set
+            {
+                allowScript_ = value;
+            }
+        }
+
+        /// <summary>Field number for the "functions" field.</summary>
+        public const int FunctionsFieldNumber = 2;
+        private static readonly pb::FieldCodec<global::Qlik.Sse.FunctionDefinition> _repeated_functions_codec
+            = pb::FieldCodec.ForMessage(18, global::Qlik.Sse.FunctionDefinition.Parser);
+        private readonly pbc::RepeatedField<global::Qlik.Sse.FunctionDefinition> functions_ = new pbc::RepeatedField<global::Qlik.Sse.FunctionDefinition>();
+        /// <summary>
+        //// The definitions of all available functions.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public pbc::RepeatedField<global::Qlik.Sse.FunctionDefinition> Functions
+        {
+            get { return functions_; }
+        }
+
+        /// <summary>Field number for the "pluginIdentifier" field.</summary>
+        public const int PluginIdentifierFieldNumber = 3;
+        private string pluginIdentifier_ = "";
+        /// <summary>
+        //// The ID or name of the plugin.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string PluginIdentifier
+        {
+            get { return pluginIdentifier_; }
+            set
+            {
+                pluginIdentifier_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            }
+        }
+
+        /// <summary>Field number for the "pluginVersion" field.</summary>
+        public const int PluginVersionFieldNumber = 4;
+        private string pluginVersion_ = "";
+        /// <summary>
+        //// The version of the plugin.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string PluginVersion
+        {
+            get { return pluginVersion_; }
+            set
+            {
+                pluginVersion_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other)
+        {
+            return Equals(other as Capabilities);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(Capabilities other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+            if (ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            if (AllowScript != other.AllowScript) return false;
+            if (!functions_.Equals(other.functions_)) return false;
+            if (PluginIdentifier != other.PluginIdentifier) return false;
+            if (PluginVersion != other.PluginVersion) return false;
+            return true;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            if (AllowScript != false) hash ^= AllowScript.GetHashCode();
+            hash ^= functions_.GetHashCode();
+            if (PluginIdentifier.Length != 0) hash ^= PluginIdentifier.GetHashCode();
+            if (PluginVersion.Length != 0) hash ^= PluginVersion.GetHashCode();
+            return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString()
+        {
+            return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output)
+        {
+            if (AllowScript != false)
+            {
+                output.WriteRawTag(8);
+                output.WriteBool(AllowScript);
+            }
+            functions_.WriteTo(output, _repeated_functions_codec);
+            if (PluginIdentifier.Length != 0)
+            {
+                output.WriteRawTag(26);
+                output.WriteString(PluginIdentifier);
+            }
+            if (PluginVersion.Length != 0)
+            {
+                output.WriteRawTag(34);
+                output.WriteString(PluginVersion);
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize()
+        {
+            int size = 0;
+            if (AllowScript != false)
+            {
+                size += 1 + 1;
+            }
+            size += functions_.CalculateSize(_repeated_functions_codec);
+            if (PluginIdentifier.Length != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeStringSize(PluginIdentifier);
+            }
+            if (PluginVersion.Length != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeStringSize(PluginVersion);
+            }
+            return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(Capabilities other)
+        {
+            if (other == null)
+            {
+                return;
+            }
+            if (other.AllowScript != false)
+            {
+                AllowScript = other.AllowScript;
+            }
+            functions_.Add(other.functions_);
+            if (other.PluginIdentifier.Length != 0)
+            {
+                PluginIdentifier = other.PluginIdentifier;
+            }
+            if (other.PluginVersion.Length != 0)
+            {
+                PluginVersion = other.PluginVersion;
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input)
+        {
+            uint tag;
+            while ((tag = input.ReadTag()) != 0)
+            {
+                switch (tag)
+                {
+                    default:
+                        input.SkipLastField();
+                        break;
+                    case 8:
+                        {
+                            AllowScript = input.ReadBool();
+                            break;
+                        }
+                    case 18:
+                        {
+                            functions_.AddEntriesFrom(input, _repeated_functions_codec);
+                            break;
+                        }
+                    case 26:
+                        {
+                            PluginIdentifier = input.ReadString();
+                            break;
+                        }
+                    case 34:
+                        {
+                            PluginVersion = input.ReadString();
+                            break;
+                        }
+                }
+            }
+        }
+
+    }
+
+    /// <summary>
+    ///*
+    /// The basic data type for the data stream. Can contain double, string, or both.
+    /// </summary>
+    public sealed partial class Dual : pb::IMessage<Dual>
+    {
+        private static readonly pb::MessageParser<Dual> _parser = new pb::MessageParser<Dual>(() => new Dual());
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<Dual> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor
+        {
+            get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[5]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor
+        {
+            get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Dual()
+        {
+            OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Dual(Dual other) : this()
+        {
+            numData_ = other.numData_;
+            strData_ = other.strData_;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Dual Clone()
+        {
+            return new Dual(this);
+        }
+
+        /// <summary>Field number for the "numData" field.</summary>
+        public const int NumDataFieldNumber = 1;
+        private double numData_;
+        /// <summary>
+        //// Numeric value as double.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public double NumData
+        {
+            get { return numData_; }
+            set
+            {
+                numData_ = value;
+            }
+        }
+
+        /// <summary>Field number for the "strData" field.</summary>
+        public const int StrDataFieldNumber = 2;
+        private string strData_ = "";
+        /// <summary>
+        //// String.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string StrData
+        {
+            get { return strData_; }
+            set
+            {
+                strData_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other)
+        {
+            return Equals(other as Dual);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(Dual other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+            if (ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            if (NumData != other.NumData) return false;
+            if (StrData != other.StrData) return false;
+            return true;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            if (NumData != 0D) hash ^= NumData.GetHashCode();
+            if (StrData.Length != 0) hash ^= StrData.GetHashCode();
+            return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString()
+        {
+            return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output)
+        {
+            if (NumData != 0D)
+            {
+                output.WriteRawTag(9);
+                output.WriteDouble(NumData);
+            }
+            if (StrData.Length != 0)
+            {
+                output.WriteRawTag(18);
+                output.WriteString(StrData);
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize()
+        {
+            int size = 0;
+            if (NumData != 0D)
+            {
+                size += 1 + 8;
+            }
+            if (StrData.Length != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeStringSize(StrData);
+            }
+            return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(Dual other)
+        {
+            if (other == null)
+            {
+                return;
+            }
+            if (other.NumData != 0D)
+            {
+                NumData = other.NumData;
+            }
+            if (other.StrData.Length != 0)
+            {
+                StrData = other.StrData;
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input)
+        {
+            uint tag;
+            while ((tag = input.ReadTag()) != 0)
+            {
+                switch (tag)
+                {
+                    default:
+                        input.SkipLastField();
+                        break;
+                    case 9:
+                        {
+                            NumData = input.ReadDouble();
+                            break;
+                        }
+                    case 18:
+                        {
+                            StrData = input.ReadString();
+                            break;
+                        }
+                }
+            }
+        }
+
+    }
+
+    /// <summary>
+    ///*
+    /// A row of duals.
+    /// </summary>
+    public sealed partial class Row : pb::IMessage<Row>
+    {
+        private static readonly pb::MessageParser<Row> _parser = new pb::MessageParser<Row>(() => new Row());
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<Row> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor
+        {
+            get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[6]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor
+        {
+            get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Row()
+        {
+            OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Row(Row other) : this()
+        {
+            duals_ = other.duals_.Clone();
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Row Clone()
+        {
+            return new Row(this);
+        }
+
+        /// <summary>Field number for the "duals" field.</summary>
+        public const int DualsFieldNumber = 1;
+        private static readonly pb::FieldCodec<global::Qlik.Sse.Dual> _repeated_duals_codec
+            = pb::FieldCodec.ForMessage(10, global::Qlik.Sse.Dual.Parser);
+        private readonly pbc::RepeatedField<global::Qlik.Sse.Dual> duals_ = new pbc::RepeatedField<global::Qlik.Sse.Dual>();
+        /// <summary>
+        //// Row of duals.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public pbc::RepeatedField<global::Qlik.Sse.Dual> Duals
+        {
+            get { return duals_; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other)
+        {
+            return Equals(other as Row);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(Row other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+            if (ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            if (!duals_.Equals(other.duals_)) return false;
+            return true;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            hash ^= duals_.GetHashCode();
+            return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString()
+        {
+            return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output)
+        {
+            duals_.WriteTo(output, _repeated_duals_codec);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize()
+        {
+            int size = 0;
+            size += duals_.CalculateSize(_repeated_duals_codec);
+            return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(Row other)
+        {
+            if (other == null)
+            {
+                return;
+            }
+            duals_.Add(other.duals_);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input)
+        {
+            uint tag;
+            while ((tag = input.ReadTag()) != 0)
+            {
+                switch (tag)
+                {
+                    default:
+                        input.SkipLastField();
+                        break;
+                    case 10:
+                        {
+                            duals_.AddEntriesFrom(input, _repeated_duals_codec);
+                            break;
+                        }
+                }
+            }
+        }
+
+    }
+
+    /// <summary>
+    ///*
+    /// A number of rows collected in one message. The actual number will depend on the size of each row and is adjusted to optimize throughput.
+    /// </summary>
+    public sealed partial class BundledRows : pb::IMessage<BundledRows>
+    {
+        private static readonly pb::MessageParser<BundledRows> _parser = new pb::MessageParser<BundledRows>(() => new BundledRows());
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<BundledRows> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor
+        {
+            get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[7]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor
+        {
+            get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public BundledRows()
+        {
+            OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public BundledRows(BundledRows other) : this()
+        {
+            rows_ = other.rows_.Clone();
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public BundledRows Clone()
+        {
+            return new BundledRows(this);
+        }
+
+        /// <summary>Field number for the "rows" field.</summary>
+        public const int RowsFieldNumber = 1;
+        private static readonly pb::FieldCodec<global::Qlik.Sse.Row> _repeated_rows_codec
+            = pb::FieldCodec.ForMessage(10, global::Qlik.Sse.Row.Parser);
+        private readonly pbc::RepeatedField<global::Qlik.Sse.Row> rows_ = new pbc::RepeatedField<global::Qlik.Sse.Row>();
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public pbc::RepeatedField<global::Qlik.Sse.Row> Rows
+        {
+            get { return rows_; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other)
+        {
+            return Equals(other as BundledRows);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(BundledRows other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+            if (ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            if (!rows_.Equals(other.rows_)) return false;
+            return true;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            hash ^= rows_.GetHashCode();
+            return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString()
+        {
+            return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output)
+        {
+            rows_.WriteTo(output, _repeated_rows_codec);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize()
+        {
+            int size = 0;
+            size += rows_.CalculateSize(_repeated_rows_codec);
+            return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(BundledRows other)
+        {
+            if (other == null)
+            {
+                return;
+            }
+            rows_.Add(other.rows_);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input)
+        {
+            uint tag;
+            while ((tag = input.ReadTag()) != 0)
+            {
+                switch (tag)
+                {
+                    default:
+                        input.SkipLastField();
+                        break;
+                    case 10:
+                        {
+                            rows_.AddEntriesFrom(input, _repeated_rows_codec);
+                            break;
+                        }
+                }
+            }
+        }
+
+    }
+
+    /// <summary>
+    ///*
+    /// A header sent at the start of an EvaluateScript request under the key "qlik-scriptrequestheader-bin".
+    /// </summary>
+    public sealed partial class ScriptRequestHeader : pb::IMessage<ScriptRequestHeader>
+    {
+        private static readonly pb::MessageParser<ScriptRequestHeader> _parser = new pb::MessageParser<ScriptRequestHeader>(() => new ScriptRequestHeader());
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<ScriptRequestHeader> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor
+        {
+            get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[8]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor
+        {
+            get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public ScriptRequestHeader()
+        {
+            OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public ScriptRequestHeader(ScriptRequestHeader other) : this()
+        {
+            script_ = other.script_;
+            functionType_ = other.functionType_;
+            returnType_ = other.returnType_;
+            params_ = other.params_.Clone();
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public ScriptRequestHeader Clone()
+        {
+            return new ScriptRequestHeader(this);
+        }
+
+        /// <summary>Field number for the "script" field.</summary>
+        public const int ScriptFieldNumber = 1;
+        private string script_ = "";
+        /// <summary>
+        //// The script to be executed.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string Script
+        {
+            get { return script_; }
+            set
+            {
+                script_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            }
+        }
+
+        /// <summary>Field number for the "functionType" field.</summary>
+        public const int FunctionTypeFieldNumber = 2;
+        private global::Qlik.Sse.FunctionType functionType_ = 0;
+        /// <summary>
+        //// The function type of the script evaluation: scalar, aggregation or tensor.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::Qlik.Sse.FunctionType FunctionType
+        {
+            get { return functionType_; }
+            set
+            {
+                functionType_ = value;
+            }
+        }
+
+        /// <summary>Field number for the "returnType" field.</summary>
+        public const int ReturnTypeFieldNumber = 3;
+        private global::Qlik.Sse.DataType returnType_ = 0;
+        /// <summary>
+        //// The return type from the script evaluation: numeric, string or both.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::Qlik.Sse.DataType ReturnType
+        {
+            get { return returnType_; }
+            set
+            {
+                returnType_ = value;
+            }
+        }
+
+        /// <summary>Field number for the "params" field.</summary>
+        public const int ParamsFieldNumber = 4;
+        private static readonly pb::FieldCodec<global::Qlik.Sse.Parameter> _repeated_params_codec
+            = pb::FieldCodec.ForMessage(34, global::Qlik.Sse.Parameter.Parser);
+        private readonly pbc::RepeatedField<global::Qlik.Sse.Parameter> params_ = new pbc::RepeatedField<global::Qlik.Sse.Parameter>();
+        /// <summary>
+        //// The parameters names and types passed to the script.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public pbc::RepeatedField<global::Qlik.Sse.Parameter> Params
+        {
+            get { return params_; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other)
+        {
+            return Equals(other as ScriptRequestHeader);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(ScriptRequestHeader other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+            if (ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            if (Script != other.Script) return false;
+            if (FunctionType != other.FunctionType) return false;
+            if (ReturnType != other.ReturnType) return false;
+            if (!params_.Equals(other.params_)) return false;
+            return true;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            if (Script.Length != 0) hash ^= Script.GetHashCode();
+            if (FunctionType != 0) hash ^= FunctionType.GetHashCode();
+            if (ReturnType != 0) hash ^= ReturnType.GetHashCode();
+            hash ^= params_.GetHashCode();
+            return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString()
+        {
+            return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output)
+        {
+            if (Script.Length != 0)
+            {
+                output.WriteRawTag(10);
+                output.WriteString(Script);
+            }
+            if (FunctionType != 0)
+            {
+                output.WriteRawTag(16);
+                output.WriteEnum((int)FunctionType);
+            }
+            if (ReturnType != 0)
+            {
+                output.WriteRawTag(24);
+                output.WriteEnum((int)ReturnType);
+            }
+            params_.WriteTo(output, _repeated_params_codec);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize()
+        {
+            int size = 0;
+            if (Script.Length != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeStringSize(Script);
+            }
+            if (FunctionType != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeEnumSize((int)FunctionType);
+            }
+            if (ReturnType != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeEnumSize((int)ReturnType);
+            }
+            size += params_.CalculateSize(_repeated_params_codec);
+            return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(ScriptRequestHeader other)
+        {
+            if (other == null)
+            {
+                return;
+            }
+            if (other.Script.Length != 0)
+            {
+                Script = other.Script;
+            }
+            if (other.FunctionType != 0)
+            {
+                FunctionType = other.FunctionType;
+            }
+            if (other.ReturnType != 0)
+            {
+                ReturnType = other.ReturnType;
+            }
+            params_.Add(other.params_);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input)
+        {
+            uint tag;
+            while ((tag = input.ReadTag()) != 0)
+            {
+                switch (tag)
+                {
+                    default:
+                        input.SkipLastField();
+                        break;
+                    case 10:
+                        {
+                            Script = input.ReadString();
+                            break;
+                        }
+                    case 16:
+                        {
+                            functionType_ = (global::Qlik.Sse.FunctionType)input.ReadEnum();
+                            break;
+                        }
+                    case 24:
+                        {
+                            returnType_ = (global::Qlik.Sse.DataType)input.ReadEnum();
+                            break;
+                        }
+                    case 34:
+                        {
+                            params_.AddEntriesFrom(input, _repeated_params_codec);
+                            break;
+                        }
+                }
+            }
+        }
+
+    }
+
+    /// <summary>
+    ///*
+    /// A header sent at the start of an ExecuteFunction request under the key "qlik-functionrequestheader-bin".
+    /// </summary>
+    public sealed partial class FunctionRequestHeader : pb::IMessage<FunctionRequestHeader>
+    {
+        private static readonly pb::MessageParser<FunctionRequestHeader> _parser = new pb::MessageParser<FunctionRequestHeader>(() => new FunctionRequestHeader());
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<FunctionRequestHeader> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor
+        {
+            get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[9]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor
+        {
+            get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public FunctionRequestHeader()
+        {
+            OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public FunctionRequestHeader(FunctionRequestHeader other) : this()
+        {
+            functionId_ = other.functionId_;
+            version_ = other.version_;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public FunctionRequestHeader Clone()
+        {
+            return new FunctionRequestHeader(this);
+        }
+
+        /// <summary>Field number for the "functionId" field.</summary>
+        public const int FunctionIdFieldNumber = 1;
+        private int functionId_;
+        /// <summary>
+        //// The ID of the function to be executed.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int FunctionId
+        {
+            get { return functionId_; }
+            set
+            {
+                functionId_ = value;
+            }
+        }
+
+        /// <summary>Field number for the "version" field.</summary>
+        public const int VersionFieldNumber = 2;
+        private string version_ = "";
+        /// <summary>
+        //// A dummy variable as a workaround for an issue.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string Version
+        {
+            get { return version_; }
+            set
+            {
+                version_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other)
+        {
+            return Equals(other as FunctionRequestHeader);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(FunctionRequestHeader other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+            if (ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            if (FunctionId != other.FunctionId) return false;
+            if (Version != other.Version) return false;
+            return true;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            if (FunctionId != 0) hash ^= FunctionId.GetHashCode();
+            if (Version.Length != 0) hash ^= Version.GetHashCode();
+            return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString()
+        {
+            return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output)
+        {
+            if (FunctionId != 0)
+            {
+                output.WriteRawTag(8);
+                output.WriteInt32(FunctionId);
+            }
+            if (Version.Length != 0)
+            {
+                output.WriteRawTag(18);
+                output.WriteString(Version);
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize()
+        {
+            int size = 0;
+            if (FunctionId != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeInt32Size(FunctionId);
+            }
+            if (Version.Length != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeStringSize(Version);
+            }
+            return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(FunctionRequestHeader other)
+        {
+            if (other == null)
+            {
+                return;
+            }
+            if (other.FunctionId != 0)
+            {
+                FunctionId = other.FunctionId;
+            }
+            if (other.Version.Length != 0)
+            {
+                Version = other.Version;
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input)
+        {
+            uint tag;
+            while ((tag = input.ReadTag()) != 0)
+            {
+                switch (tag)
+                {
+                    default:
+                        input.SkipLastField();
+                        break;
+                    case 8:
+                        {
+                            FunctionId = input.ReadInt32();
+                            break;
+                        }
+                    case 18:
+                        {
+                            Version = input.ReadString();
+                            break;
+                        }
+                }
+            }
+        }
+
+    }
+
+    /// <summary>
+    ///*
+    /// A header sent at the start of both an EvaluateScript request and an ExecuteFunction request under the key "qlik-commonrequestheader-bin".
+    /// </summary>
+    public sealed partial class CommonRequestHeader : pb::IMessage<CommonRequestHeader>
+    {
+        private static readonly pb::MessageParser<CommonRequestHeader> _parser = new pb::MessageParser<CommonRequestHeader>(() => new CommonRequestHeader());
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<CommonRequestHeader> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor
+        {
+            get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[10]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor
+        {
+            get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public CommonRequestHeader()
+        {
+            OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public CommonRequestHeader(CommonRequestHeader other) : this()
+        {
+            appId_ = other.appId_;
+            userId_ = other.userId_;
+            cardinality_ = other.cardinality_;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public CommonRequestHeader Clone()
+        {
+            return new CommonRequestHeader(this);
+        }
+
+        /// <summary>Field number for the "appId" field.</summary>
+        public const int AppIdFieldNumber = 1;
+        private string appId_ = "";
+        /// <summary>
+        //// The ID of the app the request was executed in.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string AppId
+        {
+            get { return appId_; }
+            set
+            {
+                appId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            }
+        }
+
+        /// <summary>Field number for the "userId" field.</summary>
+        public const int UserIdFieldNumber = 2;
+        private string userId_ = "";
+        /// <summary>
+        //// The ID of the user the request was executed by.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string UserId
+        {
+            get { return userId_; }
+            set
+            {
+                userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            }
+        }
+
+        /// <summary>Field number for the "cardinality" field.</summary>
+        public const int CardinalityFieldNumber = 3;
+        private long cardinality_;
+        /// <summary>
+        //// The cardinality of the parameters.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public long Cardinality
+        {
+            get { return cardinality_; }
+            set
+            {
+                cardinality_ = value;
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other)
+        {
+            return Equals(other as CommonRequestHeader);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(CommonRequestHeader other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+            if (ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            if (AppId != other.AppId) return false;
+            if (UserId != other.UserId) return false;
+            if (Cardinality != other.Cardinality) return false;
+            return true;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            if (AppId.Length != 0) hash ^= AppId.GetHashCode();
+            if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+            if (Cardinality != 0L) hash ^= Cardinality.GetHashCode();
+            return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString()
+        {
+            return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output)
+        {
+            if (AppId.Length != 0)
+            {
+                output.WriteRawTag(10);
+                output.WriteString(AppId);
+            }
+            if (UserId.Length != 0)
+            {
+                output.WriteRawTag(18);
+                output.WriteString(UserId);
+            }
+            if (Cardinality != 0L)
+            {
+                output.WriteRawTag(24);
+                output.WriteInt64(Cardinality);
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize()
+        {
+            int size = 0;
+            if (AppId.Length != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeStringSize(AppId);
+            }
+            if (UserId.Length != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+            }
+            if (Cardinality != 0L)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeInt64Size(Cardinality);
+            }
+            return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(CommonRequestHeader other)
+        {
+            if (other == null)
+            {
+                return;
+            }
+            if (other.AppId.Length != 0)
+            {
+                AppId = other.AppId;
+            }
+            if (other.UserId.Length != 0)
+            {
+                UserId = other.UserId;
+            }
+            if (other.Cardinality != 0L)
+            {
+                Cardinality = other.Cardinality;
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input)
+        {
+            uint tag;
+            while ((tag = input.ReadTag()) != 0)
+            {
+                switch (tag)
+                {
+                    default:
+                        input.SkipLastField();
+                        break;
+                    case 10:
+                        {
+                            AppId = input.ReadString();
+                            break;
+                        }
+                    case 18:
+                        {
+                            UserId = input.ReadString();
+                            break;
+                        }
+                    case 24:
+                        {
+                            Cardinality = input.ReadInt64();
+                            break;
+                        }
+                }
+            }
+        }
+
+    }
+
+    /// <summary>
+    ///*
+    /// A header sent before returning data to Qlik, under the key "qlik-tabledescription-bin".
+    /// </summary>
+    public sealed partial class TableDescription : pb::IMessage<TableDescription>
+    {
+        private static readonly pb::MessageParser<TableDescription> _parser = new pb::MessageParser<TableDescription>(() => new TableDescription());
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<TableDescription> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor
+        {
+            get { return global::Qlik.Sse.ServerSideExtensionReflection.Descriptor.MessageTypes[11]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor
+        {
+            get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public TableDescription()
+        {
+            OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public TableDescription(TableDescription other) : this()
+        {
+            fields_ = other.fields_.Clone();
+            name_ = other.name_;
+            numberOfRows_ = other.numberOfRows_;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public TableDescription Clone()
+        {
+            return new TableDescription(this);
+        }
+
+        /// <summary>Field number for the "fields" field.</summary>
+        public const int FieldsFieldNumber = 1;
+        private static readonly pb::FieldCodec<global::Qlik.Sse.FieldDescription> _repeated_fields_codec
+            = pb::FieldCodec.ForMessage(10, global::Qlik.Sse.FieldDescription.Parser);
+        private readonly pbc::RepeatedField<global::Qlik.Sse.FieldDescription> fields_ = new pbc::RepeatedField<global::Qlik.Sse.FieldDescription>();
+        /// <summary>
+        //// The fields of the table.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public pbc::RepeatedField<global::Qlik.Sse.FieldDescription> Fields
+        {
+            get { return fields_; }
+        }
+
+        /// <summary>Field number for the "name" field.</summary>
+        public const int NameFieldNumber = 2;
+        private string name_ = "";
+        /// <summary>
+        //// The name of the table.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string Name
+        {
+            get { return name_; }
+            set
+            {
+                name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            }
+        }
+
+        /// <summary>Field number for the "numberOfRows" field.</summary>
+        public const int NumberOfRowsFieldNumber = 3;
+        private long numberOfRows_;
+        /// <summary>
+        //// Number of rows in table.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public long NumberOfRows
+        {
+            get { return numberOfRows_; }
+            set
+            {
+                numberOfRows_ = value;
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other)
+        {
+            return Equals(other as TableDescription);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(TableDescription other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+            if (ReferenceEquals(other, this))
+            {
+                return true;
+            }
+            if (!fields_.Equals(other.fields_)) return false;
+            if (Name != other.Name) return false;
+            if (NumberOfRows != other.NumberOfRows) return false;
+            return true;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode()
+        {
+            int hash = 1;
+            hash ^= fields_.GetHashCode();
+            if (Name.Length != 0) hash ^= Name.GetHashCode();
+            if (NumberOfRows != 0L) hash ^= NumberOfRows.GetHashCode();
+            return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString()
+        {
+            return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output)
+        {
+            fields_.WriteTo(output, _repeated_fields_codec);
+            if (Name.Length != 0)
+            {
+                output.WriteRawTag(18);
+                output.WriteString(Name);
+            }
+            if (NumberOfRows != 0L)
+            {
+                output.WriteRawTag(24);
+                output.WriteInt64(NumberOfRows);
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize()
+        {
+            int size = 0;
+            size += fields_.CalculateSize(_repeated_fields_codec);
+            if (Name.Length != 0)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+            }
+            if (NumberOfRows != 0L)
+            {
+                size += 1 + pb::CodedOutputStream.ComputeInt64Size(NumberOfRows);
+            }
+            return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(TableDescription other)
+        {
+            if (other == null)
+            {
+                return;
+            }
+            fields_.Add(other.fields_);
+            if (other.Name.Length != 0)
+            {
+                Name = other.Name;
+            }
+            if (other.NumberOfRows != 0L)
+            {
+                NumberOfRows = other.NumberOfRows;
+            }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input)
+        {
+            uint tag;
+            while ((tag = input.ReadTag()) != 0)
+            {
+                switch (tag)
+                {
+                    default:
+                        input.SkipLastField();
+                        break;
+                    case 10:
+                        {
+                            fields_.AddEntriesFrom(input, _repeated_fields_codec);
+                            break;
+                        }
+                    case 18:
+                        {
+                            Name = input.ReadString();
+                            break;
+                        }
+                    case 24:
+                        {
+                            NumberOfRows = input.ReadInt64();
+                            break;
+                        }
+                }
+            }
+        }
+
+    }
+
+    #endregion
 
 }
 

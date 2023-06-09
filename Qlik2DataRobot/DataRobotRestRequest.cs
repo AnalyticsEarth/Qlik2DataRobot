@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NLog;
 using System;
+using System.Collections.Generic;
 // using System.Data;
 using System.IO;
 using System.Net;
@@ -84,7 +84,8 @@ namespace Qlik2DataRobot
                     dynamic catalogId;
                     responseobj.TryGetValue("catalogId", out catalogId);
                     Logger.Info($"{reqHash} - Dataset ID (): {catalogId}");
-                } else
+                }
+                else
                 {
                     Logger.Error($"{reqHash} - Dataset not uploaded properly.");
                 }
@@ -139,7 +140,8 @@ namespace Qlik2DataRobot
             if (String.IsNullOrEmpty(datasetId))
             {
                 url = $"{url}/fromFile/";
-            } else
+            }
+            else
             {
                 url = $"{url}/{datasetId}/versions/fromFile/";
 
@@ -164,7 +166,8 @@ namespace Qlik2DataRobot
                 Logger.Info($"{reqHash} - Successfully pushed Dataset");
                 responseobj.TryGetValue("catalogId", out catalogId);
                 Logger.Info($"{reqHash} - Dataset ID (): {catalogId}");
-            } else
+            }
+            else
             {
                 throw new NullReferenceException("catalogId is null.");
             }
@@ -284,7 +287,7 @@ namespace Qlik2DataRobot
         public class intakeOptions
         {
             public string type { get; set; }
-            public string datasetId {get; set; }
+            public string datasetId { get; set; }
         }
 
         public class batchOptions
@@ -309,9 +312,10 @@ namespace Qlik2DataRobot
             public string passthroughColumnsSet { get; set; }
         }
 
-        class redirectLinks {
-            public string self {get; set;}
-            public string download {get; set;}
+        class redirectLinks
+        {
+            public string self { get; set; }
+            public string download { get; set; }
         }
 
         public async Task<string> SubmitBatch(
@@ -353,8 +357,9 @@ namespace Qlik2DataRobot
                     },
                     passthroughColumnsSet = passthroughColumnsSet
                 };
-                
-            } else
+
+            }
+            else
             {
                 options = new batchOptions
                 {
@@ -383,7 +388,7 @@ namespace Qlik2DataRobot
             string uri = $"batchPredictions/";
             Logger.Info($"{reqHash} - Sending to {uri}");
             HttpResponseMessage response = await client.PostAsync(uri, httpContent);
-            
+
             string responseContent = await response.Content.ReadAsStringAsync();
             Logger.Info($"{reqHash} - resp: {JsonConvert.SerializeObject(responseContent)}");
             Logger.Trace($"{reqHash} - Parsing response: {responseContent}");
@@ -398,13 +403,15 @@ namespace Qlik2DataRobot
             Logger.Trace($"{reqHash} - status: {status}");
             Logger.Trace($"{reqHash} - jobId: {jobId}");
 
-            int counter=0;
-            while (counter < 60 && !(status.Contains("COMPLETE") || status.Contains("ERROR") || status.Contains("ABORT"))) {
+            int counter = 0;
+            while (counter < 60 && !(status.Contains("COMPLETE") || status.Contains("ERROR") || status.Contains("ABORT")))
+            {
                 counter = counter + 1;
                 Logger.Trace($"{reqHash} - status: {status}");
                 Thread.Sleep(5000);
                 Logger.Trace($"{reqHash} - trying again");
-                if (jobIdStr != "" && (status == "INITIALIZING" || status == "RUNNING")) {
+                if (jobIdStr != "" && (status == "INITIALIZING" || status == "RUNNING"))
+                {
                     Logger.Trace($"{reqHash} - Getting job {jobIdStr} details");
                     Uri statusUrl = new Uri($"{baseAddress}batchPredictions/{jobIdStr}");
                     Logger.Trace($"{reqHash} - status url: {statusUrl}");
@@ -412,11 +419,14 @@ namespace Qlik2DataRobot
                     responseContent = await response.Content.ReadAsStringAsync();
                     responseobj = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(responseContent);
                     responseobj.TryGetValue("status", out status);
-                } else {
+                }
+                else
+                {
                 }
             }
 
-            if (!status.Contains("COMPLETE")) {
+            if (!status.Contains("COMPLETE"))
+            {
                 throw new ApplicationException("Prediction Job didn't finish successfully.");
             }
 
@@ -472,9 +482,9 @@ namespace Qlik2DataRobot
 
             Logger.Trace($"{reqHash} - Starting Batch Scoring");
             string csv = await SubmitBatch(host, token, deploymentId, catalogId,
-                maxCodes: maxCodes, 
-                thresholdHigh: thresholdHigh, 
-                thresholdLow: thresholdLow, 
+                maxCodes: maxCodes,
+                thresholdHigh: thresholdHigh,
+                thresholdLow: thresholdLow,
                 explain: explain,
                 passthroughColumnsSet: passthroughColumnsSet);
             Logger.Trace($"{reqHash} - Finished Batch Scoring");
@@ -485,14 +495,14 @@ namespace Qlik2DataRobot
                 status = "success",
                 csvdata = csv
             };
-            
+
             streamWriter.WriteLine(JsonConvert.SerializeObject(resp));
             streamWriter.Flush();
             outStream.Position = 0;
             return outStream;
         }
 
-        
+
         /// <summary>
         /// Send actual values to a deployment
         /// </summary>
@@ -509,7 +519,8 @@ namespace Qlik2DataRobot
             Logger.Trace($"{reqHash} - Checking Dataset Status");
             string status = await CheckDatasetStatus(host, token, catalogId, streamWriter);
 
-            if (status != "COMPLETED") {
+            if (status != "COMPLETED")
+            {
                 Logger.Error($"Dataset failed to register: {status}");
                 streamWriter.WriteLine("{\"status\":\"error\",\"response\":{\"id\":\"" + catalogId + "\"}}");
                 streamWriter.Flush();
@@ -541,7 +552,8 @@ namespace Qlik2DataRobot
 
             Logger.Trace($"{reqHash} - Checking Dataset Status");
             string status = await CheckDatasetStatus(baseAddress, token, catalogId, streamWriter);
-            if (status != "COMPLETED") {
+            if (status != "COMPLETED")
+            {
                 Logger.Error($"Dataset failed to register: {status}");
                 streamWriter.WriteLine("{\"status\":\"error\",\"response\":{\"id\":\"err\"}}");
                 streamWriter.Flush();
@@ -567,7 +579,7 @@ namespace Qlik2DataRobot
             ConfigureAsync(client, baseAddress, token);
             Logger.Trace($"{reqHash} - Configured Client");
             var requestContent = new MultipartFormDataContent("----");
-            
+
             var projectContent = new StringContent(projectName);
             projectContent.Headers.Add("Content-Disposition", "form-data; name=\"projectName\"");
 
@@ -604,7 +616,7 @@ namespace Qlik2DataRobot
                     }
                     Thread.Sleep(1000);
                 }
-                streamWriter.WriteLine("{\"status\":\"success\",\"response\":" + status +"}");
+                streamWriter.WriteLine("{\"status\":\"success\",\"response\":" + status + "}");
             }
             catch (Exception e)
             {
@@ -642,7 +654,7 @@ namespace Qlik2DataRobot
 
             Uri uri;
 
-            if(deployment_id != null)
+            if (deployment_id != null)
             {
                 Logger.Trace($"{reqHash} - Deployment Score:{deployment_id}");
                 string param = "";
@@ -654,7 +666,7 @@ namespace Qlik2DataRobot
                     if (thresholdLow != 0) param += $"thresholdLow={thresholdLow}";
                     if (param != "") param = "?" + param;
                     uri = new Uri($"{host}/predApi/v1.0/deployments/{deployment_id}/predictionExplanations{param}");
-                    
+
                     Logger.Trace($"{reqHash} - URL:{uri}");
 
                 }
@@ -664,7 +676,7 @@ namespace Qlik2DataRobot
                     uri = new Uri($"{host}/predApi/v1.0/deployments/{deployment_id}/predictions{param}");
                     Logger.Trace($"{reqHash} - URL:{uri}");
                 }
-                
+
             }
             else
             {
@@ -673,12 +685,12 @@ namespace Qlik2DataRobot
             }
 
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, uri);
-            if(datarobot_key != null)
+            if (datarobot_key != null)
             {
                 message.Headers.Add("datarobot-key", datarobot_key);
             }
-            
-            
+
+
             message.Headers.Authorization = new AuthenticationHeaderValue("Token", api_token);
 
             var verheader = $"QlikConnector/{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Revision}";
@@ -821,9 +833,9 @@ namespace Qlik2DataRobot
             return finalresponse;
         }
 
-       
+
 
     }
 
-   
+
 }

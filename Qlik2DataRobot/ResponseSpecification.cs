@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Qlik2DataRobot
 {
@@ -30,7 +28,7 @@ namespace Qlik2DataRobot
         public int rowId { get; set; }
 
         //Passthrough
-        public Dictionary<string,dynamic> passthroughValues { get; set; }
+        public Dictionary<string, dynamic> passthroughValues { get; set; }
 
         //Timeseries
         public dynamic seriesId { get; set; }
@@ -55,7 +53,7 @@ namespace Qlik2DataRobot
         public double strength { get; set; }
         public string feature { get; set; }
         public string qualitativeStrength { get; set; }
-        public dynamic label { get; set; } 
+        public dynamic label { get; set; }
     }
 
     class DatasetUploadStatus

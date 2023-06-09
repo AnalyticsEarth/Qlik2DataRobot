@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace Qlik2DataRobot
 {
@@ -34,7 +31,7 @@ namespace Qlik2DataRobot
 
         public string forecast_point { get; set; }
         public string timestamp_field { get; set; }
-        
+
         [DefaultValue("s")]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public string timestamp_format { get; set; }

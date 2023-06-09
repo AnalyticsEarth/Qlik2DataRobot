@@ -1,20 +1,20 @@
-﻿using System;
+﻿using CsvHelper;
+using CsvHelper.Configuration;
+using Google.Protobuf;
+using Grpc.Core;
+using Newtonsoft.Json;
+using NLog;
+using Qlik.Sse;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Threading.Tasks;
-using Google.Protobuf;
-using Grpc.Core;
-using NLog;
-using Qlik.Sse;
-using Newtonsoft.Json;
-using CsvHelper;
 using System.Reflection;
-using System.Globalization;
-using CsvHelper.Configuration;
+using System.Threading.Tasks;
 
 namespace Qlik2DataRobot
 {
@@ -44,7 +44,7 @@ namespace Qlik2DataRobot
             AllowScript = true,
             Functions =
             {
-            
+
             }
         };
 
@@ -112,17 +112,17 @@ namespace Qlik2DataRobot
                 var Params = GetParams(scriptHeader.Params.ToArray());
 
                 string keyname = null;
-                if(config.keyfield != null)
+                if (config.keyfield != null)
                 {
                     keyname = config.keyfield;
 
                 }
-                
+
 
                 ResultDataColumn keyField = new ResultDataColumn();
                 var rowdatastream = await ConvertBundledRowsToCSV(Params, requestStream, context, keyField, keyname, config.timestamp_field, config.timestamp_format);
                 Logger.Debug($"{reqHash} - Input Data Size: {rowdatastream.Length}");
-                
+
                 var outData = await SelectFunction(config, rowdatastream, reqHash);
                 rowdatastream = null;
 
@@ -142,11 +142,11 @@ namespace Qlik2DataRobot
 
                 string request_type = config.request_type;
 
-                await GenerateResult(request_type, outData, responseStream, context, reqHash, cacheResultInQlik: shouldCache, keyField:keyField, keyname:keyname, includeDetail: inc_details, shouldExplain:shouldExplain, rawExplain:rawExplain, explain_max:max_codes);
+                await GenerateResult(request_type, outData, responseStream, context, reqHash, cacheResultInQlik: shouldCache, keyField: keyField, keyname: keyname, includeDetail: inc_details, shouldExplain: shouldExplain, rawExplain: rawExplain, explain_max: max_codes);
                 outData = null;
                 stopwatch.Stop();
                 Logger.Debug($"{reqHash} - Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
-                Qlik2DataRobotMetrics.DurHist.Observe(stopwatch.ElapsedMilliseconds/1000);
+                Qlik2DataRobotMetrics.DurHist.Observe(stopwatch.ElapsedMilliseconds / 1000);
             }
             catch (Exception e)
             {
@@ -155,7 +155,7 @@ namespace Qlik2DataRobot
             }
             finally
             {
-                 
+
             }
 
             GC.Collect();
@@ -169,7 +169,7 @@ namespace Qlik2DataRobot
         {
             Logger.Info($"{reqHash} - Start DataRobot");
             DataRobotRestRequest dr = new DataRobotRestRequest(reqHash);
-           
+
             string api_token = Convert.ToString(config.auth_config.api_token);
             string datarobot_key = config.auth_config.datarobot_key;
             string host = config.auth_config.endpoint;
@@ -193,7 +193,7 @@ namespace Qlik2DataRobot
 
             MemoryStream result = new MemoryStream();
 
-            string[] zipped_request_types = { "actuals", "dataset", "datasetversion", "createproject", "batchpred"};
+            string[] zipped_request_types = { "actuals", "dataset", "datasetversion", "createproject", "batchpred" };
             Logger.Info($"{reqHash} - Entering if");
             if (zipped_request_types.Contains(config.request_type))
             {
@@ -267,7 +267,8 @@ namespace Qlik2DataRobot
                     default:
                         break;
                 }
-            } else
+            }
+            else
             {
                 switch (config.request_type)
                 {
@@ -323,15 +324,15 @@ namespace Qlik2DataRobot
         {
             Logger.Debug($"{reqHash} - Start Compress");
             var outStream = new MemoryStream();
-            
-                using (var archive = new ZipArchive(outStream, ZipArchiveMode.Create, true))
-                {
-                    var fileInArchive = archive.CreateEntry(filename + ".csv", System.IO.Compression.CompressionLevel.Optimal);
-                    using (var entryStream = fileInArchive.Open())
+
+            using (var archive = new ZipArchive(outStream, ZipArchiveMode.Create, true))
+            {
+                var fileInArchive = archive.CreateEntry(filename + ".csv", System.IO.Compression.CompressionLevel.Optimal);
+                using (var entryStream = fileInArchive.Open())
                     inData.CopyTo(entryStream);
-                }
-                
-            
+            }
+
+
             outStream.Flush();
             outStream.Position = 0;
             return await Task.FromResult(outStream);
@@ -357,7 +358,7 @@ namespace Qlik2DataRobot
             for (int i = 0; i < Parameters.Length; i++)
             {
                 var param = Parameters[i];
-                if(keyname != null)
+                if (keyname != null)
                 {
                     if (param.ParamName == keyname)
                     {
@@ -381,7 +382,7 @@ namespace Qlik2DataRobot
                 csv.WriteField(param.ParamName);
             }
 
-            if (keyField.Name == null && keyname != null) 
+            if (keyField.Name == null && keyname != null)
             {
                 throw new Exception("The keyfield was not found in the source data, please ensure you are including this field in the dataset sent from Qlik.");
             }
@@ -398,7 +399,7 @@ namespace Qlik2DataRobot
 
                     for (int i = 0; i < Parameters.Length; i++)
                     {
-                        
+
                         var param = Parameters[i];
                         var dual = Row.Duals[i];
                         switch (param.DataType)
@@ -420,12 +421,12 @@ namespace Qlik2DataRobot
                                 csv.WriteField(dual.StrData);
                                 break;
                         }
-                        
+
                     }
 
                     a++;
                     csv.NextRecord();
-                } 
+                }
             }
             csv.Flush();
             tw.Flush();
@@ -460,7 +461,7 @@ namespace Qlik2DataRobot
         private async Task GenerateResult(string request_type, MemoryStream returnedData, IServerStreamWriter<BundledRows> responseStream, ServerCallContext context, int reqHash,
             bool failIfWrongDataTypeInFirstCol = false, DataType expectedFirstDataType = DataType.Numeric, bool cacheResultInQlik = true, ResultDataColumn keyField = null, string keyname = null, bool includeDetail = false, bool shouldExplain = false, bool rawExplain = false, int explain_max = 0)
         {
-            
+
             int nrOfCols = 0;
             int nrOfRows = 0;
             List<ResultDataColumn> resultDataColumns = new List<ResultDataColumn>();
@@ -484,10 +485,10 @@ namespace Qlik2DataRobot
                 {
                     var reader = new StringReader(response.csvdata);
                     var config = new CsvConfiguration(CultureInfo.InvariantCulture);
-                      /*  CsvConfiguration(CultureInfo.InvariantCulture)
-                    {
-                        HasHeaderRecord = true,
-                    };*/
+                    /*  CsvConfiguration(CultureInfo.InvariantCulture)
+                  {
+                      HasHeaderRecord = true,
+                  };*/
                     var csvReader = new CsvReader(reader, config);
 
                     csvReader.Read();
@@ -506,9 +507,9 @@ namespace Qlik2DataRobot
                         var row = new Row();
                         foreach (dynamic field in record)
                         {
-                            j += 1;                           
+                            j += 1;
                             row.Duals.Add(new Dual() { StrData = Convert.ToString(field.Value) ?? "" });
-                            
+
                         }
 
                         bundledRows.Rows.Add(row);
@@ -516,7 +517,7 @@ namespace Qlik2DataRobot
                         if (i == 0)
                         {
                             nrOfCols = j;
-                            
+
                             foreach (dynamic field in record)
                             {
                                 var a = new ResultDataColumn();
@@ -532,8 +533,9 @@ namespace Qlik2DataRobot
                             Logger.Info("Sent headers");
                         }
                         i += 1;
-                        
-                        if (i % 1000 == 0) {
+
+                        if (i % 1000 == 0)
+                        {
                             nrOfRows = i;
                             Logger.Info("Sending batch");
                             await responseStream.WriteAsync(bundledRows);
@@ -544,15 +546,15 @@ namespace Qlik2DataRobot
                     if (i > 0)
                     {
                         Logger.Info($"Sending final batch");
-                        
+
                         await responseStream.WriteAsync(bundledRows);
                         bundledRows = null;
                     }
-                    
-                } 
+
+                }
                 else if (response.data != null)
                 {
-                    
+
                     Logger.Trace($"{reqHash} - Response Data: {response.data}");
 
                     //Sort the response by RowId
@@ -786,7 +788,8 @@ namespace Qlik2DataRobot
 
 
 
-                } else
+                }
+                else
                 {
                     if (response.message != null)
                     {
@@ -799,10 +802,10 @@ namespace Qlik2DataRobot
 
                 }
 
-                
+
 
             }
-            
+
         }
 
         private async Task GenerateAndSendHeadersAsync(ServerCallContext context, int nrOfRows, int nrOfCols, List<ResultDataColumn> resultDataColumns, bool cacheResultInQlik)
