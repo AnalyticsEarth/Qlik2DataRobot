@@ -348,7 +348,8 @@ namespace Qlik2DataRobot
             var memStream = new MemoryStream();
             var streamWriter = new StreamWriter(memStream);
             var tw = TextWriter.Synchronized(streamWriter);
-            var csv = new CsvWriter(tw);
+            var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture);
+            var csv = new CsvWriter(tw, config);
 
             var keyindex = 0;
 
@@ -481,7 +482,7 @@ namespace Qlik2DataRobot
                 if (response.csvdata != null)
                 {
                     var reader = new StringReader(response.csvdata);
-                    var config = new CsvHelper.Configuration.Configuration(CultureInfo.InvariantCulture)
+                    var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
                     {
                         HasHeaderRecord = true,
                     };
