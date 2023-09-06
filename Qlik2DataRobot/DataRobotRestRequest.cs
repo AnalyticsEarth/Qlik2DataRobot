@@ -399,10 +399,10 @@ namespace Qlik2DataRobot
             Logger.Trace($"{reqHash} - jobId: {jobId}");
 
             int counter=0;
-            while (counter < 60 && !(status.Contains("COMPLETE") || status.Contains("ERROR") || status.Contains("ABORT"))) {
+            while (counter < 1200 && !(status.Contains("COMPLETE") || status.Contains("ERROR") || status.Contains("ABORT"))) {
                 counter = counter + 1;
                 Logger.Trace($"{reqHash} - status: {status}");
-                Thread.Sleep(5000);
+                Thread.Sleep(10000);
                 Logger.Trace($"{reqHash} - trying again");
                 if (jobIdStr != "" && (status == "INITIALIZING" || status == "RUNNING")) {
                     Logger.Trace($"{reqHash} - Getting job {jobIdStr} details");
